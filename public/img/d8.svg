@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#2DBBA3;}
-</style>
-<path class="st0" d="M44.7,23.1c0.8,1.4,0.7,3.1-0.2,4.4c0,0,0,0,0,0c-5.3,6.8-10.7,13.6-16.1,20.4c-1.8,2.2-4.3,2.2-6.1-0.1
-	C17,41.1,11.7,34.4,6.4,27.7c-1.4-1.8-1.4-3.4,0-5.2C11.5,16,16.6,9.6,21.7,3.2c0.3-0.4,0.6-0.7,0.9-1c1.6-1.8,4-1.9,5.5-0.1
-	c3.4,4.1,6.6,8.3,9.9,12.4c2.1,2.7,4.3,5.3,6.3,8.1C44.5,22.7,44.6,22.9,44.7,23.1z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 50 50">
+  <!-- Generator: Adobe Illustrator 29.0.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 192)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #2dbba3;
+      }
+    </style>
+  </defs>
+  <path class="st0" d="M44.4,22.93c.8,1.4.7,3.1-.2,4.4h0c-5.3,6.8-10.7,13.6-16.1,20.4-1.8,2.2-4.3,2.2-6.1-.1-5.3-6.7-10.6-13.4-15.9-20.1-1.4-1.8-1.4-3.4,0-5.2,5.1-6.5,10.2-12.9,15.3-19.3.3-.4.6-.7.9-1,1.6-1.8,4-1.9,5.5-.1,3.4,4.1,6.6,8.3,9.9,12.4,2.1,2.7,4.3,5.3,6.3,8.1.2.1.3.3.4.5Z"/>
 </svg>

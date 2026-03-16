@@ -1,0 +1,752 @@
+{
+  "1": {
+    "nameEn": "Aarakocra",
+    "name": "Ааракокра",
+    "url": "https://dnd.su/race/92-aarakocra/"
+  },
+  "2": {
+    "nameEn": "Aasimar",
+    "name": "Аасимар",
+    "url": "https://dnd.su/race/161-aasimar/"
+  },
+  "3": {
+    "nameEn": "Autognome",
+    "name": "Автогном",
+    "url": "https://dnd.su/multiverse/race/214-autognome/"
+  },
+  "4": {
+    "nameEn": "Astral elf",
+    "name": "Астральный эльф",
+    "url": "https://dnd.su/multiverse/race/213-astral-elf/"
+  },
+  "5": {
+    "nameEn": "Bugbear",
+    "name": "Багбир",
+    "url": "https://dnd.su/race/167-bugbear/"
+  },
+  "6": {
+    "nameEn": "Vedalken",
+    "name": "Ведалкен",
+    "url": "https://dnd.su/race/162-vedalken/"
+  },
+  "7": {
+    "nameEn": "Verdan",
+    "name": "Вердан",
+    "url": "https://dnd.su/race/163-verdan/"
+  },
+  "8": {
+    "nameEn": "Simic hybrid",
+    "name": "Гибрид Симиков",
+    "url": "https://dnd.su/race/164-simic-hybrid/"
+  },
+  "9": {
+    "nameEn": "Gith",
+    "name": "Гит",
+    "url": "https://dnd.su/race/165-gith/"
+  },
+  "10": {
+    "nameEn": "Giff",
+    "name": "Гифф",
+    "url": "https://dnd.su/multiverse/race/215-giff/"
+  },
+  "11": {
+    "nameEn": "Gnome",
+    "name": "Гном",
+    "url": "https://dnd.su/race/83-gnome/"
+  },
+  "12": {
+    "nameEn": "Goblin",
+    "name": "Гоблин",
+    "url": "https://dnd.su/race/166-goblin/"
+  },
+  "13": {
+    "nameEn": "Goliath",
+    "name": "Голиаф",
+    "url": "https://dnd.su/race/103-goliath/"
+  },
+  "14": {
+    "nameEn": "Grung",
+    "name": "Грунг",
+    "url": "https://dnd.su/race/169-grung/"
+  },
+  "15": {
+    "nameEn": "Dwarf",
+    "name": "Дварф",
+    "url": "https://dnd.su/race/78-dwarf/"
+  },
+  "16": {
+    "nameEn": "Genasi",
+    "name": "Дженази",
+    "url": "https://dnd.su/race/102-genasi/"
+  },
+  "17": {
+    "nameEn": "Dragonborn",
+    "name": "Драконорождённый",
+    "url": "https://dnd.su/race/82-dragonborn/"
+  },
+  "18": {
+    "nameEn": "Harengon",
+    "name": "Зайцегон",
+    "url": "https://dnd.su/race/207-harengon/"
+  },
+  "19": {
+    "nameEn": "Kalashtar",
+    "name": "Калаштар",
+    "url": "https://dnd.su/race/171-kalashtar/"
+  },
+  "20": {
+    "nameEn": "Kender",
+    "name": "Кендер",
+    "url": "https://dnd.su/race/285-kender/"
+  },
+  "21": {
+    "nameEn": "Kenku",
+    "name": "Кенку",
+    "url": "https://dnd.su/race/172-kenku/"
+  },
+  "22": {
+    "nameEn": "Centaur",
+    "name": "Кентавр",
+    "url": "https://dnd.su/race/173-centaur/"
+  },
+  "23": {
+    "nameEn": "Kobold",
+    "name": "Кобольд",
+    "url": "https://dnd.su/race/175-kobold/"
+  },
+  "24": {
+    "nameEn": "Warforged",
+    "name": "Кованый",
+    "url": "https://dnd.su/race/174-warforged/"
+  },
+  "25": {
+    "nameEn": "Leonin",
+    "name": "Леонин",
+    "url": "https://dnd.su/race/176-leonin/"
+  },
+  "26": {
+    "nameEn": "Locathah",
+    "name": "Локата",
+    "url": "https://dnd.su/race/178-locathah/"
+  },
+  "27": {
+    "nameEn": "Loxodon",
+    "name": "Локсодон",
+    "url": "https://dnd.su/race/177-loxodon/"
+  },
+  "28": {
+    "nameEn": "Lizardfolk",
+    "name": "Людоящер",
+    "url": "https://dnd.su/race/179-lizardfolk/"
+  },
+  "29": {
+    "nameEn": "Minotaur",
+    "name": "Минотавр",
+    "url": "https://dnd.su/race/181-minotaur/"
+  },
+  "30": {
+    "nameEn": "Orc",
+    "name": "Орк",
+    "url": "https://dnd.su/race/187-orc/"
+  },
+  "31": {
+    "nameEn": "Plasmoid",
+    "name": "Плазмоид",
+    "url": "https://dnd.su/multiverse/race/217-plasmoid/"
+  },
+  "32": {
+    "nameEn": "Half-orc",
+    "name": "Полуорк",
+    "url": "https://dnd.su/race/85-half-orc/"
+  },
+  "33": {
+    "nameEn": "Halfling",
+    "name": "Полурослик",
+    "url": "https://dnd.su/race/80-halfling/"
+  },
+  "34": {
+    "nameEn": "Half-elf",
+    "name": "Полуэльф",
+    "url": "https://dnd.su/race/84-half-elf/"
+  },
+  "35": {
+    "nameEn": "Satyr",
+    "name": "Сатир",
+    "url": "https://dnd.su/race/182-satyr/"
+  },
+  "36": {
+    "nameEn": "Owlin",
+    "name": "Совлин",
+    "url": "https://dnd.su/race/206-owlin/"
+  },
+  "37": {
+    "nameEn": "Tabaxi",
+    "name": "Табакси",
+    "url": "https://dnd.su/race/183-tabaxi/"
+  },
+  "38": {
+    "nameEn": "Tiefling",
+    "name": "Тифлинг",
+    "url": "https://dnd.su/race/86-tiefling/"
+  },
+  "39": {
+    "nameEn": "Tortle",
+    "name": "Тортл",
+    "url": "https://dnd.su/race/184-tortle/"
+  },
+  "40": {
+    "nameEn": "Thri-kreen",
+    "name": "Три-крин",
+    "url": "https://dnd.su/multiverse/race/218-thri-kreen/"
+  },
+  "41": {
+    "nameEn": "Triton",
+    "name": "Тритон",
+    "url": "https://dnd.su/race/188-triton/"
+  },
+  "42": {
+    "nameEn": "Firbolg",
+    "name": "Фирболг",
+    "url": "https://dnd.su/race/185-firbolg/"
+  },
+  "43": {
+    "nameEn": "Fairy",
+    "name": "Фэйри",
+    "url": "https://dnd.su/race/204-fairy/"
+  },
+  "44": {
+    "nameEn": "Hadozee",
+    "name": "Хадози",
+    "url": "https://dnd.su/multiverse/race/216-hadozee/"
+  },
+  "45": {
+    "nameEn": "Hobgoblin",
+    "name": "Хобгоблин",
+    "url": "https://dnd.su/race/168-hobgoblin/"
+  },
+  "46": {
+    "nameEn": "Changeling",
+    "name": "Чейнджлинг",
+    "url": "https://dnd.su/race/170-changeling/"
+  },
+  "47": {
+    "nameEn": "Human",
+    "name": "Человек",
+    "url": "https://dnd.su/race/81-human/"
+  },
+  "48": {
+    "nameEn": "Shifter",
+    "name": "Шифтер",
+    "url": "https://dnd.su/race/186-shifter/"
+  },
+  "49": {
+    "nameEn": "Elf",
+    "name": "Эльф",
+    "url": "https://dnd.su/race/79-elf/"
+  },
+  "50": {
+    "nameEn": "Yuan-ti Pureblood",
+    "name": "Юань-ти",
+    "url": "https://dnd.su/race/189-yuan-ti-pureblood/"
+  },
+  "51": {
+    "nameEn": "Hexblood",
+    "name": "Ведьмовская кровь",
+    "url": "https://dnd.su/race/192-hexblood/"
+  },
+  "52": {
+    "nameEn": "Reborn",
+    "name": "Возрождённый",
+    "url": "https://dnd.su/race/193-reborn/"
+  },
+  "53": {
+    "nameEn": "Dhampir",
+    "name": "Дампир",
+    "url": "https://dnd.su/race/191-dhampir/"
+  },
+  "54": {
+    "nameEn": "Custom lineage",
+    "name": "Своё происхождение",
+    "url": "https://dnd.su/race/223-custom-lineage/"
+  },
+  "55": {
+    "nameEn": "Aarakocra",
+    "name": "Ааракокра",
+    "url": "https://dnd.su/multiverse/race/278-aarakocra/"
+  },
+  "56": {
+    "nameEn": "Aasimar",
+    "name": "Аасимар",
+    "url": "https://dnd.su/multiverse/race/280-aasimar/"
+  },
+  "57": {
+    "nameEn": "Bugbear",
+    "name": "Багбир",
+    "url": "https://dnd.su/multiverse/race/281-bugbear/"
+  },
+  "58": {
+    "nameEn": "Githzerai",
+    "name": "Гитцерай",
+    "url": "https://dnd.su/multiverse/race/293-githzerai/"
+  },
+  "59": {
+    "nameEn": "Githyanki",
+    "name": "Гитъянки",
+    "url": "https://dnd.su/multiverse/race/292-githyanki/"
+  },
+  "60": {
+    "nameEn": "Deep Gnome",
+    "name": "Глубинный гном",
+    "url": "https://dnd.su/multiverse/race/286-deep-gnome/"
+  },
+  "61": {
+    "nameEn": "Goblin",
+    "name": "Гоблин",
+    "url": "https://dnd.su/multiverse/race/294-goblin/"
+  },
+  "62": {
+    "nameEn": "Goliath",
+    "name": "Голиаф",
+    "url": "https://dnd.su/multiverse/race/295-goliath/"
+  },
+  "63": {
+    "nameEn": "Genasi",
+    "name": "Дженази",
+    "url": "https://dnd.su/multiverse/race/291-genasi/"
+  },
+  "64": {
+    "nameEn": "Duergar",
+    "name": "Дуэргар",
+    "url": "https://dnd.su/multiverse/race/287-duergar/"
+  },
+  "65": {
+    "nameEn": "Harengon",
+    "name": "Зайцегон",
+    "url": "https://dnd.su/multiverse/race/296-harengon/"
+  },
+  "66": {
+    "nameEn": "Kenku",
+    "name": "Кенку",
+    "url": "https://dnd.su/multiverse/race/298-kenku/"
+  },
+  "67": {
+    "nameEn": "Centaur",
+    "name": "Кентавр",
+    "url": "https://dnd.su/multiverse/race/282-centaur/"
+  },
+  "68": {
+    "nameEn": "Kobold",
+    "name": "Кобольд",
+    "url": "https://dnd.su/multiverse/race/299-kobold/"
+  },
+  "69": {
+    "nameEn": "Lizardfolk",
+    "name": "Людоящер",
+    "url": "https://dnd.su/multiverse/race/300-lizardfolk/"
+  },
+  "70": {
+    "nameEn": "Minotaur",
+    "name": "Минотавр",
+    "url": "https://dnd.su/multiverse/race/301-minotaur/"
+  },
+  "71": {
+    "nameEn": "Sea Elf",
+    "name": "Морской эльф",
+    "url": "https://dnd.su/multiverse/race/304-sea-elf/"
+  },
+  "72": {
+    "nameEn": "Orc",
+    "name": "Орк",
+    "url": "https://dnd.su/multiverse/race/302-orc/"
+  },
+  "73": {
+    "nameEn": "Satyr",
+    "name": "Сатир",
+    "url": "https://dnd.su/multiverse/race/303-satyr/"
+  },
+  "74": {
+    "nameEn": "Tabaxi",
+    "name": "Табакси",
+    "url": "https://dnd.su/multiverse/race/307-tabaxi/"
+  },
+  "75": {
+    "nameEn": "Tortle",
+    "name": "Тортл",
+    "url": "https://dnd.su/multiverse/race/309-tortle/"
+  },
+  "76": {
+    "nameEn": "Triton",
+    "name": "Тритон",
+    "url": "https://dnd.su/multiverse/race/310-triton/"
+  },
+  "77": {
+    "nameEn": "Firbolg",
+    "name": "Фирболг",
+    "url": "https://dnd.su/multiverse/race/290-firbolg/"
+  },
+  "78": {
+    "nameEn": "Fairy",
+    "name": "Фэйри",
+    "url": "https://dnd.su/multiverse/race/289-fairy/"
+  },
+  "79": {
+    "nameEn": "Hobgoblin",
+    "name": "Хобгоблин",
+    "url": "https://dnd.su/multiverse/race/297-hobgoblin/"
+  },
+  "80": {
+    "nameEn": "Changeling",
+    "name": "Чейнджлинг",
+    "url": "https://dnd.su/multiverse/race/283-changeling/"
+  },
+  "81": {
+    "nameEn": "Shadar-Kai",
+    "name": "Шадар-кай",
+    "url": "https://dnd.su/multiverse/race/305-shadar-kai/"
+  },
+  "82": {
+    "nameEn": "Shifter",
+    "name": "Шифтер",
+    "url": "https://dnd.su/multiverse/race/306-shifter/"
+  },
+  "83": {
+    "nameEn": "Eladrin",
+    "name": "Эладрин",
+    "url": "https://dnd.su/multiverse/race/288-eladrin/"
+  },
+  "84": {
+    "nameEn": "Yuan-Ti",
+    "name": "Юань-ти",
+    "url": "https://dnd.su/multiverse/race/311-yuan-ti/"
+  },
+  "85": {
+    "nameEn": "Glitchling",
+    "name": "Глючный",
+    "url": "https://dnd.su/homebrew/race/367-glitchling/"
+  },
+  "86": {
+    "nameEn": "Revenant",
+    "name": "Ревенант",
+    "url": "https://dnd.su/homebrew/race/275-revenant/"
+  },
+  "87": {
+    "nameEn": "Hobgoblin of the Feywild",
+    "name": "Хобгоблин из Страны Фей",
+    "url": "https://dnd.su/homebrew/race/205-hobgoblin-of-the-feywild/"
+  },
+  "88": {
+    "nameEn": "Aven",
+    "name": "Авен",
+    "url": "https://dnd.su/homebrew/race/329-aven/"
+  },
+  "89": {
+    "nameEn": "Minotaur",
+    "name": "Минотавр",
+    "url": "https://dnd.su/homebrew/race/328-minotaur/"
+  },
+  "90": {
+    "nameEn": "Naga",
+    "name": "Нага",
+    "url": "https://dnd.su/homebrew/race/221-naga/"
+  },
+  "91": {
+    "nameEn": "Khenra",
+    "name": "Хенра",
+    "url": "https://dnd.su/homebrew/race/333-khenra/"
+  },
+  "92": {
+    "nameEn": "Human",
+    "name": "Человек",
+    "url": "https://dnd.su/homebrew/race/332-human/"
+  },
+  "93": {
+    "nameEn": "People of Innistrad",
+    "name": "Люди Иннистрада",
+    "url": "https://dnd.su/homebrew/race/336-people-of-innistrad/"
+  },
+  "94": {
+    "nameEn": "Gnoll",
+    "name": "Гнолл",
+    "url": "https://dnd.su/homebrew/race/435-gnoll/"
+  },
+  "95": {
+    "nameEn": "Gnome",
+    "name": "Гном",
+    "url": "https://dnd.su/homebrew/race/436-gnome/"
+  },
+  "96": {
+    "nameEn": "Dhampir",
+    "name": "Дампир",
+    "url": "https://dnd.su/homebrew/race/431-dhampir/"
+  },
+  "97": {
+    "nameEn": "Dwarf",
+    "name": "Дварф",
+    "url": "https://dnd.su/homebrew/race/432-dwarf/"
+  },
+  "98": {
+    "nameEn": "Winterfolk halflings",
+    "name": "Зиморождённые полурослики",
+    "url": "https://dnd.su/homebrew/race/444-winterfolk-halflings/"
+  },
+  "99": {
+    "nameEn": "Centaur",
+    "name": "Кентавр",
+    "url": "https://dnd.su/homebrew/race/430-centaur/"
+  },
+  "100": {
+    "nameEn": "Kobolds of Midgard",
+    "name": "Кобольд Мидгарда",
+    "url": "https://dnd.su/homebrew/race/438-kobolds-of-midgard/"
+  },
+  "101": {
+    "nameEn": "Gearforged",
+    "name": "Кованый",
+    "url": "https://dnd.su/homebrew/race/434-gearforged/"
+  },
+  "102": {
+    "nameEn": "Human of Midgard",
+    "name": "Люди Мидгарда",
+    "url": "https://dnd.su/homebrew/race/437-human-of-midgard/"
+  },
+  "103": {
+    "nameEn": "Ravenfolk",
+    "name": "Людоворон",
+    "url": "https://dnd.su/homebrew/race/441-ravenfolk/"
+  },
+  "104": {
+    "nameEn": "Ratfolk",
+    "name": "Людокрыса",
+    "url": "https://dnd.su/homebrew/race/440-ratfolk/"
+  },
+  "105": {
+    "nameEn": "Bearfolk",
+    "name": "Людомедведь",
+    "url": "https://dnd.su/homebrew/race/429-bearfolk/"
+  },
+  "106": {
+    "nameEn": "Minotaur",
+    "name": "Минотавр",
+    "url": "https://dnd.su/homebrew/race/439-minotaur/"
+  },
+  "107": {
+    "nameEn": "Shadow fey",
+    "name": "Теневая фея",
+    "url": "https://dnd.su/homebrew/race/442-shadow-fey/"
+  },
+  "108": {
+    "nameEn": "Trollkin",
+    "name": "Троллеобразный",
+    "url": "https://dnd.su/homebrew/race/443-trollkin/"
+  },
+  "109": {
+    "nameEn": "Elf",
+    "name": "Эльф",
+    "url": "https://dnd.su/homebrew/race/433-elf/"
+  },
+  "110": {
+    "nameEn": "Accursed Tiefling",
+    "name": "Анафемный тифлинг",
+    "url": "https://dnd.su/homebrew/race/461-accursed-tiefling/"
+  },
+  "111": {
+    "nameEn": "Elkian",
+    "name": "Вапитианец",
+    "url": "https://dnd.su/homebrew/race/405-elkian/"
+  },
+  "112": {
+    "nameEn": "Vegepygmy",
+    "name": "Вегепигмей",
+    "url": "https://dnd.su/homebrew/race/112-vegepygmy/"
+  },
+  "113": {
+    "nameEn": "Deep One Dwarf (Y'ha-nthlei)",
+    "name": "Глубинный дварф (Й'ха-нтлей)",
+    "url": "https://dnd.su/homebrew/race/471-deep-one-dwarf-yha-nthlei/"
+  },
+  "114": {
+    "nameEn": "Gobbok",
+    "name": "Гоббок",
+    "url": "https://dnd.su/homebrew/race/581-gobbok/"
+  },
+  "115": {
+    "nameEn": "Golynn",
+    "name": "Голинн",
+    "url": "https://dnd.su/homebrew/race/582-golynn/"
+  },
+  "116": {
+    "nameEn": "Graceza",
+    "name": "Грацеза",
+    "url": "https://dnd.su/homebrew/race/556-graceza/"
+  },
+  "117": {
+    "nameEn": "Dhampir",
+    "name": "Дампир",
+    "url": "https://dnd.su/homebrew/race/522-dhampir/"
+  },
+  "118": {
+    "nameEn": "Drevan",
+    "name": "Древан",
+    "url": "https://dnd.su/homebrew/race/521-drevan/"
+  },
+  "119": {
+    "nameEn": "Isetsu",
+    "name": "Исэцу",
+    "url": "https://dnd.su/homebrew/race/543-isetsu/"
+  },
+  "120": {
+    "nameEn": "Cadaver",
+    "name": "Кадавр",
+    "url": "https://dnd.su/homebrew/race/562-cadaver/"
+  },
+  "121": {
+    "nameEn": "Kitsune",
+    "name": "Кицунэ",
+    "url": "https://dnd.su/homebrew/race/538-kitsune/"
+  },
+  "122": {
+    "nameEn": "Catfolk",
+    "name": "Котовец",
+    "url": "https://dnd.su/homebrew/race/496-catfolk/"
+  },
+  "123": {
+    "nameEn": "Lipsick",
+    "name": "Липсик",
+    "url": "https://dnd.su/homebrew/race/520-lipsick/"
+  },
+  "124": {
+    "nameEn": "Lotol",
+    "name": "Лотол",
+    "url": "https://dnd.su/homebrew/race/583-lotol/"
+  },
+  "125": {
+    "nameEn": "Lion Turtle",
+    "name": "Львиная черепаха",
+    "url": "https://dnd.su/homebrew/race/546-lion-turtle/"
+  },
+  "126": {
+    "nameEn": "Manikin",
+    "name": "Манекен",
+    "url": "https://dnd.su/homebrew/race/460-manikin/"
+  },
+  "127": {
+    "nameEn": "Mycelian",
+    "name": "Мицелиан",
+    "url": "https://dnd.su/homebrew/race/584-mycelian/"
+  },
+  "128": {
+    "nameEn": "Mousefolk",
+    "name": "Мышинец",
+    "url": "https://dnd.su/homebrew/race/494-mousefolk/"
+  },
+  "129": {
+    "nameEn": "Hishikin",
+    "name": "Нисикин",
+    "url": "https://dnd.su/homebrew/race/544-hishikin/"
+  },
+  "130": {
+    "nameEn": "Ombrask",
+    "name": "Омбраск",
+    "url": "https://dnd.su/homebrew/race/585-ombrask/"
+  },
+  "131": {
+    "nameEn": "Oniborne",
+    "name": "Онирождённый",
+    "url": "https://dnd.su/homebrew/race/545-oniborne/"
+  },
+  "132": {
+    "nameEn": "Demidritch",
+    "name": "Полусторонний",
+    "url": "https://dnd.su/homebrew/race/459-demidritch/"
+  },
+  "133": {
+    "nameEn": "Scourgeborne",
+    "name": "Порождение Бедствия",
+    "url": "https://dnd.su/homebrew/race/462-scourgeborne/"
+  },
+  "134": {
+    "nameEn": "Awakened",
+    "name": "Пробуждённый",
+    "url": "https://dnd.su/homebrew/race/111-awakened/"
+  },
+  "135": {
+    "nameEn": "Cursed-Blood",
+    "name": "Проклятокровый",
+    "url": "https://dnd.su/homebrew/race/470-cursed-blood/"
+  },
+  "136": {
+    "nameEn": "Ryujin",
+    "name": "Рюдзин",
+    "url": "https://dnd.su/homebrew/race/547-ryujin/"
+  },
+  "137": {
+    "nameEn": "Silva",
+    "name": "Сильва",
+    "url": "https://dnd.su/homebrew/race/110-silva/"
+  },
+  "138": {
+    "nameEn": "Slimee",
+    "name": "Склизыш",
+    "url": "https://dnd.su/homebrew/race/560-slimee/"
+  },
+  "139": {
+    "nameEn": "Oozekin",
+    "name": "Слизевик",
+    "url": "https://dnd.su/homebrew/race/586-oozekin/"
+  },
+  "140": {
+    "nameEn": "Stick'Ti'Kal",
+    "name": "Стик'Ти'Кал",
+    "url": "https://dnd.su/homebrew/race/561-sticktikal/"
+  },
+  "141": {
+    "nameEn": "Cnidaran",
+    "name": "Стрекающие",
+    "url": "https://dnd.su/homebrew/race/579-cnidaran/"
+  },
+  "142": {
+    "nameEn": "Teratect",
+    "name": "Тератект",
+    "url": "https://dnd.su/homebrew/race/475-teratect/"
+  },
+  "143": {
+    "nameEn": "Smoldering",
+    "name": "Тлеющий",
+    "url": "https://dnd.su/homebrew/race/474-smoldering/"
+  },
+  "144": {
+    "nameEn": "Tengu",
+    "name": "Тэнгу",
+    "url": "https://dnd.su/homebrew/race/548-tengu/"
+  },
+  "145": {
+    "nameEn": "Florene",
+    "name": "Флорен",
+    "url": "https://dnd.su/homebrew/race/466-florene/"
+  },
+  "146": {
+    "nameEn": "Fuyohren",
+    "name": "Фунаюрэй",
+    "url": "https://dnd.su/homebrew/race/540-fuyohren/"
+  },
+  "147": {
+    "nameEn": "Hanamori",
+    "name": "Ханамори",
+    "url": "https://dnd.su/homebrew/race/541-hanamori/"
+  },
+  "148": {
+    "nameEn": "Haniwa",
+    "name": "Ханива",
+    "url": "https://dnd.su/homebrew/race/542-haniwa/"
+  },
+  "149": {
+    "nameEn": "Cyclopian",
+    "name": "Циклопианец",
+    "url": "https://dnd.su/homebrew/race/580-cyclopian/"
+  },
+  "150": {
+    "nameEn": "Enkoh",
+    "name": "Энкох",
+    "url": "https://dnd.su/homebrew/race/539-enkoh/"
+  }
+}

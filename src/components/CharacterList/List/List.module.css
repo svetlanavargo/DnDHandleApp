@@ -1,0 +1,21 @@
+.characterContent {
+    padding: 12px;
+    border-radius: 6px;
+    max-width: 600px;
+    overflow: auto;
+    /* Firefox */
+    scrollbar-width: none;
+    /* IE и старые Edge */
+    -ms-overflow-style: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.delete {
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

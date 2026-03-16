@@ -4,9 +4,9 @@ import type { Condition } from '../../hooks/useBattle';
 import CardsList from './CardsList/CardsList.tsx';
 import Times from './Times/Times.tsx';
 import BattleField from './BattleField/BattleField.tsx';
-import CreateCardModal from './Modals/CreateCardModal.tsx';
-import ConditionModal from './Modals/ConditionModal.tsx';
-import NoticesModal from './Modals/NoticesModal.tsx';
+import CreateCardModal from '../Modals/CreateCardModal.tsx';
+import ConditionModal from '../Modals/ConditionModal.tsx';
+import NoticesModal from '../Modals/NoticesModal.tsx';
 import styles from './BattleTracker.module.css';
 
 export interface Card {

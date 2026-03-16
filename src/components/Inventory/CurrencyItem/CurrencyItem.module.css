@@ -1,0 +1,51 @@
+.currencyItemContainer {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.value {
+    padding: 0;
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #242424;
+    border-radius: 8px;
+}
+
+.btnWrapper {
+    display: flex;
+    align-items: center;
+
+    border-radius: 50px;
+}
+
+.platinum, .gold, .silver, .bronze {
+    width: 40px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    margin-right: 10px;
+}
+
+.platinum {
+    background-image: url("/img/Currency/platinum.svg");
+}
+
+.gold {
+    background-image: url("/img/Currency/gold.svg");
+}
+
+.silver {
+    background-image: url("/img/Currency/silver.svg");
+}
+
+.bronze {
+    background-image: url("/img/Currency/bronze.svg");
+}

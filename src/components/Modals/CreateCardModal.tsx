@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import type { Card } from '../../../App.tsx';
-import Btn from '../../UI/Btn/Btn.tsx';
-import TextArea from '../../UI/Input/TextArea.tsx';
-import Input from '../../UI/Input/Input.tsx';
+import React, { useState, useEffect, useRef } from 'react';
+import type { Card } from '../../App.tsx';
+import Btn from '../UI/Btn/Btn.tsx';
+import TextArea from '../UI/Input/TextArea.tsx';
+import Input from '../UI/Input/Input.tsx';
 import styles from './Modals.module.css';
 
 interface CardModalProps {
@@ -125,10 +125,14 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
                     inputMode="numeric"
                     value={formValues.maxHits}
                     onChange={e => {
-                        let val = e.target.value.replace(/\D/g, '');
-                        if (val === '' || Number(val) === 0) val = '1';
-                        if (Number(val) > 1000) val = '1000';
-                        handleChange('maxHits', val);
+                        const val = e.target.value.replace(/\D/g, '');
+                        if (val === '') {
+                            handleChange('maxHits', '');
+                            return;
+                        }
+                        let num = Number(val);
+                        if (num > 1000) num = 1000;
+                        handleChange('maxHits', num.toString());
                     }}
                 >
                     Максимум хитов:
@@ -175,27 +179,17 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
                         inputMode="numeric"
                         value={formValues.initiativeBonus}
                         onChange={e => {
-                            let val = e.target.value;
-
-                            // разрешаем пустое значение (пользователь ещё вводит)
+                            const val = e.target.value;
                             if (val === '') {
                                 handleChange('initiativeBonus', '');
                                 return;
                             }
-
-                            // разрешаем только цифры или минус в начале
                             if (!/^(-?\d*)$/.test(val)) return;
-
-                            // если введён минус без цифр, просто сохраняем '-'
                             if (val === '-') {
                                 handleChange('initiativeBonus', '-');
                                 return;
                             }
-
-                            // теперь можно преобразовать в число
                             let num = Number(val);
-
-                            // ограничиваем диапазон
                             if (num > 100) num = 100;
                             if (num < -100) num = -100;
 

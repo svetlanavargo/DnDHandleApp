@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 27.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#2DBBA3;}
-</style>
-<path class="st0" d="M43.9,40.2c0,2.8-1.5,4.4-4.3,4.4c-9.9,0-19.8,0-29.7,0c-2.7,0-4.3-1.6-4.3-4.3c0-5,0-10,0-15
-	c0-4.9,0-9.7,0-14.6c0-3,1.5-4.5,4.5-4.5c9.8,0,19.6,0,29.4,0c2.9,0,4.4,1.5,4.4,4.4C43.9,20.5,43.9,30.4,43.9,40.2z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 50 50">
+  <!-- Generator: Adobe Illustrator 29.0.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 192)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #2dbba3;
+      }
+    </style>
+  </defs>
+  <path class="st0" d="M44.15,39.8c0,2.8-1.5,4.4-4.3,4.4H10.15c-2.7,0-4.3-1.6-4.3-4.3V10.3c0-3,1.5-4.5,4.5-4.5h29.4c2.9,0,4.4,1.5,4.4,4.4v29.6Z"/>
 </svg>

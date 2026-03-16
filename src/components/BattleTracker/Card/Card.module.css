@@ -1,9 +1,10 @@
 .card {
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #3D3D3D;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #1F1F1F;
 }
 
 .flex {
@@ -66,15 +67,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #1a1a1a;
-    background-color: darkgray;
+    color: #ffffff;
+    background-color: #3D3D3D;
     border-radius: 50%;
     margin: 0;
 }
 
 .conditionWrap {
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #3D3D3D;
+    border-top: 1px solid #3D3D3D;
     padding: .5rem 1rem;
     display: flex;
     align-items: center;
@@ -95,7 +96,7 @@ ul {
 .noteWrapper {
     display: flex;
     padding: .5rem 0 0 1rem;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #3D3D3D;
 }
 
 .note {
@@ -124,17 +125,17 @@ ul {
 
 .red {
     background-color: #610000;
-    border-color: #ccc;
+    border-color: #610000;
 }
 
 .blue {
-    background-color: #140B73;
-    border-color: #ccc;
+    background-color: #003161;
+    border-color: #003161;
 }
 
 .green {
-    background-color: #074D22;
-    border-color: #ccc;
+    background-color: #006131;
+    border-color: #006131;
 }
 
 .dead {
@@ -142,11 +143,11 @@ ul {
 }
 
 .low {
-    border: 2px solid red;
+    border: 1px solid red;
 }
 
 .currentTurn {
-    outline: 3px solid gold;
+    outline: 1px solid gold;
     box-shadow: 0 0 10px gold;
     transition: all 0.2s ease;
 }

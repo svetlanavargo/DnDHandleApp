@@ -34,7 +34,7 @@ function Field({total, history, onReset, onInc, onDec}: Props) {
 
                     return (
                         <div key={index} className={styles.historyWrapper}>
-                            <img className={styles.historyImg} src={`/dice/img/${imgName}.svg`} alt=''/>
+                            <img className={styles.historyImg} src={`../img/${imgName}.svg`} alt=''/>
                             <span className={styles.historyRollValue}>{roll.value}</span>
                         </div>
                     )

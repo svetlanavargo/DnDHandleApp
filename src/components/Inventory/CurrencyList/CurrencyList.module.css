@@ -1,0 +1,12 @@
+.currencyListContainer {
+    background-color: #3D3D3D;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.currencyList {
+
+}

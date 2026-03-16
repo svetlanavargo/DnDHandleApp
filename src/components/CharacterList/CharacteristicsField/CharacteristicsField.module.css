@@ -1,0 +1,91 @@
+.characteristicsFieldContainer {
+    background-color: #1F1F1F;
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.characteristicsFieldWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.characteristicsField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border: 1px solid #2eb9a1;
+    border-radius: 4px;
+    padding: 10px 14px;
+    width: min-content;
+    background-color: #242424;
+}
+
+.characteristicsFieldName {
+    font-size: 10px;
+    font-weight: bold;
+    width: 23px;
+    text-align: center;
+}
+
+.characteristicsFieldValue {
+    border: 1px solid #3D3D3D;
+    font-size: 10px;
+    width: 100%;
+    text-align: center;
+    background-color: #242424;
+}
+
+.characteristicsFieldValue:focus-visible {
+    outline: none;
+}
+
+.modifier {
+    font-weight: bold;
+    padding: 5px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.savingThrows {
+    border: 1px solid #2eb9a1;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-top: -7px;
+    background-color: #1F1F1F;
+    z-index: 1;
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+    padding: 3px 0;
+}
+
+.savingThrows:after {
+    content: "";
+    outline: 1px solid #2eb9a1;
+    background-color: #1F1F1F;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -6px;
+}
+
+.isSelected {
+    position: relative;
+}
+
+.isSelected:after {
+    content: "";
+    background-color: #2eb9a1;
+    border: 1px solid #242424;
+}

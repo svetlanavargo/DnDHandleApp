@@ -1,0 +1,119 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow-y: auto;
+    z-index: 99;
+}
+
+/* обычная модалка (десктоп) */
+
+.modalContent {
+    background: darkgray;
+    padding: 2rem;
+    border-radius: 16px;
+    min-width: 300px;
+    max-width: 600px;
+    width: 100%;
+    color: #1a1a1a;
+
+    animation: modalFadeIn 0.25s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 600px) {
+
+    .modalOverlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modalContent {
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+
+        animation: modalSlideUp 0.3s ease;
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+}
+
+h2 {
+     margin: 0 0 20px 0;
+}
+
+.modalButtons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+select {
+    height: 30px;
+    width: 100%;
+}
+
+select:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.notices {
+    padding-bottom: 20px;
+}
+
+button {
+    width: 100%;
+}
+
+.languagesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.languageLabel {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}

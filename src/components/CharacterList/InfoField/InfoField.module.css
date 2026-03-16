@@ -1,0 +1,51 @@
+.infoFieldContainer {
+    background-color: #1F1F1F;
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.infoWrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text {
+    text-transform: uppercase;
+    font-size: 7px;
+    font-weight: bold;
+}
+
+.proficiencyBonus, .initiative, .speed, .ac {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2eb9a1;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    padding-bottom: 9px;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.proficiencyBonus {
+    background-image: url("/img/frame/proficiencyBonus.svg");
+}
+
+.initiative {
+    background-image: url("/img/frame/initiative.svg");
+}
+
+.speed {
+    background-image: url("/img/frame/speed.svg");
+}
+
+.ac {
+    background-image: url("/img/frame/ac.svg");
+}

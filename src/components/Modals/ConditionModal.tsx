@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import type { Condition } from '../../../hooks/useBattle.ts';
+import type { Condition } from '../../hooks/useBattle.ts';
 import styles from './Modals.module.css';
-import Input from "../../UI/Input/Input.tsx";
-import Btn from "../../UI/Btn/Btn.tsx";
+import Input from "../UI/Input/Input.tsx";
+import Btn from "../UI/Btn/Btn.tsx";
 
 interface Props {
     isOpen: boolean;

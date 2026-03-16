@@ -1,0 +1,13 @@
+.domainFieldContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.domainFieldWrapper {
+    background-color: #1F1F1F;
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
