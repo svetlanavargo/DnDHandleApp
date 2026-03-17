@@ -1,5 +1,5 @@
 import type { BattleCard } from '../../../hooks/useBattle.ts';
-import { remainingTimeInMinutes } from '../../../utils/time.ts';
+import { remainingTimeInMinutes } from '../../../utils/getTime.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Times.module.css';
 

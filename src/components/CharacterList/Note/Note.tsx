@@ -1,4 +1,4 @@
-import type { Character } from '../CharacterList.tsx';
+import type { Character } from '../../../types/Character.ts';
 import { useRef, useEffect } from 'react';
 import styles from './Note.module.css';
 

@@ -1,5 +1,6 @@
-import { textSpec} from '../../../constants/classes.ts';
-import { textRace} from '../../../constants/races.ts';
+import { TextClasses } from '../../../constants/TextClasses.ts';
+import { TextSubClasses } from '../../../constants/TextSubClasses.ts';
+import { TextRace } from '../../../constants/TextRaces.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './ListHeader.module.css';
 
@@ -8,11 +9,12 @@ interface ListHeaderProps {
     level: number,
     race: string,
     spec: string,
+    charSubclass?: string,
     onEdit: () => void
     longRest: () => void
 }
 
-function ListHeader({name, level, race, spec, onEdit, longRest}: ListHeaderProps) {
+function ListHeader({name, level, race, spec, charSubclass, onEdit, longRest}: ListHeaderProps) {
     return(
         <div className={styles.listHeader}>
             <div className={styles.flex}>
@@ -23,9 +25,12 @@ function ListHeader({name, level, race, spec, onEdit, longRest}: ListHeaderProps
                         <div className={styles.level}>{level}</div>
                         <Btn onClick={onEdit} classBtn='edit'/>
                     </div>
-                    <div className={styles.flex}>
-                        <p className={styles.race}>{textRace[race]}</p>
-                        <p>{textSpec[spec]}</p>
+                    <div>
+                        <div className={styles.flex}>
+                            <p className={styles.race}>{TextRace[race]}</p>
+                            <p>{TextClasses[spec]}</p>
+                        </div>
+                        <div className={styles.charSubclass}>{TextSubClasses[spec]?.[charSubclass]}</div>
                     </div>
                 </div>
             </div>

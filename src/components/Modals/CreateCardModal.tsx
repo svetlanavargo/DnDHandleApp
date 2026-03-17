@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { Card } from '../../App.tsx';
+import type { Card } from '../../types/CardInBattleTracker.ts';
 import Btn from '../UI/Btn/Btn.tsx';
 import TextArea from '../UI/Input/TextArea.tsx';
 import Input from '../UI/Input/Input.tsx';
 import styles from './Modals.module.css';
+import Select from "../UI/Select/Select.tsx";
+import Checkbox from "../UI/Checkbox/Checkbox.tsx";
 
 interface CardModalProps {
     isOpen: boolean;
@@ -164,14 +166,11 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
                     Класс Доспеха:
                 </Input>
 
-                <label>
-                    Это игрок?
-                    <input
-                        type="checkbox"
-                        checked={formValues.isPlayer}
-                        onChange={e => handleChange('isPlayer', e.target.checked)}
-                    />
-                </label>
+                <Checkbox
+                    label="Это игрок?"
+                    checked={formValues.isPlayer}
+                    onChange={(checked) => handleChange('isPlayer', checked)}
+                />
 
                 {!formValues.isPlayer && (
                     <Input
@@ -201,22 +200,17 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
                 )}
 
                 {formValues.isPlayer && (
-                    <label>
-                        <select
-                            value={formValues.color || ''}
-                            onChange={e =>
-                                handleChange(
-                                    'color',
-                                    e.target.value as 'red' | 'blue' | 'green'
-                                )
-                            }
-                        >
-                            <option value="">Выбрать цвет</option>
-                            <option value="red">🔴</option>
-                            <option value="blue">🔵</option>
-                            <option value="green">🟢</option>
-                        </select>
-                    </label>
+                    <Select
+                        label="Цвет игрока"
+                        value={formValues.color}
+                        placeholder="Выбрать цвет"
+                        options={{
+                            red: "🔴",
+                            blue: "🔵",
+                            green: "🟢"
+                        }}
+                        onChange={(value) => handleChange('color', value as 'red' | 'blue' | 'green')}
+                    />
                 )}
 
                 <TextArea value={formValues.note}

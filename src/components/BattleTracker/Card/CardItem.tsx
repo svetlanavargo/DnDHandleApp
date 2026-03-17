@@ -1,8 +1,8 @@
 import { useRef, useEffect, forwardRef } from 'react';
-import type { Card } from '../../../App.tsx';
+import type { Card } from '../../../types/CardInBattleTracker.ts';
 import type { BattleCard } from '../BattleField/BattleField.tsx';
 import type { Condition } from '../../../hooks/useBattle.ts';
-import { remainingTimeInMinutes } from '../../../utils/time.ts';
+import { remainingTimeInMinutes } from '../../../utils/getTime.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Card.module.css';
 

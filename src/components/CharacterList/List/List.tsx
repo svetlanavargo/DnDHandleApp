@@ -1,4 +1,4 @@
-import type { Character } from '../CharacterList.tsx';
+import type { Character } from '../../../types/Character.ts';
 import InfoField from '../InfoField/InfoField.tsx';
 import Note from '../Note/Note.tsx';
 import ListHeader from '../ListHeader/ListHeader.tsx';
@@ -6,6 +6,7 @@ import HitsField from '../HitsField/HitsField.tsx';
 import CharacteristicsField from '../CharacteristicsField/CharacteristicsField.tsx';
 import Skills from '../Skills/Skills.tsx';
 import DomainField from '../DomainField/DomainField.tsx';
+import Spells from '../Spells/Spells.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './List.module.css';
 
@@ -34,68 +35,77 @@ function List({
                   addHits,
                   subtractHits,
                   subtractDice,
-
-                  noteText,
                   isNoteOpen,
                   toggleNoteOpen,
                   updateCharacter
               }: ListProps) {
     return (
-        <div className={styles.characterContent}>
-            <ListHeader
-                name={activeCharacter.name}
-                level={activeCharacter.level}
-                race={activeCharacter.race}
-                spec={activeCharacter.class}
-                onEdit={openEditModal}
-                longRest={longRest}
-            />
+        <div className={styles.characterContentWrapper}>
+            <div className={styles.characterContent}>
+                <ListHeader
+                    name={activeCharacter.name}
+                    level={activeCharacter.level}
+                    race={activeCharacter.race}
+                    spec={activeCharacter.class}
+                    charSubclass={activeCharacter.subclass}
+                    onEdit={openEditModal}
+                    longRest={longRest}
+                />
 
-            <Note
-                text={activeCharacter.note || ''}
-                isOpen={isNoteOpen}
-                toggleOpen={toggleNoteOpen}
-                character={activeCharacter}
-                updateCharacter={updateCharacter}
-            />
+                <Note
+                    text={activeCharacter.note || ''}
+                    isOpen={isNoteOpen}
+                    toggleOpen={toggleNoteOpen}
+                    character={activeCharacter}
+                    updateCharacter={updateCharacter}
+                />
 
-            <InfoField
-                speed={activeCharacter.speed}
-                initiative={activeCharacter.initiative}
-                level={activeCharacter.level}
-                ac={activeCharacter.ac}
-            />
+                <InfoField
+                    speed={activeCharacter.speed}
+                    initiative={activeCharacter.initiative}
+                    level={activeCharacter.level}
+                    ac={activeCharacter.ac}
+                />
 
-            <HitsField
-                charClass={activeCharacter.class}
-                hits={activeCharacter.hits}
-                diceHitsCount={activeCharacter.diceHitsCount}
-                temporaryHits={activeCharacter.temporaryHits}
-                currentHits={activeCharacter.currentHits}
-                addHits={addHits}
-                subtractHits={subtractHits}
-                subtractDice={subtractDice}
-            />
+                <HitsField
+                    charClass={activeCharacter.class}
+                    hits={activeCharacter.hits}
+                    diceHitsCount={activeCharacter.diceHitsCount}
+                    temporaryHits={activeCharacter.temporaryHits}
+                    currentHits={activeCharacter.currentHits}
+                    addHits={addHits}
+                    subtractHits={subtractHits}
+                    subtractDice={subtractDice}
+                />
 
-            <CharacteristicsField
-                characteristics={activeCharacter.characteristics}
-                charClass={activeCharacter.class}
-                level={activeCharacter.level}
-            />
+                <CharacteristicsField
+                    characteristics={activeCharacter.characteristics}
+                    charClass={activeCharacter.class}
+                    level={activeCharacter.level}
+                />
 
-            <Skills
-                characteristics={activeCharacter.characteristics}
-                skills={activeCharacter.skills}
-                onToggleSkill={onToggleSkill}
-                level={activeCharacter.level}
-            />
+                <Skills
+                    characteristics={activeCharacter.characteristics}
+                    skills={activeCharacter.skills}
+                    onToggleSkill={onToggleSkill}
+                    level={activeCharacter.level}
+                />
 
-            <DomainField
-                lang={activeCharacter.languages}
-            />
+                <DomainField
+                    lang={activeCharacter.languages}
+                    armors={activeCharacter.armors}
+                    weapons={activeCharacter.weapons}
+                    tools={activeCharacter.tools}
+                />
 
-            <div className={styles.delete}>
-                <Btn onClick={removeCharacter} classBtn="delete" />
+                <Spells
+                    character={activeCharacter}
+                    updateCharacter={updateCharacter}
+                />
+
+                <div className={styles.delete}>
+                    <Btn onClick={removeCharacter} classBtn="delete" />
+                </div>
             </div>
         </div>
     );

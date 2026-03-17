@@ -1,4 +1,4 @@
-export const tools: Record<string, string> = {
+export const TextTools: Record<string, string> = {
     thievesTools: 'Воровские инструменты',
     gamingSet: 'Игровой набор',
     navigatorTools: 'Инструменты навигатора',

@@ -1,4 +1,4 @@
-export const textLanguages: Record<string, string> = {
+export const TextLanguages: Record<string, string> = {
     // Общие
     common: 'Общий',
     draconic: 'Драконий',

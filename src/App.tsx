@@ -7,18 +7,6 @@ import SpellsList from './components/Spells List/SpellsList.tsx';
 import Inventory from './components/Inventory/Inventory.tsx';
 import './App.css'
 
-export interface Card {
-    id: string,
-    name: string,
-    maxHits: number,
-    currentHits: number,
-    ac: number,
-    note?: string,
-    isPlayer: boolean,
-    initiativeBonus: number,
-    color?: 'red' | 'blue' | 'green' | undefined
-}
-
 function App() {
     return (
         <BrowserRouter>

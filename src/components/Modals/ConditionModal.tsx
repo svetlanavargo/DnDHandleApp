@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { Condition } from '../../hooks/useBattle.ts';
 import styles from './Modals.module.css';
 import Input from "../UI/Input/Input.tsx";
+import Select from '../UI/Select/Select.tsx';
 import Btn from "../UI/Btn/Btn.tsx";
 
 interface Props {
@@ -18,7 +19,6 @@ export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
 
     const nameInputRef = useRef<HTMLInputElement>(null);
 
-    // автофокус
     useEffect(() => {
         if (!isOpen) return;
 
@@ -66,16 +66,17 @@ export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
                     Название состояния:
                 </Input>
 
-                <label>
-                    Тип:
-                    <select
-                        value={type}
-                        onChange={e => setType(e.target.value as 'round' | 'time')}
-                    >
-                        <option value="round">Раунды</option>
-                        <option value="time">Минуты</option>
-                    </select>
-                </label>
+                <Select
+                    label="Тип"
+                    value={type}
+                    placeholder="Выбрать тип"
+                    options={{
+                        round: "Раунды",
+                        time: "Минуты"
+                    }}
+                    onChange={(value) => setType(value as 'round' | 'time')}
+                />
+
                 <Input
                     type="text"
                     inputMode="numeric"

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import type { Card } from '../../../App.tsx';
+import type { Card } from '../../../types/CardInBattleTracker.ts';
 import type { Condition } from '../../../hooks/useBattle.ts';
 import CardItem from '../Card/CardItem.tsx';
 import styles from './BattleField.module.css';

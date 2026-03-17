@@ -1,5 +1,5 @@
 import Btn from '../../UI/Btn/Btn.tsx';
-import type { Character } from '../CharacterList';
+import type { Character } from '../../../types/Character.ts';
 import styles from './Tabs.module.css';
 
 interface TabsProps {
@@ -23,7 +23,9 @@ function Tabs({ characters, activeId, setActive, addCharacter }: TabsProps) {
                     </div>
                 ))}
                 {characters.length < 6 && (
-                    <Btn onClick={addCharacter} classBtn='addCharacter'/>
+                    <div className={styles.btnWrapper}>
+                        <Btn onClick={addCharacter} classBtn='addCharacter'/>
+                    </div>
                 )}
             </div>
         </div>

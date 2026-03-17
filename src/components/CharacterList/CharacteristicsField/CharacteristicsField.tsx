@@ -1,4 +1,4 @@
-import type { Characteristics } from '../CharacterList.tsx';
+import type { Characteristics } from '../../../types/Character.ts';
 import { getProficiencyBonus } from '../../../utils/getProficiencyBonus.ts';
 import { getModifier } from '../../../utils/getModifier.ts';
 import classesData from '../../../data/Classes/classes.json';

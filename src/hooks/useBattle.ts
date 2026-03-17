@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Card } from '../App';
+import type { Card } from '../types/CardInBattleTracker.ts';
 
 export type Condition = {
     id: string,

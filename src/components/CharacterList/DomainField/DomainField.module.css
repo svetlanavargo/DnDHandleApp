@@ -1,13 +1,27 @@
 .domainFieldContainer {
     display: flex;
-    justify-content: space-between;
     margin-bottom: 12px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .domainFieldWrapper {
+    flex: 1 1 150px;
     background-color: #1F1F1F;
     padding: 12px;
     border-radius: 4px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+}
+
+.header {
+    text-transform: uppercase;
+    font-size: 7px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #2eb9a1;
+}
+
+.text {
+    font-size: 12px;
 }

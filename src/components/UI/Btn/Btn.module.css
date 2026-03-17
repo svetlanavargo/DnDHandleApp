@@ -16,13 +16,19 @@ button:focus-visible {
     outline: none;
 }
 
-.addCard, .nextMove, .stopBattle, .addCharacter, .note, .saveNote, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
+.addCard, .nextMove, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
     background-repeat: no-repeat;
     background-color: transparent;
     background-size: contain;
     background-position: center;
     cursor: pointer;
     padding: 0;
+}
+
+.close {
+    width: 25px;
+    height: 25px;
+    background-image: url("/img/close.svg");
 }
 
 .addCard {

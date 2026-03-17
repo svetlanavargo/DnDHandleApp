@@ -1,4 +1,4 @@
-export const textSpec: Record<string, string> = {
+export const TextClasses: Record<string, string> = {
     artificer: 'Изобретатель',
     barbarian: 'Варвар',
     bard: 'Бард',

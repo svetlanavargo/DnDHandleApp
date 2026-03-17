@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import type { Card } from '../../types/CardInBattleTracker.ts';
 import { useBattle } from '../../hooks/useBattle.ts';
 import type { Condition } from '../../hooks/useBattle';
 import CardsList from './CardsList/CardsList.tsx';
@@ -9,17 +10,6 @@ import ConditionModal from '../Modals/ConditionModal.tsx';
 import NoticesModal from '../Modals/NoticesModal.tsx';
 import styles from './BattleTracker.module.css';
 
-export interface Card {
-    id: string,
-    name: string,
-    maxHits: number,
-    currentHits: number,
-    ac: number,
-    note?: string,
-    isPlayer: boolean,
-    initiativeBonus: number,
-    color?: 'red' | 'blue' | 'green' | undefined
-}
 
 function BattleTracker() {
     const [cards, setCards] = useState<Card[]>(() => {

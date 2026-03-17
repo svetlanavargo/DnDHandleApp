@@ -78,14 +78,14 @@
 /* Ссылки внутри меню */
 .menu a {
     text-decoration: none;
-    color: #3D3D3D;
+    color: #2eb9a1;
     font-weight: 500;
     transition: color 0.3s ease;
     white-space: nowrap;
 }
 
 .menu a:hover {
-    color: #2eb9a1;
+    color: #ffffff;
 }
 
 /* Показываем бургер только на маленьких экранах */
