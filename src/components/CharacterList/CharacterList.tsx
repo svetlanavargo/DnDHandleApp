@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import type { Character } from '../../types/Character';
 import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
 import type { SpellSlotProgression } from '../../types/dnd';
@@ -7,6 +8,9 @@ import classesData from '../../data/classes.json';
 import { getModifier } from '../../utils/getModifier';
 import Tabs from './Tabs/Tabs';
 import List from './List/List';
+import Modal from '../Modals/Modal.tsx';
+import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
+import DeleteCharacter from '../Modals/DeleteCharacter.tsx';
 import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
 
@@ -34,6 +38,8 @@ function CharacterList() {
 
     const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
     const [isNoteOpen, setIsNoteOpen] = useState(false);
+    const [deletingCharacter, setDeletingCharacter] = useState<Character | null>(null);
+    const closeDeleteModal = () => setDeletingCharacter(null);
 
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(characters));
@@ -145,65 +151,89 @@ function CharacterList() {
         );
     };
 
-    const removeCharacter = (id: string) => {
+    const removeCharacterById = (id: string) => {
         setCharacters(prev => {
             const updated = prev.filter(c => c.id !== id);
-            if (activeId === id) {
-                setActiveId(updated[0]?.id ?? null);
-            }
+            if (activeId === id) setActiveId(updated[0]?.id ?? null);
             return updated;
         });
+        closeDeleteModal();
     };
 
     const setActive = (id: string) => setActiveId(id);
     const closeModal = () => setEditingCharacter(null);
 
     const addHits = () => {
-        const value = prompt('Сколько хитов прибавить?');
-        if (!value) return;
+        const char = characters.find(c => c.id === activeId);
+        if (!char) return;
 
-        const amount = Number(value);
-        if (isNaN(amount) || amount <= 0) return;
+        numberModal.openModal({
+            title: 'Прибавить хиты',
+            name: char.name,
+            min: 0,
+            onConfirm: (amount) => {
+                if (amount <= 0) return;
 
-        setCharacters(prev =>
-            prev.map(c => {
-                if (c.id !== activeId) return c;
+                setCharacters(prev =>
+                    prev.map(c => {
+                        if (c.id !== activeId) return c;
 
-                const newCurrent = c.currentHits + amount;
-                if (newCurrent <= c.hits) return { ...c, currentHits: newCurrent };
+                        const newCurrent = c.currentHits + amount;
 
-                const overflow = newCurrent - c.hits;
-                return { ...c, currentHits: c.hits, temporaryHits: c.temporaryHits + overflow };
-            })
-        );
+                        if (newCurrent <= c.hits) {
+                            return { ...c, currentHits: newCurrent };
+                        }
+
+                        const overflow = newCurrent - c.hits;
+
+                        return {
+                            ...c,
+                            currentHits: c.hits,
+                            temporaryHits: c.temporaryHits + overflow
+                        };
+                    })
+                );
+            },
+        });
     };
 
     const subtractHits = () => {
-        const value = prompt('Сколько хитов снять?');
-        if (!value) return;
+        const char = characters.find(c => c.id === activeId);
+        if (!char) return;
 
-        const amount = Number(value);
-        if (isNaN(amount) || amount <= 0) return;
+        numberModal.openModal({
+            title: 'Снять хиты',
+            name: char.name,
+            min: 0,
+            onConfirm: (amount) => {
+                if (amount <= 0) return;
 
-        setCharacters(prev =>
-            prev.map(c => {
-                if (c.id !== activeId) return c;
+                setCharacters(prev =>
+                    prev.map(c => {
+                        if (c.id !== activeId) return c;
 
-                let damage = amount;
-                let newTemp = c.temporaryHits;
-                let newCurrent = c.currentHits;
+                        let damage = amount;
 
-                if (newTemp > 0) {
-                    const tempDamage = Math.min(newTemp, damage);
-                    newTemp -= tempDamage;
-                    damage -= tempDamage;
-                }
+                        // Сначала временные хиты
+                        const tempDamage = Math.min(c.temporaryHits, damage);
+                        const newTemp = c.temporaryHits - tempDamage;
+                        damage -= tempDamage;
 
-                if (damage > 0) newCurrent = Math.max(0, newCurrent - damage);
+                        // Потом обычные
+                        const newCurrent =
+                            damage > 0
+                                ? Math.max(0, c.currentHits - damage)
+                                : c.currentHits;
 
-                return { ...c, temporaryHits: newTemp, currentHits: newCurrent };
-            })
-        );
+                        return {
+                            ...c,
+                            temporaryHits: newTemp,
+                            currentHits: newCurrent,
+                        };
+                    })
+                );
+            },
+        });
     };
 
     const subtractDice = () => {
@@ -265,6 +295,8 @@ function CharacterList() {
         );
     };
 
+    const numberModal = useNumberModal();
+
     return (
         <div className={styles.characterListContainer}>
             <div className={styles.characterList}>
@@ -278,7 +310,7 @@ function CharacterList() {
                     <List
                         onToggleSkill={handleToggleSkill}
                         activeCharacter={activeCharacter}
-                        removeCharacter={() => removeCharacter(activeCharacter.id)}
+                        removeCharacter={() => setDeletingCharacter(activeCharacter)}
                         openEditModal={() => setEditingCharacter(activeCharacter)}
                         longRest={longRest}
                         addHits={addHits}
@@ -291,13 +323,40 @@ function CharacterList() {
                 )}
             </div>
 
-            {editingCharacter && (
-                <CharacterModal
-                    isOpen
-                    character={editingCharacter}
-                    onClose={closeModal}
-                    onSave={saveCharacter}
+            <Modal
+                isOpen={numberModal.isOpen}
+                size='small'
+            >
+                <ChangeHitsModal
+                    title={numberModal.title}
+                    name={numberModal.name}
+                    min={numberModal.min}
+                    max={numberModal.max}
+                    onConfirm={(value) => numberModal.onConfirm?.(value)}
+                    onClose={numberModal.closeModal}
                 />
+            </Modal>
+
+            {editingCharacter && (
+                <Modal
+                    isOpen={!!editingCharacter}
+                    size="large"
+                >
+                    <CharacterModal
+                        character={editingCharacter}
+                        onClose={closeModal}
+                        onSave={saveCharacter}
+                    />
+                </Modal>
+            )}
+            {deletingCharacter && (
+                <Modal isOpen={!!deletingCharacter} size="small">
+                    <DeleteCharacter
+                        removeCharacter={() => removeCharacterById(deletingCharacter.id)}
+                        onClose={closeDeleteModal}
+                        name={deletingCharacter.name}
+                    />
+                </Modal>
             )}
         </div>
     );

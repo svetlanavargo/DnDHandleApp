@@ -157,3 +157,8 @@ button:focus-visible {
     height: 25px;
     padding: 5px 15px;
 }
+
+.textDelete {
+    background-color: #2eb9a1;
+    color: #1F1F1F;
+}

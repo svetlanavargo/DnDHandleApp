@@ -16,12 +16,18 @@ export interface BattleCard extends Card {
 
 export const useBattle = (
     _cards: Card[],
-    setCards: React.Dispatch<React.SetStateAction<Card[]>>
+    setCards: React.Dispatch<React.SetStateAction<Card[]>>,
+    openNumberModal: (params: {
+        title: string;
+        name?: string;
+        min?: number;
+        max?: number;
+        onConfirm: (value: number) => void;
+    }) => void
 ) => {
     const [battleCards, setBattleCards] = useState<BattleCard[]>([]);
     const [isBattle, setIsBattle] = useState(false);
 
-    // счётчики ходов, раундов и таймер
     const [turnState, setTurnState] = useState({
         turnCounter: 0,
         currentTurnIndex: 0,
@@ -32,7 +38,6 @@ export const useBattle = (
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
     const [noteDraft, setNoteDraft] = useState('');
 
-    // сообщения о завершении состояний
     const [expiredConditions, setExpiredConditions] = useState<string[]>([]);
 
     const turnDuration = 6;
@@ -48,7 +53,6 @@ export const useBattle = (
                 card.id === id ? { ...card, note: noteDraft } : card
             )
         );
-
         setEditingNoteId(null);
     };
 
@@ -56,7 +60,6 @@ export const useBattle = (
         setCards(prevCards =>
             prevCards.map(card => {
                 const battleCard = battleList.find(b => b.id === card.id);
-
                 if (!battleCard) return card;
 
                 return {
@@ -68,36 +71,41 @@ export const useBattle = (
         );
     };
 
-    const rollInitiative = (card: Card) => {
-        if (card.isPlayer) {
-            let value: number | null = null;
-
-            while (value === null) {
-                const input = window.prompt(`Инициатива ${card.name}:`, '0');
-                if (input === null) return 0; // отмена
-
-                const num = Number(input);
-
-                if (!Number.isNaN(num)) {
-                    value = num;
-                } else {
-                    alert('Введите число');
-                }
+    const rollInitiative = (card: Card): Promise<number> => {
+        return new Promise((resolve) => {
+            if (!card.isPlayer) {
+                const roll = Math.floor(Math.random() * 20 + 1);
+                resolve(roll + (card.initiativeBonus || 0));
+                return;
             }
 
-            return Math.max(0, Math.min(1000, value));
-        }
-        const roll = Math.floor(Math.random() * 20 + 1);
-        return roll + (card.initiativeBonus || 0);
+            openNumberModal({
+                title: 'Введите инициативу',
+                name: card.name,
+                min: 0,
+                max: 1000,
+                onConfirm: (value) => {
+                    const initiative = Math.max(0, Math.min(1000, value));
+                    resolve(initiative);
+                }
+            });
+        });
     };
 
-    const startFight = () => {
+    const startFight = async () => {
         if (battleCards.length === 0) return;
 
-        const newBattleCards = battleCards.map(card => ({
-            ...card,
-            initiative: rollInitiative(card)
-        }));
+        const newBattleCards: BattleCard[] = [];
+
+        for (const card of battleCards) {
+            if (card.isPlayer) {
+                const initiative = await rollInitiative(card); // ждём пока игрок введёт
+                newBattleCards.push({ ...card, initiative });
+            } else {
+                const roll = Math.floor(Math.random() * 20 + 1);
+                newBattleCards.push({ ...card, initiative: roll + (card.initiativeBonus || 0) });
+            }
+        }
 
         newBattleCards.sort((a, b) => b.initiative - a.initiative);
 
@@ -130,10 +138,10 @@ export const useBattle = (
         const currentCardIndex = newTurn % totalCards;
         const currentCard = battleCards[currentCardIndex];
 
-        setBattleCards(prevCards => {
+        setBattleCards(prev => {
             const expired: string[] = [];
 
-            const updated = prevCards.map(card => {
+            const updated = prev.map(card => {
                 if (!card.conditions) return card;
 
                 const remainingConditions = card.conditions
@@ -147,6 +155,7 @@ export const useBattle = (
                             expired.push(`Состояние "${cond.name}" на ${card.name} закончилось`);
                             return null;
                         }
+
                         return { ...cond, remaining: newRemaining };
                     })
                     .filter(Boolean) as Condition[];
@@ -155,19 +164,21 @@ export const useBattle = (
             });
 
             if (expired.length > 0) {
-                setExpiredConditions(prev => [...prev, ...expired.filter(msg => !prev.includes(msg))]);
+                setExpiredConditions(prevMsgs => [
+                    ...prevMsgs,
+                    ...expired.filter(msg => !prevMsgs.includes(msg))
+                ]);
             }
 
             return updated;
         });
 
-        // обновляем счётчики отдельно
-        setTurnState({
+        setTurnState(prev => ({
             turnCounter: newTurn,
             currentTurnIndex: currentCardIndex,
             round: Math.floor(newTurn / totalCards) + 1,
-            timer: turnState.timer + turnDuration
-        });
+            timer: prev.timer + turnDuration
+        }));
     };
 
     const addUserToBattle = (card: Card) => {
@@ -185,8 +196,7 @@ export const useBattle = (
         setBattleCards(prev => {
             const updated = prev.filter(c => c.id !== id);
 
-            // синхронизируем хиты
-            syncBattleHitsToCards(prev);
+            syncBattleHitsToCards(updated);
 
             if (updated.length <= 1) {
                 setIsBattle(false);
@@ -198,50 +208,76 @@ export const useBattle = (
         });
     };
 
-    const changeHits = (id: string, delta: number) => {
-        setBattleCards(prev =>
-            prev.map(card =>
-                card.id === id ? { ...card, currentHits: Math.max(0, card.currentHits + delta) } : card
-            )
-        );
-    };
-
     const subtractHits = (id: string) => {
         const card = battleCards.find(c => c.id === id);
         if (!card) return;
 
-        const input = window.prompt(`Сколько урона у ${card.name}?`, '0');
-        if (!input) return;
+        openNumberModal({
+            title: 'Нанести урон',
+            name: card.name,
+            min: 0,
+            onConfirm: (damage) => {
+                if (damage <= 0) return;
 
-        const damage = Number(input);
-        if (isNaN(damage)) return;
+                let shouldRemove = false;
 
-        const newHits = Math.max(0, card.currentHits - damage);
+                setBattleCards(prev => {
+                    const updated = prev.map(c => {
+                        if (c.id !== id) return c;
 
-        setBattleCards(prev =>
-            prev.map(c =>
-                c.id === id ? { ...c, currentHits: newHits } : c
-            )
-        );
+                        const newHits = Math.max(0, c.currentHits - damage);
 
-        if (newHits === 0) {
-            getOutOfBattle(id);
-        }
+                        if (newHits === 0) {
+                            shouldRemove = true;
+                        }
+
+                        return { ...c, currentHits: newHits };
+                    });
+
+                    return updated;
+                });
+
+                if (shouldRemove) {
+                    getOutOfBattle(id);
+                }
+            }
+        });
     };
 
     const addHits = (id: string) => {
-        const input = window.prompt('Сколько лечения?');
-        if (!input) return;
+        const card = battleCards.find(c => c.id === id);
+        if (!card) return;
 
-        const heal = Number(input);
-        if (isNaN(heal)) return;
+        openNumberModal({
+            title: 'Лечение',
+            name: card.name,
+            min: 0,
+            onConfirm: (heal) => {
+                if (heal <= 0) return;
 
-        changeHits(id, heal);
+                setBattleCards(prev =>
+                    prev.map(c =>
+                        c.id === id
+                            ? { ...c, currentHits: Math.max(0, c.currentHits + heal) }
+                            : c
+                    )
+                );
+            }
+        });
     };
 
     const longRest = () => {
-        setCards(prev => prev.map(card => card.currentHits > 0 ? { ...card, currentHits: card.maxHits } : card));
-        setBattleCards(prev => prev.map(card => card.currentHits > 0 ? { ...card, currentHits: card.maxHits } : card));
+        setCards(prev =>
+            prev.map(card =>
+                card.currentHits > 0 ? { ...card, currentHits: card.maxHits } : card
+            )
+        );
+
+        setBattleCards(prev =>
+            prev.map(card =>
+                card.currentHits > 0 ? { ...card, currentHits: card.maxHits } : card
+            )
+        );
     };
 
     const addCondition = (cardId: string, condition: Condition) => {

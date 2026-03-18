@@ -1,10 +1,13 @@
 import {useEffect, useState} from "react";
 import type { Card } from '../../types/CardInBattleTracker.ts';
 import { useBattle } from '../../hooks/useBattle.ts';
+import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import type { Condition } from '../../hooks/useBattle';
 import CardsList from './CardsList/CardsList.tsx';
 import Times from './Times/Times.tsx';
 import BattleField from './BattleField/BattleField.tsx';
+import Modal from '../Modals/Modal.tsx';
+import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import CreateCardModal from '../Modals/CreateCardModal.tsx';
 import ConditionModal from '../Modals/ConditionModal.tsx';
 import NoticesModal from '../Modals/NoticesModal.tsx';
@@ -20,6 +23,9 @@ function BattleTracker() {
     const [editingCardId, setEditingCardId] = useState<string | null>(null);
     const [conditionModalOpen, setConditionModalOpen] = useState(false);
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
+
+    const numberModal = useNumberModal();
+
 
     const {
         isBattle,
@@ -44,7 +50,7 @@ function BattleTracker() {
         addCondition,
         clearExpiredConditions,
         resurrectCard
-    } = useBattle(cards, setCards);
+    } = useBattle(cards, setCards, numberModal.openModal);
 
     const { turnCounter, timer, round, currentTurnIndex } = turnState;
 
@@ -134,34 +140,65 @@ function BattleTracker() {
                 />
             </div>
 
-            <CreateCardModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onSubmit={handleSubmit}
-                initialValues={editingCard ? {
-                    name: editingCard.name,
-                    maxHits: editingCard.maxHits,
-                    currentHits: editingCard.currentHits,
-                    ac: editingCard.ac,
-                    isPlayer: editingCard.isPlayer,
-                    initiativeBonus: editingCard.initiativeBonus,
-                    note: editingCard.note,
-                    color: editingCard.color
-                } : undefined}
-            />
+            {isModalOpen && (
+                <Modal
+                    isOpen={isModalOpen}
+                    size="small"
+                >
+                    <CreateCardModal
+                        initialValues={editingCard ? {
+                            name: editingCard.name,
+                            maxHits: editingCard.maxHits,
+                            currentHits: editingCard.currentHits,
+                            ac: editingCard.ac,
+                            isPlayer: editingCard.isPlayer,
+                            initiativeBonus: editingCard.initiativeBonus,
+                            note: editingCard.note,
+                            color: editingCard.color,
+                        } : undefined}
+                        onSubmit={handleSubmit}
+                        onClose={closeModal}
+                    />
+                </Modal>
+            )}
 
-            <ConditionModal
-                isOpen={conditionModalOpen}
-                onClose={closeConditionModal}
-                onAdd={handleAddCondition}
-            />
+            {conditionModalOpen && (
+                <Modal
+                    isOpen={conditionModalOpen}
+                    size="small"
+                >
+                    <ConditionModal
+                        onAdd={handleAddCondition}
+                        onClose={closeConditionModal}
+                    />
+                </Modal>
+            )}
 
             {expiredConditions.length > 0 && (
-                <NoticesModal
-                    message={expiredConditions}
-                    onClose={clearExpiredConditions}
-                />
+                <Modal
+                    isOpen={expiredConditions.length > 0}
+                    size="small"
+                >
+                    <NoticesModal
+                        message={expiredConditions}
+                        onClose={clearExpiredConditions}
+                    />
+                </Modal>
             )}
+
+            <Modal isOpen={numberModal.isOpen} size="small">
+                {numberModal.isOpen && numberModal.onConfirm && (
+                    <ChangeHitsModal
+                        key={numberModal.modalKey}
+                        title={numberModal.title}
+                        name={numberModal.name}
+                        min={numberModal.min}
+                        max={numberModal.max}
+                        onConfirm={numberModal.onConfirm}
+                        onClose={numberModal.closeModal}
+                    />
+                )}
+            </Modal>
         </>
     );
 }

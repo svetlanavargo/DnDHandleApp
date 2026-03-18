@@ -35,7 +35,6 @@ const spellSlotProgression = rawSpellSlotProgression as unknown as Record<string
 
 // ===== Типы =====
 interface Props {
-    isOpen: boolean;
     character: Character;
     onClose: () => void;
     onSave: (updated: Character) => void;
@@ -78,14 +77,12 @@ const defaultForm: FormValues = {
 };
 
 // ===== Компонент =====
-function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
+function CharacterModal({ character, onClose, onSave }: Props) {
     const [formValues, setFormValues] = useState<FormValues>(defaultForm);
     const firstInputRef = useRef<HTMLInputElement>(null);
 
     // ===== Инициализация формы =====
     useEffect(() => {
-        if (!isOpen) return;
-
         setFormValues({
             name: character.name,
             race: character.race as RaceKey,
@@ -105,7 +102,7 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
         });
 
         firstInputRef.current?.focus();
-    }, [isOpen, character]);
+    }, [character]);
 
     // ===== Изменение поля формы =====
     function handleChange<K extends keyof FormValues>(field: K, value: FormValues[K]) {
@@ -182,12 +179,9 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
         onSave({ ...character, ...patch });
     }
 
-    if (!isOpen) return null;
-
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
-            <form
-                className={styles.modalContent}
+        <div>
+            <form className={styles.form}
                 onClick={e => e.stopPropagation()}
                 onSubmit={handleSubmit}
             >

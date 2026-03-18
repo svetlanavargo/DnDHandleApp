@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { Condition } from '../../hooks/useBattle.ts';
 import styles from './Modals.module.css';
 import Input from "../UI/Input/Input.tsx";
@@ -6,12 +6,11 @@ import Select from '../UI/Select/Select.tsx';
 import Btn from "../UI/Btn/Btn.tsx";
 
 interface Props {
-    isOpen: boolean;
     onClose: () => void;
     onAdd: (condition: Condition) => void;
 }
 
-export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
+export default function ConditionModal({ onClose, onAdd }: Props) {
     const [name, setName] = useState('');
     const [type, setType] = useState<'round' | 'time'>('round');
     const [duration, setDuration] = useState<number>(1);
@@ -20,16 +19,13 @@ export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
     const nameInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (!isOpen) return;
-
         const id = setTimeout(() => {
             nameInputRef.current?.focus();
         }, 0);
 
         return () => clearTimeout(id);
-    }, [isOpen]);
+    }, []);
 
-    if (!isOpen) return null;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,9 +45,9 @@ export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
     };
 
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
+        <div>
             <form
-                className={styles.modalContent}
+                className={styles.form}
                 onClick={e => e.stopPropagation()}
                 onSubmit={handleSubmit}
             >
@@ -98,6 +94,7 @@ export default function ConditionModal({ isOpen, onClose, onAdd }: Props) {
 
                 <div className={styles.modalButtons}>
                     <Btn type="submit">Добавить</Btn>
+                    <Btn onClick={onClose}>Отмена</Btn>
                 </div>
             </form>
         </div>

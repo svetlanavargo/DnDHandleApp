@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import InventoryList from './InventoryList/InventoryList.tsx';
 import CurrencyList from './CurrencyList/CurrencyList.tsx';
+import { useNumberModal } from '../../hooks/useNumberModal.ts';
+import Modal from '../Modals/Modal.tsx';
+import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import styles from './Inventory.module.css';
 
 export interface Currency {
-    platinum: number
-    gold: number
-    silver: number
-    bronze: number
+    platinum: number;
+    gold: number;
+    silver: number;
+    bronze: number;
 }
 
 const defaultCurrency: Currency = {
@@ -27,9 +30,9 @@ function Inventory() {
         return saved ? JSON.parse(saved) : defaultCurrency;
     });
 
-    const handleSetText = (newText: string) => {
-        setText(newText);
-    }
+    const numberModal = useNumberModal();
+
+    const handleSetText = (newText: string) => setText(newText);
 
     const increment = (key: keyof Currency) => {
         setCurrency(prev => ({
@@ -45,40 +48,30 @@ function Inventory() {
         }));
     };
 
-    const onCalc = (key: keyof  Currency) => {
-        const input = prompt('Введите число (можно отрицательное):');
-
-        if (input === null) return;
-
-        const value = Number(input);
-
-        if (Number.isNaN(value)) {
-            alert('Нужно ввести число');
-            return;
-        }
-
-        setCurrency(prev => {
-            const newValue = prev[key] + value;
-
-            return {
-                ...prev,
-                [key]: newValue < 0 ? 0 : newValue
-            };
+    const onCalc = (key: keyof Currency) => {
+        numberModal.openModal({
+            title: `Изменение ${key}, введи +-`,
+            min: undefined,
+            max: undefined,
+            onConfirm: (value) => {
+                setCurrency(prev => ({
+                    ...prev,
+                    [key]: Math.max(0, prev[key] + value)
+                }));
+            }
         });
-    }
+    };
 
-    useEffect(() => {
+    // синхронизация с localStorage
+    useState(() => {
         localStorage.setItem('currency', JSON.stringify(currency));
-    }, [currency]);
-
-    useEffect(() => {
         localStorage.setItem('note', text);
-    }, [text]);
+    });
 
     return (
         <div className={styles.inventoryContainer}>
             <div className={styles.inventory}>
-                <InventoryList text={text} setText={handleSetText}/>
+                <InventoryList text={text} setText={handleSetText} />
                 <CurrencyList
                     currency={currency}
                     increment={increment}
@@ -86,8 +79,18 @@ function Inventory() {
                     onCalc={onCalc}
                 />
             </div>
+
+            <Modal isOpen={numberModal.isOpen} size="small">
+                {numberModal.isOpen && numberModal.onConfirm && (
+                    <ChangeHitsModal
+                        title={numberModal.title}
+                        onConfirm={numberModal.onConfirm}
+                        onClose={numberModal.closeModal}
+                    />
+                )}
+            </Modal>
         </div>
-    )
+    );
 }
 
-export default Inventory
+export default Inventory;

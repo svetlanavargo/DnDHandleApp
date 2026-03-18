@@ -8,7 +8,6 @@ import Select from "../UI/Select/Select.tsx";
 import Checkbox from "../UI/Checkbox/Checkbox.tsx";
 
 interface CardModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: Omit<Card, 'id'>) => void;
     initialValues?: Omit<Card, 'id'>;
@@ -36,14 +35,12 @@ const defaultForm: FormValues = {
     color: undefined
 };
 
-function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModalProps) {
+function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
     const [formValues, setFormValues] = useState<FormValues>(defaultForm);
     const firstInputRef = useRef<HTMLInputElement>(null);
 
     // синхронизация формы при открытии модалки
     useEffect(() => {
-        if (!isOpen) return;
-
         if (initialValues) {
             setFormValues({
                 name: initialValues.name,
@@ -62,7 +59,7 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
         // автофокус
         const id = setTimeout(() => firstInputRef.current?.focus(), 0);
         return () => clearTimeout(id);
-    }, [isOpen, initialValues]);
+    }, [initialValues]);
 
     const handleChange = <K extends keyof FormValues>(field: K, value: FormValues[K]) => {
         setFormValues(prev => {
@@ -99,12 +96,9 @@ function CreateCardModal({ isOpen, onClose, onSubmit, initialValues }: CardModal
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className={styles.modalOverlay}>
-            <form
-                className={styles.modalContent}
+        <div>
+            <form className={styles.form}
                 onClick={e => e.stopPropagation()}
                 onSubmit={handleSubmit}
             >
