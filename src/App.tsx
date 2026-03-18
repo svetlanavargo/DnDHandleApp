@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import CharacterProvider from './context/CharacterProvider.tsx';
 import Header from './components/Header/Header.tsx';
 import MainPage from './components/MainPage/MainPage.tsx';
 import Dice from './components/Dice/Dice.tsx';
@@ -10,17 +11,19 @@ import './App.css'
 
 function App() {
     return (
-        <BrowserRouter>
-            <Header/>
-            <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/dice" element={<Dice />} />
-                <Route path="/character_list" element={<CharacterList />} />
-                <Route path="/spells_list" element={<SpellsList />} />
-                <Route path="/battle_tracker" element={<BattleTracker />} />
-                <Route path="/inventory" element={<Inventory />} />
-            </Routes>
-        </BrowserRouter>
+        <CharacterProvider>
+            <BrowserRouter>
+                <Header />
+                <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/dice" element={<Dice />} />
+                    <Route path="/character_list" element={<CharacterList />} />
+                    <Route path="/spells_list" element={<SpellsList />} />
+                    <Route path="/battle_tracker" element={<BattleTracker />} />
+                    <Route path="/inventory" element={<Inventory />} />
+                </Routes>
+            </BrowserRouter>
+        </CharacterProvider>
     );
 }
 

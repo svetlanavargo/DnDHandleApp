@@ -227,3 +227,10 @@ export type Skill = {
     name: string;
     ability: keyof Characteristics;
 };
+
+export interface Currency {
+    platinum: number;
+    gold: number;
+    silver: number;
+    bronze: number;
+}

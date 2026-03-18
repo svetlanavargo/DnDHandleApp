@@ -44,9 +44,12 @@ function ChangeHitsModal({
             <h2>{title} {name ? name : ''}</h2>
             <Input
                 ref={inputRef}
-                type="number"
+                type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                    const onlyDigits = e.target.value.replace(/\D/g, '');
+                    setInput(onlyDigits);
+                }}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') handleConfirm();
                     if (e.key === 'Escape') onClose();

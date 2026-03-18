@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { CharacterContext } from '../../context/CharacterContext';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
-import type { Character } from '../../types/Character';
 import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
-import type { SpellSlotProgression } from '../../types/dnd';
+import type { Character } from '../../types/Character.ts';
 import rawSpellSlotProgression from '../../data/Spells/spellSlotProgression.json';
 import classesData from '../../data/classes.json';
 import { getModifier } from '../../utils/getModifier';
@@ -15,111 +15,56 @@ import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
 
 const classes: Classes = classesData as unknown as Classes;
-const spellSlotProgression: SpellSlotProgression = rawSpellSlotProgression as unknown as SpellSlotProgression;
+const spellSlotProgression: Record<ProgressionType, number[][]> = rawSpellSlotProgression as unknown as Record<ProgressionType, number[][]>;
 
-const LOCAL_STORAGE_KEY = 'characters';
-
-function CharacterList() {
-    const [characters, setCharacters] = useState<Character[]>(() => {
-        const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (stored) {
-            try {
-                return JSON.parse(stored) as Character[];
-            } catch {
-                return [];
-            }
-        }
-        return [];
-    });
-
-    const [activeId, setActiveId] = useState<string>(
-        () => characters[0]?.id ?? null
-    );
+export default function CharacterList() {
+    const { characters, activeCharacterId, setActiveCharacterId, addCharacter, updateCharacter, removeCharacter: removeCharacterFromContext } = useContext(CharacterContext);
 
     const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
-    const [isNoteOpen, setIsNoteOpen] = useState(false);
     const [deletingCharacter, setDeletingCharacter] = useState<Character | null>(null);
+    const [creatingCharacter, setCreatingCharacter] = useState(false);
+    const [isNoteOpen, setIsNoteOpen] = useState(false);
+
+    const numberModal = useNumberModal();
+    const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
+
     const closeDeleteModal = () => setDeletingCharacter(null);
+    const closeEditModal = () => setEditingCharacter(null);
 
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(characters));
-    }, [characters]);
-
-    const activeCharacter = characters.find(c => c.id === activeId) ?? characters[0] ?? null;
-
-    const addCharacter = () => {
+    // === Add Character ===
+    const handleAddCharacter = () => {
         if (characters.length >= 6) return;
-
-        const newChar: Character = {
-            id: crypto.randomUUID(),
-            race: 'human',
-            speed: 30,
-            ac: 10,
-            name: '',
-            hits: 1,
-            diceHitsCount: 1,
-            currentHits: 1,
-            temporaryHits: 0,
-            level: 1,
-            initiative: 0,
-            class: 'fighter',
-            subclass: undefined,
-            characteristics: { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 },
-            skills: [],
-            languages: [],
-            weapons: [],
-            armors: [],
-            tools: [],
-            spellSlots: initSpellSlots('fighter', undefined, 1)
-        };
-
-        setEditingCharacter(newChar);
+        setCreatingCharacter(true);
     };
 
+    // === Save Character ===
     const saveCharacter = (updated: Character) => {
-        setCharacters(prev => {
-            const exists = prev.find(c => c.id === updated.id);
+        let spellSlots = updated.spellSlots;
 
-            let spellSlots = updated.spellSlots;
+        const exists = characters.find(c => c.id === updated.id);
+        if (
+            !exists ||
+            exists.class !== updated.class ||
+            exists.subclass !== updated.subclass ||
+            exists.level !== updated.level
+        ) {
+            spellSlots = initSpellSlots(updated.class as ClassKey, updated.subclass, updated.level);
+        }
 
-            if (
-                !exists ||
-                exists.class !== updated.class ||
-                exists.subclass !== updated.subclass ||
-                exists.level !== updated.level
-            ) {
-                spellSlots = initSpellSlots(updated.class as ClassKey, updated.subclass, updated.level);
-            }
-
-            const updatedCharacter: Character = { ...updated, spellSlots };
-
-            if (exists) {
-                return prev.map(c => (c.id === updated.id ? updatedCharacter : c));
-            }
-
-            return [...prev, updatedCharacter];
-        });
-
-        setActiveId(updated.id);
-        setEditingCharacter(null);
+        const updatedCharacter: Character = { ...updated, spellSlots };
+        updateCharacter(updatedCharacter);
+        closeEditModal();
     };
 
-    function initSpellSlots(
-        className: ClassKey,
-        subclassName: string | undefined,
-        level: number
-    ): SpellSlotsState {
+    // === Spell Slots ===
+    function initSpellSlots(className: ClassKey, subclassName: string | undefined, level: number): SpellSlotsState {
         const classData = classes[className];
         if (!classData) return {};
 
         let caster = classData.caster ?? null;
-
-        // если указан сабкласс с кастером — используем его
         if (subclassName && classData.subclasses) {
             const subclassData = classData.subclasses[subclassName];
-            if (subclassData?.caster) {
-                caster = subclassData.caster;
-            }
+            if (subclassData?.caster) caster = subclassData.caster;
         }
 
         if (!caster) return {};
@@ -136,186 +81,126 @@ function CharacterList() {
         return state;
     }
 
+    // === Toggle Skill ===
     const handleToggleSkill = (skill: string) => {
-        setCharacters(prev =>
-            prev.map(c => {
-                if (c.id !== activeId) return c;
-                const hasSkill = c.skills.includes(skill);
-                return {
-                    ...c,
-                    skills: hasSkill
-                        ? c.skills.filter(s => s !== skill)
-                        : [...c.skills, skill]
-                };
-            })
-        );
+        if (!activeCharacter) return;
+
+        const hasSkill = activeCharacter.skills.includes(skill);
+        const updated: Character = {
+            ...activeCharacter,
+            skills: hasSkill
+                ? activeCharacter.skills.filter(s => s !== skill)
+                : [...activeCharacter.skills, skill]
+        };
+        updateCharacter(updated);
     };
 
-    const removeCharacterById = (id: string) => {
-        setCharacters(prev => {
-            const updated = prev.filter(c => c.id !== id);
-            if (activeId === id) setActiveId(updated[0]?.id ?? null);
-            return updated;
-        });
-        closeDeleteModal();
-    };
-
-    const setActive = (id: string) => setActiveId(id);
-    const closeModal = () => setEditingCharacter(null);
-
+    // === HP / Dice / Rest ===
     const addHits = () => {
-        const char = characters.find(c => c.id === activeId);
-        if (!char) return;
+        if (!activeCharacter) return;
 
         numberModal.openModal({
             title: 'Прибавить хиты',
-            name: char.name,
+            name: activeCharacter.name,
             min: 0,
             onConfirm: (amount) => {
                 if (amount <= 0) return;
+                const updated: Character = { ...activeCharacter };
+                const newCurrent = updated.currentHits + amount;
 
-                setCharacters(prev =>
-                    prev.map(c => {
-                        if (c.id !== activeId) return c;
+                if (newCurrent <= updated.hits) {
+                    updated.currentHits = newCurrent;
+                } else {
+                    updated.currentHits = updated.hits;
+                    updated.temporaryHits += newCurrent - updated.hits;
+                }
 
-                        const newCurrent = c.currentHits + amount;
-
-                        if (newCurrent <= c.hits) {
-                            return { ...c, currentHits: newCurrent };
-                        }
-
-                        const overflow = newCurrent - c.hits;
-
-                        return {
-                            ...c,
-                            currentHits: c.hits,
-                            temporaryHits: c.temporaryHits + overflow
-                        };
-                    })
-                );
-            },
+                updateCharacter(updated);
+            }
         });
     };
 
     const subtractHits = () => {
-        const char = characters.find(c => c.id === activeId);
-        if (!char) return;
+        if (!activeCharacter) return;
 
         numberModal.openModal({
             title: 'Снять хиты',
-            name: char.name,
+            name: activeCharacter.name,
             min: 0,
             onConfirm: (amount) => {
                 if (amount <= 0) return;
+                const updated: Character = { ...activeCharacter };
+                let damage = amount;
 
-                setCharacters(prev =>
-                    prev.map(c => {
-                        if (c.id !== activeId) return c;
+                const tempDamage = Math.min(updated.temporaryHits, damage);
+                updated.temporaryHits -= tempDamage;
+                damage -= tempDamage;
 
-                        let damage = amount;
+                updated.currentHits = Math.max(0, updated.currentHits - damage);
 
-                        // Сначала временные хиты
-                        const tempDamage = Math.min(c.temporaryHits, damage);
-                        const newTemp = c.temporaryHits - tempDamage;
-                        damage -= tempDamage;
-
-                        // Потом обычные
-                        const newCurrent =
-                            damage > 0
-                                ? Math.max(0, c.currentHits - damage)
-                                : c.currentHits;
-
-                        return {
-                            ...c,
-                            temporaryHits: newTemp,
-                            currentHits: newCurrent,
-                        };
-                    })
-                );
-            },
+                updateCharacter(updated);
+            }
         });
     };
 
     const subtractDice = () => {
-        setCharacters(prev =>
-            prev.map(c => {
-                if (c.id !== activeId) return c;
+        if (!activeCharacter) return;
 
-                const dice = c.diceHitsCount;
-                if (dice <= 0) return c;
+        const hitDiceValue = classes[activeCharacter.class as ClassKey]?.hitDice;
+        if (!hitDiceValue || activeCharacter.diceHitsCount <= 0) return;
 
-                const newDice = dice - 1;
-                const hitDiceValue = classes[c.class as ClassKey]?.hitDice;
-                if (!hitDiceValue) return c;
+        const roll = Math.floor(Math.random() * Number(hitDiceValue) + 1);
+        const totalHeal = roll + getModifier(activeCharacter.characteristics.CON);
 
-                const hitDice = Number(hitDiceValue);
-                const roll = Math.floor(Math.random() * hitDice + 1);
-                const mod = getModifier(c.characteristics.CON);
-                const totalHeal = roll + mod;
-
-                const newCurrentHits = Math.min(c.hits, c.currentHits + totalHeal);
-
-                return {
-                    ...c,
-                    diceHitsCount: newDice,
-                    currentHits: newCurrentHits
-                };
-            })
-        );
+        const updated: Character = {
+            ...activeCharacter,
+            diceHitsCount: activeCharacter.diceHitsCount - 1,
+            currentHits: Math.min(activeCharacter.hits, activeCharacter.currentHits + totalHeal)
+        };
+        updateCharacter(updated);
     };
 
     const longRest = () => {
-        setCharacters(prev =>
-            prev.map(c => {
-                if (c.id !== activeId) return c;
+        if (!activeCharacter) return;
 
-                const newCurrentHits = c.hits;
-                const newTemporaryHits = 0;
-
-                const maxDice = c.level;
-                const usedDice = maxDice - c.diceHitsCount;
-                const recoverDice = Math.max(1, Math.floor(usedDice / 2));
-                const newDiceHitsCount = Math.min(maxDice, c.diceHitsCount + recoverDice);
-
-                const newSpellSlots: SpellSlotsState = Object.fromEntries(
-                    Object.entries(c.spellSlots ?? {}).map(([lvl, slots]) => [
-                        Number(lvl),
-                        slots.map(() => false)
-                    ])
-                );
-
-                return {
-                    ...c,
-                    currentHits: newCurrentHits,
-                    temporaryHits: newTemporaryHits,
-                    diceHitsCount: newDiceHitsCount,
-                    spellSlots: newSpellSlots
-                };
-            })
-        );
+        const updated: Character = {
+            ...activeCharacter,
+            currentHits: activeCharacter.hits,
+            temporaryHits: 0,
+            diceHitsCount: Math.min(activeCharacter.level, activeCharacter.diceHitsCount + Math.max(1, Math.floor((activeCharacter.level - activeCharacter.diceHitsCount)/2))),
+            spellSlots: Object.fromEntries(
+                Object.entries(activeCharacter.spellSlots ?? {}).map(([lvl, slots]) => [Number(lvl), slots.map(() => false)])
+            )
+        };
+        updateCharacter(updated);
     };
 
-    const numberModal = useNumberModal();
+    // === Remove Character ===
+    const handleRemoveCharacter = (id: string) => {
+        removeCharacterFromContext(id); // используем функцию из контекста
+        closeDeleteModal();
+    };
 
     return (
         <div className={styles.characterListContainer}>
             <div className={styles.characterList}>
                 <Tabs
                     characters={characters}
-                    activeId={activeId}
-                    setActive={setActive}
-                    addCharacter={addCharacter}
+                    activeId={activeCharacterId ?? ''}
+                    setActive={setActiveCharacterId}
+                    addCharacter={handleAddCharacter}
                 />
+
                 {activeCharacter && (
                     <List
-                        onToggleSkill={handleToggleSkill}
                         activeCharacter={activeCharacter}
+                        onToggleSkill={handleToggleSkill}
                         removeCharacter={() => setDeletingCharacter(activeCharacter)}
                         openEditModal={() => setEditingCharacter(activeCharacter)}
-                        longRest={longRest}
                         addHits={addHits}
                         subtractHits={subtractHits}
                         subtractDice={subtractDice}
+                        longRest={longRest}
                         isNoteOpen={isNoteOpen}
                         toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
                         updateCharacter={saveCharacter}
@@ -323,10 +208,7 @@ function CharacterList() {
                 )}
             </div>
 
-            <Modal
-                isOpen={numberModal.isOpen}
-                size='small'
-            >
+            <Modal isOpen={numberModal.isOpen} size="small">
                 <ChangeHitsModal
                     title={numberModal.title}
                     name={numberModal.name}
@@ -337,22 +219,33 @@ function CharacterList() {
                 />
             </Modal>
 
+            {creatingCharacter && (
+                <Modal isOpen={creatingCharacter} size="large">
+                    <CharacterModal
+                        character={null}
+                        onClose={() => setCreatingCharacter(false)}
+                        onSave={(newChar) => {
+                            addCharacter(newChar);
+                            setCreatingCharacter(false);
+                        }}
+                    />
+                </Modal>
+            )}
+
             {editingCharacter && (
-                <Modal
-                    isOpen={!!editingCharacter}
-                    size="large"
-                >
+                <Modal isOpen={!!editingCharacter} size="large">
                     <CharacterModal
                         character={editingCharacter}
-                        onClose={closeModal}
+                        onClose={closeEditModal}
                         onSave={saveCharacter}
                     />
                 </Modal>
             )}
+
             {deletingCharacter && (
                 <Modal isOpen={!!deletingCharacter} size="small">
                     <DeleteCharacter
-                        removeCharacter={() => removeCharacterById(deletingCharacter.id)}
+                        removeCharacter={() => handleRemoveCharacter(deletingCharacter.id)}
                         onClose={closeDeleteModal}
                         name={deletingCharacter.name}
                     />
@@ -361,5 +254,3 @@ function CharacterList() {
         </div>
     );
 }
-
-export default CharacterList;

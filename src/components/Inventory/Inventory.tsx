@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { CharacterContext } from '../../context/CharacterContext';
+import type { Currency } from '../../types/dnd.ts';
+import type { Character as CharacterType } from '../../types/Character.ts'
 import InventoryList from './InventoryList/InventoryList.tsx';
 import CurrencyList from './CurrencyList/CurrencyList.tsx';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
@@ -6,77 +9,92 @@ import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import styles from './Inventory.module.css';
 
-export interface Currency {
-    platinum: number;
-    gold: number;
-    silver: number;
-    bronze: number;
-}
-
-const defaultCurrency: Currency = {
-    platinum: 0,
-    gold: 0,
-    silver: 0,
-    bronze: 0
-};
-
 function Inventory() {
-    const [text, setText] = useState(() => {
-        const saved = localStorage.getItem('note');
-        return saved ?? '';
-    });
-    const [currency, setCurrency] = useState<Currency>(() => {
-        const saved = localStorage.getItem('currency');
-        return saved ? JSON.parse(saved) : defaultCurrency;
-    });
+    const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
+
+    // Если персонаж выбран, берём его; иначе null
+    const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
 
     const numberModal = useNumberModal();
 
-    const handleSetText = (newText: string) => setText(newText);
+    // Локальные состояния для note и currency
+    const [text, setText] = useState<string>('');
+    const [currency, setCurrency] = useState<Currency>({
+        platinum: 0,
+        gold: 0,
+        silver: 0,
+        bronze: 0
+    });
+
+    // Синхронизируем локальные состояния при смене персонажа
+    useEffect(() => {
+        if (!activeCharacter) return;
+
+        queueMicrotask(() => {
+            setText(activeCharacter.inventory.note);
+            setCurrency(activeCharacter.inventory.currency);
+        });
+    }, [activeCharacter]);
+
+    // Обновление inventory персонажа
+    const updateInventory = (updateFn: (inv: CharacterType['inventory']) => CharacterType['inventory']) => {
+        if (!activeCharacter) return;
+        const updatedInventory = updateFn(activeCharacter.inventory);
+        updateCharacter({ ...activeCharacter, inventory: updatedInventory });
+    };
+
+    // ===== Обработчики =====
+    const handleTextChange = (newText: string) => {
+        setText(newText);
+        updateInventory(inv => ({ ...inv, note: newText }));
+    };
 
     const increment = (key: keyof Currency) => {
-        setCurrency(prev => ({
-            ...prev,
-            [key]: prev[key] + 1
-        }));
+        updateInventory(inv => {
+            const updated = { ...inv.currency, [key]: inv.currency[key] + 1 };
+            setCurrency(updated);
+            return { ...inv, currency: updated };
+        });
     };
 
     const decrement = (key: keyof Currency) => {
-        setCurrency(prev => ({
-            ...prev,
-            [key]: prev[key] > 0 ? prev[key] - 1 : 0
-        }));
+        updateInventory(inv => {
+            const updated = { ...inv.currency, [key]: Math.max(0, inv.currency[key] - 1) };
+            setCurrency(updated);
+            return { ...inv, currency: updated };
+        });
     };
 
     const onCalc = (key: keyof Currency) => {
         numberModal.openModal({
             title: `Изменение ${key}, введи +-`,
-            min: undefined,
-            max: undefined,
             onConfirm: (value) => {
-                setCurrency(prev => ({
-                    ...prev,
-                    [key]: Math.max(0, prev[key] + value)
-                }));
+                updateInventory(inv => {
+                    const updated = { ...inv.currency, [key]: Math.max(0, inv.currency[key] + value) };
+                    setCurrency(updated);
+                    return { ...inv, currency: updated };
+                });
             }
         });
     };
 
-    // синхронизация с localStorage
-    useState(() => {
-        localStorage.setItem('currency', JSON.stringify(currency));
-        localStorage.setItem('note', text);
-    });
+    // Если персонаж не выбран, показываем заглушку
+    if (!activeCharacter) {
+        return <div className={styles.inventoryContainer}>Выберите персонажа для просмотра инвентаря</div>;
+    }
 
     return (
         <div className={styles.inventoryContainer}>
             <div className={styles.inventory}>
-                <InventoryList text={text} setText={handleSetText} />
+                <InventoryList
+                    text={text}
+                    setText={handleTextChange}
+                />
                 <CurrencyList
                     currency={currency}
-                    increment={increment}
-                    decrement={decrement}
-                    onCalc={onCalc}
+                    increment={key => increment(key as keyof Currency)}
+                    decrement={key => decrement(key as keyof Currency)}
+                    onCalc={key => onCalc(key as keyof Currency)}
                 />
             </div>
 
