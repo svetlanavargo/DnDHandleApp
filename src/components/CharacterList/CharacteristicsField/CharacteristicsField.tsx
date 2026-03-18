@@ -1,7 +1,7 @@
-import type { Characteristics } from '../../../types/Character.ts';
+import type { Characteristics } from '../../../types/dnd.ts';
 import { getProficiencyBonus } from '../../../utils/getProficiencyBonus.ts';
 import { getModifier } from '../../../utils/getModifier.ts';
-import classesData from '../../../data/Classes/classes.json';
+import classesData from '../../../data/classes.json';
 import styles from './CharacteristicsField.module.css';
 
 interface CharacteristicsFieldProps {
@@ -12,7 +12,7 @@ interface CharacteristicsFieldProps {
 
 function CharacteristicsField({ characteristics, level, charClass }: CharacteristicsFieldProps) {
     const savingThrows =
-        classesData.classes[charClass as keyof typeof classesData.classes]?.savingThrows ?? [];
+        classesData[charClass as keyof typeof classesData]?.savingThrows ?? [];
 
     return (
         <div className={styles.characteristicsFieldContainer}>

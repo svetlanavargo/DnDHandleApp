@@ -4,8 +4,8 @@ import styles from './Tabs.module.css';
 
 interface TabsProps {
     characters: Character[];
-    activeId: number;
-    setActive: (id: number) => void;
+    activeId: string;
+    setActive: (id: string) => void;
     addCharacter: () => void;
 }
 

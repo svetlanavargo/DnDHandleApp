@@ -1,19 +1,8 @@
-export interface Characteristics {
-    STR: number;
-    DEX: number;
-    CON: number;
-    INT: number;
-    WIS: number;
-    CHA: number;
-}
-
-export interface SpellSlotsState {
-    [level: number]: boolean[];
-}
+import type { ClassKey, RaceKey, Characteristics, SpellSlotsState } from './dnd.ts';
 
 export interface Character {
-    id: number | string;
-    race: string;
+    id: string;
+    race: RaceKey;
     speed: number;
     ac: number;
     name: string;
@@ -23,7 +12,7 @@ export interface Character {
     temporaryHits: number;
     initiative: number;
     level: number;
-    class: string;
+    class: ClassKey;
     subclass?: string;
     characteristics: Characteristics;
     skills: string[];

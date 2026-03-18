@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import type { Character, Characteristics } from "../../types/Character";
+import type { Character } from "../../types/Character";
+import type {
+    ClassKey,
+    RaceKey,
+    Classes,
+    ProgressionType,
+    Characteristics,
+    SpellSlotsState
+} from "../../types/dnd";
+
 import { TextClasses } from "../../constants/TextClasses";
 import { TextSubClasses } from "../../constants/TextSubClasses";
 import { TextRace } from "../../constants/TextRaces";
@@ -15,11 +24,16 @@ import Input from "../UI/Input/Input";
 import Select from "../UI/Select/Select";
 import CheckboxDropdown from "../UI/CheckboxDropdown/CheckboxDropdown";
 
-import { classes } from "../../data/Classes/classes.json";
-import spellSlotProgression from "../../data/Spells/spellSlotProgression.json";
+import classesData from "../../data/classes.json";
+import rawSpellSlotProgression from "../../data/Spells/spellSlotProgression.json";
 
 import styles from "./Modals.module.css";
 
+// ===== Константы =====
+const classes: Classes = classesData as unknown as Classes;
+const spellSlotProgression = rawSpellSlotProgression as unknown as Record<string, Record<number, number[]>>;
+
+// ===== Типы =====
 interface Props {
     isOpen: boolean;
     character: Character;
@@ -29,8 +43,8 @@ interface Props {
 
 type FormValues = {
     name: string;
-    race: string;
-    class: string;
+    race: RaceKey;
+    class: ClassKey;
     subclass?: string;
     speed: string;
     ac: string;
@@ -63,17 +77,19 @@ const defaultForm: FormValues = {
     tools: []
 };
 
+// ===== Компонент =====
 function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
     const [formValues, setFormValues] = useState<FormValues>(defaultForm);
     const firstInputRef = useRef<HTMLInputElement>(null);
 
+    // ===== Инициализация формы =====
     useEffect(() => {
         if (!isOpen) return;
 
         setFormValues({
             name: character.name,
-            race: character.race,
-            class: character.class,
+            race: character.race as RaceKey,
+            class: character.class as ClassKey,
             subclass: character.subclass,
             speed: character.speed.toString(),
             ac: character.ac.toString(),
@@ -88,9 +104,10 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
             tools: [...character.tools]
         });
 
-        setTimeout(() => firstInputRef.current?.focus(), 0);
+        firstInputRef.current?.focus();
     }, [isOpen, character]);
 
+    // ===== Изменение поля формы =====
     function handleChange<K extends keyof FormValues>(field: K, value: FormValues[K]) {
         setFormValues(prev => ({ ...prev, [field]: value }));
     }
@@ -102,23 +119,22 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
         }));
     }
 
-    function initSpellSlots(className: string, subclassName: string | undefined, level: number) {
+    // ===== Инициализация spellSlots =====
+    function initSpellSlots(className: ClassKey, subclassName: string | undefined, level: number): SpellSlotsState {
         const classData = classes[className];
         if (!classData) return {};
 
         let caster = classData.caster;
-
         if (subclassName && classData.subclasses?.[subclassName]?.caster) {
             caster = classData.subclasses[subclassName].caster;
         }
-
         if (!caster) return {};
 
-        const progression = spellSlotProgression[caster.progression ?? "full"];
+        const progressionType: ProgressionType = caster.progression ?? "full";
+        const progression = spellSlotProgression[progressionType] ?? {};
         const slotsPerLevel = progression[level] ?? [];
 
-        const state: Record<number, boolean[]> = {};
-
+        const state: SpellSlotsState = {};
         slotsPerLevel.forEach((count, i) => {
             state[i + 1] = Array(count).fill(false);
         });
@@ -126,21 +142,19 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
         return state;
     }
 
+    // ===== Сохранение персонажа =====
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        const level = Number(formValues.level) || 1;
-        const hits = Number(formValues.hits) || 0;
+        const levelNum = Number(formValues.level) || 1;
+        const hitsNum = Number(formValues.hits) || 0;
 
-        let spellSlots = character.spellSlots;
-
-        if (
+        const updatedSpellSlots =
             character.class !== formValues.class ||
             character.subclass !== formValues.subclass ||
-            character.level !== level
-        ) {
-            spellSlots = initSpellSlots(formValues.class, formValues.subclass, level);
-        }
+            character.level !== levelNum
+                ? initSpellSlots(formValues.class, formValues.subclass, levelNum)
+                : character.spellSlots;
 
         const updated: Character = {
             ...character,
@@ -150,8 +164,8 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
             subclass: formValues.subclass,
             speed: Number(formValues.speed) || 0,
             ac: Number(formValues.ac) || 0,
-            hits,
-            level,
+            hits: hitsNum,
+            level: levelNum,
             initiative: Number(formValues.initiative) || 0,
             characteristics: { ...formValues.characteristics },
             skills: [...formValues.skills],
@@ -159,15 +173,13 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
             weapons: [...formValues.weapons],
             armors: [...formValues.armors],
             tools: [...formValues.tools],
-            spellSlots
+            spellSlots: updatedSpellSlots,
+            diceHitsCount: levelNum,
+            currentHits: hitsNum
         };
 
         const patch = getCharacterPatch(character, updated);
-
-        onSave({
-            ...character,
-            ...patch
-        });
+        onSave({ ...character, ...patch });
     }
 
     if (!isOpen) return null;
@@ -184,6 +196,7 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                     <Btn onClick={onClose} classBtn="close" />
                 </div>
 
+                {/* Имя */}
                 <Input
                     ref={firstInputRef}
                     type="text"
@@ -193,20 +206,27 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                     Имя
                 </Input>
 
+                {/* Раса */}
                 <Select
                     label="Раса"
                     value={formValues.race}
                     options={TextRace}
-                    onChange={v => handleChange("race", v)}
+                    onChange={v => v && handleChange("race", v as RaceKey)}
                 />
 
+                {/* Класс */}
                 <Select
                     label="Класс"
                     value={formValues.class}
                     options={TextClasses}
-                    onChange={v => setFormValues(p => ({ ...p, class: v, subclass: undefined }))}
+                    onChange={v => setFormValues(p => ({
+                        ...p,
+                        class: v as ClassKey,
+                        subclass: undefined
+                    }))}
                 />
 
+                {/* Сабкласс */}
                 <Select
                     label="Сабкласс"
                     value={formValues.subclass}
@@ -215,17 +235,28 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                     onChange={v => handleChange("subclass", v)}
                 />
 
-                <Input
-                    type="text"
-                    inputMode="numeric"
-                    value={formValues.level}
-                    onChange={e => handleChange("level", e.target.value.replace(/\D/g, ""))}
-                >
-                    Уровень
-                </Input>
+                {/* Уровень, Хиты, Скорость, AC, Инициатива */}
+                {["level","hits","speed","ac","initiative"].map(field => (
+                    <Input
+                        key={field}
+                        type="text"
+                        inputMode="numeric"
+                        value={formValues[field as keyof FormValues] as string}
+                        onChange={e => handleChange(
+                            field as keyof FormValues,
+                            e.target.value.replace(/\D/g, "") as any
+                        )}
+                    >
+                        {field === "level" ? "Уровень" :
+                            field === "hits" ? "Хиты" :
+                                field === "speed" ? "Скорость" :
+                                    field === "ac" ? "AC" :
+                                        "Инициатива"}
+                    </Input>
+                ))}
 
+                {/* Характеристики */}
                 <h3>Характеристики</h3>
-
                 <div className={styles.flex}>
                     {Object.entries(formValues.characteristics).map(([key, value]) => (
                         <Input
@@ -234,10 +265,7 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                             inputMode="numeric"
                             value={value.toString()}
                             onChange={e =>
-                                handleCharacteristicChange(
-                                    key as keyof Characteristics,
-                                    Number(e.target.value) || 0
-                                )
+                                handleCharacteristicChange(key as keyof Characteristics, Number(e.target.value) || 0)
                             }
                         >
                             {key}
@@ -245,8 +273,8 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                     ))}
                 </div>
 
+                {/* Владения */}
                 <h3>Владения</h3>
-
                 <CheckboxDropdown
                     label="Навыки"
                     options={skillsListSorted.map(s => ({
@@ -256,43 +284,27 @@ function CharacterModal({ isOpen, character, onClose, onSave }: Props) {
                     selected={formValues.skills}
                     onChange={v => handleChange("skills", v)}
                 />
-
                 <CheckboxDropdown
                     label="Языки"
-                    options={Object.entries(TextLanguages).map(([k, v]) => ({
-                        value: k,
-                        label: v
-                    }))}
+                    options={Object.entries(TextLanguages).map(([k,v]) => ({value:k,label:v}))}
                     selected={formValues.languages}
                     onChange={v => handleChange("languages", v)}
                 />
-
                 <CheckboxDropdown
                     label="Оружие"
-                    options={Object.entries(TextWeapons).map(([k, v]) => ({
-                        value: k,
-                        label: v
-                    }))}
+                    options={Object.entries(TextWeapons).map(([k,v]) => ({value:k,label:v}))}
                     selected={formValues.weapons}
                     onChange={v => handleChange("weapons", v)}
                 />
-
                 <CheckboxDropdown
                     label="Броня"
-                    options={Object.entries(TextArmors).map(([k, v]) => ({
-                        value: k,
-                        label: v
-                    }))}
+                    options={Object.entries(TextArmors).map(([k,v]) => ({value:k,label:v}))}
                     selected={formValues.armors}
                     onChange={v => handleChange("armors", v)}
                 />
-
                 <CheckboxDropdown
                     label="Инструменты"
-                    options={Object.entries(TextTools).map(([k, v]) => ({
-                        value: k,
-                        label: v
-                    }))}
+                    options={Object.entries(TextTools).map(([k,v]) => ({value:k,label:v}))}
                     selected={formValues.tools}
                     onChange={v => handleChange("tools", v)}
                 />

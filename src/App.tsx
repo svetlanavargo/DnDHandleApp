@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header.tsx';
+import MainPage from './components/MainPage/MainPage.tsx';
 import Dice from './components/Dice/Dice.tsx';
 import CharacterList from './components/CharacterList/CharacterList.tsx';
 import BattleTracker from './components/BattleTracker/BattleTracker.tsx';
@@ -12,6 +13,7 @@ function App() {
         <BrowserRouter>
             <Header/>
             <Routes>
+                <Route path="/" element={<MainPage />} />
                 <Route path="/dice" element={<Dice />} />
                 <Route path="/character_list" element={<CharacterList />} />
                 <Route path="/spells_list" element={<SpellsList />} />

@@ -1,4 +1,4 @@
-import type { Skill } from '../types/Skill.ts';
+import type { Skill } from '../types/dnd';
 
 export const skillsList: Skill[] = [
     { key: "Athletics", name: "Атлетика", ability: "STR" },

@@ -1,49 +1,58 @@
-import { classes } from '../data/Classes/classes.json'
-import { getModifier } from './getModifier'
-import { getProficiencyBonus } from './getProficiencyBonus.ts'
+import classesData from '../data/classes.json';
+import { getModifier } from './getModifier';
+import { getProficiencyBonus } from './getProficiencyBonus';
+import type { ClassKey, Classes, Characteristics } from '../types/dnd';
+
+const classes: Classes = classesData as unknown as Classes;
 
 interface SpellcastingInfo {
-    ability: keyof typeof classes[keyof typeof classes]['caster']['ability']
-    modifier: number
-    spellAttack: number
-    spellSave: number
+    ability: keyof Characteristics;
+    modifier: number;
+    spellAttack: number;
+    spellSave: number;
 }
 
-/**
- * Возвращает информацию о заклинаниях персонажа.
- * Поддерживает кастеров и специальные подклассы (Arcane Trickster, Eldritch Knight).
- */
+interface SimpleCaster {
+    ability: keyof Characteristics;
+}
+
 export function getSpellcastingInfo(
-    className: string,
+    className: ClassKey,
     level: number,
-    characteristics: Record<string, number>,
+    characteristics: Characteristics,
     subclass?: string
 ): SpellcastingInfo | null {
-    const classData = classes[className]
-    if (!classData) return null
+    const classData = classes[className];
+    if (!classData) return null;
 
-    let casterData = classData.caster
+    let casterData: SimpleCaster | undefined = undefined;
 
-    const subclassCasters: Record<string, keyof typeof characteristics> = {
+    // основной кастер
+    if (classData.caster?.ability) {
+        casterData = { ability: classData.caster.ability as keyof Characteristics };
+    }
+
+    // проверка подклассов
+    const subclassCasters: Record<string, keyof Characteristics> = {
         arcane_trickster: 'INT',
         eldritch_knight: 'INT'
-    }
+    };
 
     if (!casterData && subclass && subclassCasters[subclass]) {
-        casterData = { ability: subclassCasters[subclass] }
+        casterData = { ability: subclassCasters[subclass] };
     }
 
-    if (!casterData) return null
+    if (!casterData) return null;
 
-    const ability = casterData.ability
-    const abilityScore = characteristics[ability]
-    const modifier = getModifier(abilityScore)
-    const proficiency = getProficiencyBonus(level)
+    const ability = casterData.ability;
+    const abilityScore = characteristics[ability];
+    const modifier = getModifier(abilityScore);
+    const proficiency = getProficiencyBonus(level);
 
     return {
         ability,
         modifier,
         spellAttack: modifier + proficiency,
         spellSave: 8 + modifier + proficiency
-    }
+    };
 }

@@ -1,4 +1,5 @@
 import type { Character } from '../../../types/Character.ts';
+import type { ClassKey, RaceKey } from '../../../types/dnd';
 import InfoField from '../InfoField/InfoField.tsx';
 import Note from '../Note/Note.tsx';
 import ListHeader from '../ListHeader/ListHeader.tsx';
@@ -19,8 +20,6 @@ interface ListProps {
     addHits: () => void;
     subtractHits: () => void;
     subtractDice: () => void;
-
-    noteText: string;
     isNoteOpen: boolean;
     toggleNoteOpen: () => void;
     updateCharacter: (updated: Character) => void;
@@ -37,16 +36,19 @@ function List({
                   subtractDice,
                   isNoteOpen,
                   toggleNoteOpen,
-                  updateCharacter
+                  updateCharacter,
               }: ListProps) {
+    const raceKey = activeCharacter.race as RaceKey;
+    const classKey = activeCharacter.class as ClassKey;
+
     return (
         <div className={styles.characterContentWrapper}>
             <div className={styles.characterContent}>
                 <ListHeader
                     name={activeCharacter.name}
                     level={activeCharacter.level}
-                    race={activeCharacter.race}
-                    spec={activeCharacter.class}
+                    race={raceKey}
+                    spec={classKey}
                     charSubclass={activeCharacter.subclass}
                     onEdit={openEditModal}
                     longRest={longRest}
@@ -68,7 +70,7 @@ function List({
                 />
 
                 <HitsField
-                    charClass={activeCharacter.class}
+                    charClass={activeCharacter.class as ClassKey}
                     hits={activeCharacter.hits}
                     diceHitsCount={activeCharacter.diceHitsCount}
                     temporaryHits={activeCharacter.temporaryHits}

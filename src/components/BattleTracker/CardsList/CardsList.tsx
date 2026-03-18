@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type {Card} from '../../../App.tsx';
+import type { Card } from '../../../types/CardInBattleTracker.ts';
 import CardItem from '../Card/CardItem.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './CardsList.module.css';

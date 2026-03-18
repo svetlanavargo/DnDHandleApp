@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
-import type { Character } from '../../types/Character.ts';
-import type { SpellSlotsState } from '../../types/Character.ts';
-import spellSlotProgression from "../../data/Spells/spellSlotProgression.json";
-import { classes } from '../../data/Classes/classes.json';
-import { getModifier } from '../../utils/getModifier.ts';
-import Tabs from './Tabs/Tabs.tsx';
-import List from './List/List.tsx';
-import CharacterModal from '../Modals/CharacterModal.tsx';
+import type { Character } from '../../types/Character';
+import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
+import type { SpellSlotProgression } from '../../types/dnd';
+import rawSpellSlotProgression from '../../data/Spells/spellSlotProgression.json';
+import classesData from '../../data/classes.json';
+import { getModifier } from '../../utils/getModifier';
+import Tabs from './Tabs/Tabs';
+import List from './List/List';
+import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
+
+const classes: Classes = classesData as unknown as Classes;
+const spellSlotProgression: SpellSlotProgression = rawSpellSlotProgression as unknown as SpellSlotProgression;
 
 const LOCAL_STORAGE_KEY = 'characters';
 
@@ -24,8 +28,8 @@ function CharacterList() {
         return [];
     });
 
-    const [activeId, setActiveId] = useState(
-        () => characters.length > 0 ? characters[0].id : null
+    const [activeId, setActiveId] = useState<string>(
+        () => characters[0]?.id ?? null
     );
 
     const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
@@ -35,14 +39,13 @@ function CharacterList() {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(characters));
     }, [characters]);
 
-
     const activeCharacter = characters.find(c => c.id === activeId) ?? characters[0] ?? null;
 
     const addCharacter = () => {
         if (characters.length >= 6) return;
 
         const newChar: Character = {
-            id: Math.random().toString(36).slice(2, 11),
+            id: crypto.randomUUID(),
             race: 'human',
             speed: 30,
             ac: 10,
@@ -61,7 +64,7 @@ function CharacterList() {
             weapons: [],
             armors: [],
             tools: [],
-            spellSlots: initSpellSlots('fighter', 1)
+            spellSlots: initSpellSlots('fighter', undefined, 1)
         };
 
         setEditingCharacter(newChar);
@@ -79,10 +82,10 @@ function CharacterList() {
                 exists.subclass !== updated.subclass ||
                 exists.level !== updated.level
             ) {
-                spellSlots = initSpellSlots(updated.class, updated.subclass, updated.level);
+                spellSlots = initSpellSlots(updated.class as ClassKey, updated.subclass, updated.level);
             }
 
-            const updatedCharacter = { ...updated, spellSlots };
+            const updatedCharacter: Character = { ...updated, spellSlots };
 
             if (exists) {
                 return prev.map(c => (c.id === updated.id ? updatedCharacter : c));
@@ -96,24 +99,28 @@ function CharacterList() {
     };
 
     function initSpellSlots(
-        className: string,
+        className: ClassKey,
         subclassName: string | undefined,
         level: number
     ): SpellSlotsState {
-        const classData = classes[className.toLowerCase()];
+        const classData = classes[className];
         if (!classData) return {};
 
-        let caster = classData.caster;
+        let caster = classData.caster ?? null;
 
-        if ((!caster || subclassName) && classData.subclasses?.[subclassName]?.caster) {
-            caster = classData.subclasses[subclassName].caster;
+        // если указан сабкласс с кастером — используем его
+        if (subclassName && classData.subclasses) {
+            const subclassData = classData.subclasses[subclassName];
+            if (subclassData?.caster) {
+                caster = subclassData.caster;
+            }
         }
 
         if (!caster) return {};
 
-        const progressionType = caster.progression || 'full';
-        const progression = spellSlotProgression[progressionType] || {};
-        const slotsPerLevel = progression[level] || [];
+        const progressionType: ProgressionType = caster.progression ?? 'full';
+        const progression = spellSlotProgression[progressionType] ?? {};
+        const slotsPerLevel = progression[level] ?? [];
 
         const state: SpellSlotsState = {};
         slotsPerLevel.forEach((count, i) => {
@@ -138,7 +145,7 @@ function CharacterList() {
         );
     };
 
-    const removeCharacter = (id: number | string) => {
+    const removeCharacter = (id: string) => {
         setCharacters(prev => {
             const updated = prev.filter(c => c.id !== id);
             if (activeId === id) {
@@ -148,7 +155,7 @@ function CharacterList() {
         });
     };
 
-    const setActive = (id: number | string) => setActiveId(id);
+    const setActive = (id: string) => setActiveId(id);
     const closeModal = () => setEditingCharacter(null);
 
     const addHits = () => {
@@ -208,8 +215,10 @@ function CharacterList() {
                 if (dice <= 0) return c;
 
                 const newDice = dice - 1;
+                const hitDiceValue = classes[c.class as ClassKey]?.hitDice;
+                if (!hitDiceValue) return c;
 
-                const hitDice = Number(classes[c.class]?.hitDice);
+                const hitDice = Number(hitDiceValue);
                 const roll = Math.floor(Math.random() * hitDice + 1);
                 const mod = getModifier(c.characteristics.CON);
                 const totalHeal = roll + mod;
@@ -238,10 +247,9 @@ function CharacterList() {
                 const recoverDice = Math.max(1, Math.floor(usedDice / 2));
                 const newDiceHitsCount = Math.min(maxDice, c.diceHitsCount + recoverDice);
 
-                // восстановление всех spell slots
-                const newSpellSlots = Object.fromEntries(
-                    Object.entries(c.spellSlots).map(([lvl, slots]) => [
-                        lvl,
+                const newSpellSlots: SpellSlotsState = Object.fromEntries(
+                    Object.entries(c.spellSlots ?? {}).map(([lvl, slots]) => [
+                        Number(lvl),
                         slots.map(() => false)
                     ])
                 );
@@ -276,10 +284,8 @@ function CharacterList() {
                         addHits={addHits}
                         subtractHits={subtractHits}
                         subtractDice={subtractDice}
-                        text={activeCharacter.note || ''}
                         isNoteOpen={isNoteOpen}
                         toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
-                        character={activeCharacter}
                         updateCharacter={saveCharacter}
                     />
                 )}
