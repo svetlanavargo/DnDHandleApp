@@ -61,14 +61,14 @@ function CardsList(
 
     return (
         <div className={styles.cardsList}>
+            <div className={styles.actions}>
+                {hasInjuredAliveCards && (
+                    <Btn onClick={onLongRest} classBtn='reset'/>
+                )}
+                <Btn onClick={onAddCard} classBtn='addCard'/>
+            </div>
             {cards.length > 0 && (
                 <>
-                    <div className={styles.actions}>
-                        {hasInjuredAliveCards && (
-                            <Btn onClick={onLongRest} classBtn='reset'/>
-                        )}
-                        <Btn onClick={onAddCard} classBtn='addCard'/>
-                    </div>
                     {/* Вкладки */}
                     <div className={styles.tabs}>
                         <div

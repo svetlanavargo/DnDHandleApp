@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 upload.sh
+robots.txt
+sitemap.xml
 
 # Editor directories and files
 .vscode/*
