@@ -1,40 +1,45 @@
 export const TextLanguages: Record<string, string> = {
-    // Общие
     common: 'Общий',
-    draconic: 'Драконий',
-
-    // Расовые
-    dwarvish: 'Дварфийский',
+    dwarvish: 'Дварфский',
     elvish: 'Эльфийский',
-    gnomish: 'Гномийский',
-    halfling: 'Полурослийский',
-    orc: 'Орочий',
+    giant: 'Великаний',
+    gnomish: 'Гномий',
     goblin: 'Гоблинский',
-    giant: 'Гигантский',
-    kobold: 'Кобольдский',
-    aarakocra: 'Ааракокра',
-    tiefling: 'Тифлинг',
-    dragonborn: 'Драконорожденный',
+    halfling: 'Язык полуросликов',
+    orc: 'Орочий',
 
-    // Мифические / магические
+    // 🌀 Экзотические языки (PHB/SRD)
+    abyssal: 'Бездны',
     celestial: 'Небесный',
+    draconic: 'Драконий',
+    deepSpeech: 'Глубинная речь',
     infernal: 'Инфернальный',
-    abyssal: 'Абиссальный',
-    primordial: 'Первозданный',
-    sylvan: 'Сильванский',
+    primordial: 'Первичный',
+    sylvan: 'Сильван',
     undercommon: 'Подземный',
 
-    // Дополнительные из расширений
-    merfolk: 'Мерфольк',
-    giantfolk: 'Гигантский народ',
-    gith: 'Гитхи',
-    minotaur: 'Минотавр',
-    halflingcant: 'Полурослийский жаргон',
-    deepSpeech: 'Глубокий язык',
+    // 🌍 Диалекты Primordial
+    aquan: 'Акван (диалект)',
+    auran: 'Ауран (диалект)',
+    ignan: 'Игнан (диалект)',
+    terran: 'Терран (диалект)',
+
+    // ⚔️ Сеттинговые / дополнительные языки
     druidic: 'Друидический',
-    orcish: 'Орочий',
-    aquan: 'Водный',
-    auran: 'Воздушный',
-    ignean: 'Огненный',
-    terran: 'Земной'
+    thievesCant: 'Воровской жаргон',
+
+    // 🌆 Из сеттинга Eberron
+    quori: 'Куори',
+    riedran: 'Ридран',
+
+    // 🌆 Из Guildmasters’ Guide to Ravnica
+    kraul: 'Краул',
+    loxodon: 'Локсодонский',
+    merfolk: 'Мерфолкский',
+    minotaur: 'Минувровский',
+    vedalken: 'Ведалкенский',
+
+    // 🧬 Прочие (монстр/фамильные)
+    gnoll: 'Гноллский',
+    trollkin: 'Троллеобразный',
 };
