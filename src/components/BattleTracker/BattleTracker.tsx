@@ -191,7 +191,6 @@ function BattleTracker() {
                     <ChangeHitsModal
                         key={numberModal.modalKey}
                         title={numberModal.title}
-                        name={numberModal.name}
                         min={numberModal.min}
                         max={numberModal.max}
                         onConfirm={numberModal.onConfirm}

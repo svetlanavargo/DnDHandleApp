@@ -213,9 +213,9 @@ export const useBattle = (
         if (!card) return;
 
         openNumberModal({
-            title: 'Нанести урон',
-            name: card.name,
+            title: `Нанести урон ${card.name}`,
             min: 0,
+            max: 1000,
             onConfirm: (damage) => {
                 if (damage <= 0) return;
 
@@ -249,9 +249,9 @@ export const useBattle = (
         if (!card) return;
 
         openNumberModal({
-            title: 'Лечение',
-            name: card.name,
+            title: `Лечение ${card.name}`,
             min: 0,
+            max: 1000,
             onConfirm: (heal) => {
                 if (heal <= 0) return;
 

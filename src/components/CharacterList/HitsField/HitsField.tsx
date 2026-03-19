@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import classesData from '../../../data/classes.json';
+import {classesData} from '../../../constants/classesData.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './HitsField.module.css';
 import type { ClassKey } from '../../../types/dnd';

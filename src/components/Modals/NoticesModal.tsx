@@ -15,7 +15,7 @@ function NoticesModal({ message, onClose }: NoticesProps) {
             {messages.map((msg, i) => (
                 <div key={i} className={styles.notices}>{msg}</div>
             ))}
-            <Btn onClick={onClose}>Закрыть</Btn>
+            <Btn onClick={onClose} classBtn='btnColor'>Закрыть</Btn>
         </div>
     );
 }

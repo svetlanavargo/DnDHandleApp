@@ -93,7 +93,7 @@ export default function ConditionModal({ onClose, onAdd }: Props) {
                 </Input>
 
                 <div className={styles.modalButtons}>
-                    <Btn type="submit">Добавить</Btn>
+                    <Btn type="submit" classBtn='btnColor'>Добавить</Btn>
                     <Btn onClick={onClose}>Отмена</Btn>
                 </div>
             </form>

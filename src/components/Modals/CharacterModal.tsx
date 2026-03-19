@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { CharacterContext } from "../../context/CharacterContext";
 import type { Character } from "../../types/Character";
 import type { Classes, ClassKey, RaceKey, Characteristics, SpellSlotsState } from "../../types/dnd";
-import classesData from "../../data/classes.json";
 import rawSpellSlotProgression from "../../data/Spells/spellSlotProgression.json";
 
 import Btn from "../UI/Btn/Btn";
@@ -11,17 +10,15 @@ import Input from "../UI/Input/Input";
 import Select from "../UI/Select/Select";
 import CheckboxDropdown from "../UI/CheckboxDropdown/CheckboxDropdown";
 
-import { TextClasses } from "../../constants/TextClasses";
 import { TextSubClasses } from "../../constants/TextSubClasses";
-import { TextRace } from "../../constants/TextRaces";
+import { racesData } from "../../constants/racesData.ts";
+import { classesData } from "../../constants/classesData.ts";
+
 import { TextLanguages } from "../../constants/TextLanguages";
 import { TextWeapons } from "../../constants/TextWeapons";
 import { TextArmors } from "../../constants/TextArmors";
 import { TextTools } from "../../constants/TextTools";
 import { skillsListSorted } from "../../constants/TextSkills";
-
-// import { getCharacterPatch } from "../../utils/getCharacterPatch";
-
 import styles from "./Modals.module.css";
 
 // ===== Константы =====
@@ -35,6 +32,8 @@ interface Props {
     onSave: (updated: Character) => void;
 }
 
+type NumericField = "hits" | "speed" | "ac" | "initiative";
+
 type FormValues = {
     name: string;
     race: RaceKey;
@@ -47,6 +46,7 @@ type FormValues = {
     initiative: string;
     characteristics: Characteristics;
     skills: string[];
+    expertise: string[];
     languages: string[];
     weapons: string[];
     armors: string[];
@@ -65,6 +65,7 @@ const defaultForm: FormValues = {
     initiative: "0",
     characteristics: { STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0 },
     skills: [],
+    expertise: [],
     languages: [],
     weapons: [],
     armors: [],
@@ -93,6 +94,7 @@ function CharacterModal({ character, onClose }: Props) {
                     initiative: character.initiative.toString(),
                     characteristics: {...character.characteristics},
                     skills: [...character.skills],
+                    expertise: character.expertise ? [...character.expertise] : [],
                     languages: [...character.languages],
                     weapons: [...character.weapons],
                     armors: [...character.armors],
@@ -106,6 +108,17 @@ function CharacterModal({ character, onClose }: Props) {
         }
         firstInputRef.current?.focus();
     }, [character]);
+
+    useEffect(() => {
+        const limit = Number(formValues.level) >= 6 ? 4 : 2;
+
+        setFormValues(prev => ({
+            ...prev,
+            expertise: prev.expertise
+                .filter(e => prev.skills.includes(e))
+                .slice(0, limit)
+        }));
+    }, [formValues.skills, formValues.level]);
 
     // ===== Инициализация spellSlots =====
     function initSpellSlots(className: ClassKey, subclassName: string | undefined, level: number): SpellSlotsState {
@@ -125,6 +138,18 @@ function CharacterModal({ character, onClose }: Props) {
         const state: SpellSlotsState = {};
         slotsPerLevel.forEach((count, i) => (state[i + 1] = Array(count).fill(false)));
         return state;
+    }
+
+    const expertiseLimit = Number(formValues.level) >= 6 ? 4 : 2;
+
+    function handleExpertiseChange(values: string[]) {
+        const filtered = values.filter(v => formValues.skills.includes(v));
+        const limited = filtered.slice(0, expertiseLimit);
+
+        setFormValues(prev => ({
+            ...prev,
+            expertise: limited,
+        }));
     }
 
     // ===== Изменение полей =====
@@ -155,7 +180,6 @@ function CharacterModal({ character, onClose }: Props) {
                 ? initSpellSlots(formValues.class, formValues.subclass, levelNum)
                 : character?.spellSlots ?? initSpellSlots(formValues.class, formValues.subclass, levelNum);
 
-        // Создаём общий объект персонажа
         const charToSave: Character = {
             id: character?.id ?? crypto.randomUUID(),
             name: nameToUse,
@@ -171,6 +195,7 @@ function CharacterModal({ character, onClose }: Props) {
             initiative: Number(formValues.initiative),
             characteristics: { ...formValues.characteristics },
             skills: [...formValues.skills],
+            expertise: [...formValues.expertise],
             languages: [...formValues.languages],
             weapons: [...formValues.weapons],
             armors: [...formValues.armors],
@@ -192,42 +217,167 @@ function CharacterModal({ character, onClose }: Props) {
         onClose();
     }
 
+    const fieldsConfig = {
+        hits: { label: "Хиты", max: 1000 },
+        speed: { label: "Скорость", max: 200 },
+        ac: { label: "AC", max: 40 },
+        initiative: { label: "Инициатива", max: 30 },
+    };
+
+    const fieldKeys = Object.keys(fieldsConfig) as NumericField[];
+
+    function clampNumber(value: string, max: number): string {
+        const digits = value.replace(/\D/g, "");
+        if (!digits) return "";
+
+        const num = Number(digits);
+        return Math.min(num, max).toString();
+    }
+
     return (
         <form className={styles.form} onSubmit={handleSubmit} onClick={e => e.stopPropagation()}>
-            <h2>{character ? "Редактирование персонажа" : "Создать персонажа"}</h2>
+            <div className={styles.flex}>
+                <h2>{character ? "Редактирование" : "Создание"}</h2>
+                <Btn onClick={onClose} classBtn='close'/>
+            </div>
 
-            <Input ref={firstInputRef} type="text" value={formValues.name} onChange={e => handleChange("name", e.target.value)}>Имя</Input>
+            <Input
+                ref={firstInputRef}
+                type="text"
+                value={formValues.name}
+                onChange={e => handleChange("name", e.target.value)}>
+                Имя
+            </Input>
 
-            <Select label="Раса" value={formValues.race} options={TextRace} onChange={v => v && handleChange("race", v as RaceKey)} />
+            <Select
+                label="Раса"
+                value={formValues.race}
+                options={Object.fromEntries(
+                    Object.entries(racesData).map(([key, race]) => [key, race.name])
+                )}
+                onChange={v => v && handleChange("race", v as RaceKey)} />
 
-            <Select label="Класс" value={formValues.class} options={TextClasses} onChange={v => setFormValues(p => ({ ...p, class: v as ClassKey, subclass: undefined }))} />
+            <Select
+                label="Класс"
+                value={formValues.class}
+                options={Object.fromEntries(
+                    Object.entries(classesData).map(([key, c]) => [key, c.name])
+                )}
+                onChange={v => setFormValues(p => ({ ...p, class: v as ClassKey, subclass: undefined }))} />
 
-            <Select label="Сабкласс" value={formValues.subclass} options={TextSubClasses[formValues.class] ?? {}} placeholder="— Нет —" onChange={v => handleChange("subclass", v)} />
+            <Select
+                label="Сабкласс"
+                value={formValues.subclass}
+                options={TextSubClasses[formValues.class] ?? {}}
+                placeholder="— Нет —"
+                onChange={v => handleChange("subclass", v)} />
 
-            {["level","hits","speed","ac","initiative"].map(field => (
-                <Input key={field} type="text" inputMode="numeric" value={formValues[field as keyof FormValues] as string} onChange={e => handleChange(field as keyof FormValues, e.target.value.replace(/\D/g, "") as any)}>
-                    {field === "level" ? "Уровень" : field === "hits" ? "Хиты" : field === "speed" ? "Скорость" : field === "ac" ? "AC" : "Инициатива"}
-                </Input>
-            ))}
+            <Input
+                type="text"
+                inputMode="numeric"
+                value={formValues.level}
+                onChange={e => handleChange("level", clampNumber(e.target.value, 20))}
+            >
+                Уровень
+            </Input>
+
+            <div className={styles.inputsGroup}>
+                {fieldKeys.map(key => (
+                    <Input
+                        type='text'
+                        inputMode='numeric'
+                        key={key}
+                        value={formValues[key]}
+                        onChange={e =>
+                            handleChange(key, clampNumber(e.target.value, fieldsConfig[key].max))
+                        }
+                    >
+                        {fieldsConfig[key].label}
+                    </Input>
+                ))}
+            </div>
 
             <h3>Характеристики</h3>
-            <div className={styles.flex}>
-                {Object.entries(formValues.characteristics).map(([key,value]) => (
-                    <Input key={key} type="text" inputMode="numeric" value={value.toString()} onChange={e => handleCharacteristicChange(key as keyof Characteristics, Number(e.target.value) || 0)}>
+            <div className={styles.inputsGroup}>
+                {Object.entries(formValues.characteristics).map(([key, value]) => (
+                    <Input
+                        key={key}
+                        type="text"
+                        inputMode="numeric"
+                        value={value.toString()}
+                        onChange={e => {
+                            const clamped = clampNumber(e.target.value, 30);
+                            handleCharacteristicChange(
+                                key as keyof Characteristics,
+                                Number(clamped) || 0
+                            );
+                        }}
+                    >
                         {key}
                     </Input>
                 ))}
             </div>
 
             <h3>Владения</h3>
-            <CheckboxDropdown label="Навыки" options={skillsListSorted.map(s => ({ value: s.key, label: `${s.name} (${s.ability})` }))} selected={formValues.skills} onChange={v => handleChange("skills", v)} />
-            <CheckboxDropdown label="Языки" options={Object.entries(TextLanguages).map(([k,v]) => ({ value:k,label:v }))} selected={formValues.languages} onChange={v => handleChange("languages", v)} />
-            <CheckboxDropdown label="Оружие" options={Object.entries(TextWeapons).map(([k,v]) => ({ value:k,label:v }))} selected={formValues.weapons} onChange={v => handleChange("weapons", v)} />
-            <CheckboxDropdown label="Броня" options={Object.entries(TextArmors).map(([k,v]) => ({ value:k,label:v }))} selected={formValues.armors} onChange={v => handleChange("armors", v)} />
-            <CheckboxDropdown label="Инструменты" options={Object.entries(TextTools).map(([k,v]) => ({ value:k,label:v }))} selected={formValues.tools} onChange={v => handleChange("tools", v)} />
+            <CheckboxDropdown
+                label="Навыки"
+                options={skillsListSorted.map(s => ({ value: s.key, label: `${s.name} (${s.ability})` }))}
+                selected={formValues.skills}
+                onChange={v => handleChange("skills", v)} />
+
+            {formValues.class === 'rogue' && (
+                <>
+                    <h3>
+                        Компетентность ({formValues.expertise.length}/{expertiseLimit})
+                    </h3>
+
+                    <CheckboxDropdown
+                        label="Выбери навыки"
+                        options={formValues.skills.map(skill => {
+                            const skillData = skillsListSorted.find(s => s.key === skill);
+
+                            const isSelected = formValues.expertise.includes(skill);
+                            const isDisabled =
+                                formValues.expertise.length >= expertiseLimit && !isSelected;
+
+                            return {
+                                value: skill,
+                                label: skillData
+                                    ? `${skillData.name} (${skillData.ability})`
+                                    : skill,
+                                disabled: isDisabled,
+                            };
+                        })}
+                        selected={formValues.expertise}
+                        onChange={handleExpertiseChange}
+                    />
+                    <h3>Остальные владения</h3>
+                </>
+            )}
+
+            <CheckboxDropdown
+                label="Языки"
+                options={Object.entries(TextLanguages).map(([k,v]) => ({ value:k,label:v }))}
+                selected={formValues.languages}
+                onChange={v => handleChange("languages", v)} />
+            <CheckboxDropdown
+                label="Оружие"
+                options={Object.entries(TextWeapons).map(([k,v]) => ({ value:k,label:v }))}
+                selected={formValues.weapons}
+                onChange={v => handleChange("weapons", v)} />
+            <CheckboxDropdown
+                label="Броня"
+                options={Object.entries(TextArmors).map(([k,v]) => ({ value:k,label:v }))}
+                selected={formValues.armors}
+                onChange={v => handleChange("armors", v)} />
+            <CheckboxDropdown
+                label="Инструменты"
+                options={Object.entries(TextTools).map(([k,v]) => ({ value:k,label:v }))}
+                selected={formValues.tools}
+                onChange={v => handleChange("tools", v)} />
 
             <div className={styles.modalButtons}>
-                <Btn type="submit">{character ? "Сохранить" : "Создать"}</Btn>
+                <Btn type="submit" classBtn='btnColor'>{character ? "Сохранить" : "Создать"}</Btn>
                 <Btn onClick={onClose}>Отмена</Btn>
             </div>
         </form>

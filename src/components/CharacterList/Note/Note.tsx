@@ -1,5 +1,4 @@
 import type { Character } from '../../../types/Character.ts';
-import { useRef, useEffect } from 'react';
 import styles from './Note.module.css';
 
 interface NoteProps {
@@ -11,18 +10,9 @@ interface NoteProps {
 }
 
 function Note({ text, isOpen, toggleOpen, character, updateCharacter }: NoteProps) {
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         updateCharacter({ ...character, note: e.target.value });
     };
-
-    useEffect(() => {
-        if (isOpen && textareaRef.current) {
-            textareaRef.current.focus();
-            textareaRef.current.selectionStart = textareaRef.current.value.length;
-        }
-    }, [isOpen]);
 
     return (
         <div className={styles.noteContainer}>
@@ -33,13 +23,14 @@ function Note({ text, isOpen, toggleOpen, character, updateCharacter }: NoteProp
             <div
                 className={`${styles.textareaWrapper} ${isOpen ? styles.open : ''}`}
             >
-                <textarea
-                    ref={textareaRef}
-                    className={styles.contentEditable}
-                    value={text}
-                    onChange={handleChange}
-                    placeholder="Записывай сюда свое барахло"
-                />
+                <div className={styles.noteWrapper}>
+                     <textarea
+                         className={styles.contentEditable}
+                         value={text}
+                         onChange={handleChange}
+                         placeholder="Заметки..."
+                     />
+                </div>
             </div>
         </div>
     );

@@ -40,7 +40,7 @@
     margin: 6px;
 }
 
-.selected {
+.selected, .expertise {
     border: 1px solid #242424;
     background-color: #2eb9a1;
 }
@@ -49,6 +49,7 @@
     font-size: 12px;
     font-weight: bold;
     white-space: nowrap;
+    margin-right: 12px;
 }
 
 .modifer {
@@ -77,4 +78,21 @@
             6px 100%,
             0 50%
     );
+}
+
+.expertiseImg {
+    position: relative;
+}
+
+.expertiseImg::after {
+    content: "★";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: -6px;
+    right: -12px;
+    font-size: 10px;
+    color: #2eb9a1;
+    text-shadow: 0 0 2px rgba(79, 151, 255, 0.7);
+    pointer-events: none;
 }

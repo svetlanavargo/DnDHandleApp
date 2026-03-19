@@ -6,34 +6,38 @@ import styles from './Skills.module.css';
 
 interface SkillsDisplayProps {
     characteristics: Characteristics;
-    skills: string[]; // ключи навыков персонажа
-    level: number;
-    onToggleSkill: (skill: string) => void;
+    skills: string[];
+    expertise: string[];
+    level: number
 }
 
-function Skills({ characteristics, skills, level }: SkillsDisplayProps) {
+function Skills({ characteristics, skills, expertise, level }: SkillsDisplayProps) {
     const proficiencyBonus = getProficiencyBonus(level);
 
     return (
         <div className={styles.skillsContainer}>
             {skillsListSorted.map((skill: Skill) => {
-                const abilityKey = skill.ability as keyof Characteristics; // безопасный ключ для TS
+                const abilityKey = skill.ability as keyof Characteristics;
                 const abilityScore = characteristics[abilityKey];
                 const abilityMod = getModifier(abilityScore);
+
                 const isProficient = skills.includes(skill.key);
-                const modifier = abilityMod + (isProficient ? proficiencyBonus : 0);
+                const isExpert = expertise.includes(skill.key);
+
+                const totalModifier = abilityMod + (isExpert ? proficiencyBonus * 2 : isProficient ? proficiencyBonus : 0);
 
                 return (
                     <div key={skill.key} className={styles.skillWrapper}>
                         <div className={styles.leftSide}>
-                            <div className={`${styles.select} ${isProficient ? styles.selected : ''}`} />
+                            <div className={`${styles.select} ${isExpert ? styles.expertise : isProficient ? styles.selected : ''}`} />
                             <div className={styles.skillName}>{skill.name}</div>
+                            <div className={`${isExpert ? styles.expertiseImg : ''}`}/>
                         </div>
                         <div className={styles.rightSide}>
                             <div className={styles.modifer}>
-                                {modifier > 0 ? `+${modifier}` : modifier}
+                                {totalModifier >= 0 ? `+${totalModifier}` : totalModifier}
                             </div>
-                            <div className={styles.at}>{String(skill.ability)}</div> {/* конвертируем в строку */}
+                            <div className={styles.at}>{skill.ability}</div>
                         </div>
                     </div>
                 );

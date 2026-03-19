@@ -14,7 +14,6 @@ import styles from './List.module.css';
 interface ListProps {
     activeCharacter: Character;
     removeCharacter: () => void;
-    onToggleSkill: (skill: string) => void;
     openEditModal: () => void;
     longRest: () => void;
     addHits: () => void;
@@ -28,7 +27,6 @@ interface ListProps {
 function List({
                   activeCharacter,
                   removeCharacter,
-                  onToggleSkill,
                   openEditModal,
                   longRest,
                   addHits,
@@ -88,8 +86,8 @@ function List({
 
                 <Skills
                     characteristics={activeCharacter.characteristics}
+                    expertise={activeCharacter.expertise}
                     skills={activeCharacter.skills}
-                    onToggleSkill={onToggleSkill}
                     level={activeCharacter.level}
                 />
 

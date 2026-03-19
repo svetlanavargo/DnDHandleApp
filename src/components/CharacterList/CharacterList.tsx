@@ -4,7 +4,7 @@ import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
 import type { Character } from '../../types/Character.ts';
 import rawSpellSlotProgression from '../../data/Spells/spellSlotProgression.json';
-import classesData from '../../data/classes.json';
+import {classesData} from '../../constants/classesData.ts';
 import { getModifier } from '../../utils/getModifier';
 import Tabs from './Tabs/Tabs';
 import List from './List/List';
@@ -15,7 +15,7 @@ import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
 
 const classes: Classes = classesData as unknown as Classes;
-const spellSlotProgression: Record<ProgressionType, number[][]> = rawSpellSlotProgression as unknown as Record<ProgressionType, number[][]>;
+const spellSlotProgression = rawSpellSlotProgression as unknown as Record<string, Record<number, number[]>>;
 
 export default function CharacterList() {
     const { characters, activeCharacterId, setActiveCharacterId, addCharacter, updateCharacter, removeCharacter: removeCharacterFromContext } = useContext(CharacterContext);
@@ -81,28 +81,14 @@ export default function CharacterList() {
         return state;
     }
 
-    // === Toggle Skill ===
-    const handleToggleSkill = (skill: string) => {
-        if (!activeCharacter) return;
-
-        const hasSkill = activeCharacter.skills.includes(skill);
-        const updated: Character = {
-            ...activeCharacter,
-            skills: hasSkill
-                ? activeCharacter.skills.filter(s => s !== skill)
-                : [...activeCharacter.skills, skill]
-        };
-        updateCharacter(updated);
-    };
-
     // === HP / Dice / Rest ===
     const addHits = () => {
         if (!activeCharacter) return;
 
         numberModal.openModal({
-            title: 'Прибавить хиты',
-            name: activeCharacter.name,
+            title: `Прибавить хиты ${activeCharacter.name}`,
             min: 0,
+            max: 1000,
             onConfirm: (amount) => {
                 if (amount <= 0) return;
                 const updated: Character = { ...activeCharacter };
@@ -124,9 +110,9 @@ export default function CharacterList() {
         if (!activeCharacter) return;
 
         numberModal.openModal({
-            title: 'Снять хиты',
-            name: activeCharacter.name,
+            title: `Снять хиты у ${activeCharacter.name}`,
             min: 0,
+            max: 1000,
             onConfirm: (amount) => {
                 if (amount <= 0) return;
                 const updated: Character = { ...activeCharacter };
@@ -194,7 +180,6 @@ export default function CharacterList() {
                 {activeCharacter && (
                     <List
                         activeCharacter={activeCharacter}
-                        onToggleSkill={handleToggleSkill}
                         removeCharacter={() => setDeletingCharacter(activeCharacter)}
                         openEditModal={() => setEditingCharacter(activeCharacter)}
                         addHits={addHits}
@@ -211,7 +196,6 @@ export default function CharacterList() {
             <Modal isOpen={numberModal.isOpen} size="small">
                 <ChangeHitsModal
                     title={numberModal.title}
-                    name={numberModal.name}
                     min={numberModal.min}
                     max={numberModal.max}
                     onConfirm={(value) => numberModal.onConfirm?.(value)}
@@ -220,7 +204,7 @@ export default function CharacterList() {
             </Modal>
 
             {creatingCharacter && (
-                <Modal isOpen={creatingCharacter} size="large">
+                <Modal isOpen={creatingCharacter} size="small">
                     <CharacterModal
                         character={null}
                         onClose={() => setCreatingCharacter(false)}
@@ -233,7 +217,7 @@ export default function CharacterList() {
             )}
 
             {editingCharacter && (
-                <Modal isOpen={!!editingCharacter} size="large">
+                <Modal isOpen={!!editingCharacter} size="small">
                     <CharacterModal
                         character={editingCharacter}
                         onClose={closeEditModal}

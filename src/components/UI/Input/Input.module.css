@@ -4,6 +4,8 @@
     font-size: 10px;
     text-transform: uppercase;
     font-weight: bold;
+    min-width: 0;
+    width: auto;
 }
 
 .label input:focus-visible {
@@ -13,11 +15,14 @@
 }
 
 .label input {
-    height: 30px;
+    height: 44px;
     padding: 6px 12px;
     border: 1px solid #3D3D3D;
     border-radius: 4px;
     background-color: #242424;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
 textarea {
@@ -28,4 +33,12 @@ textarea {
 textarea:focus-visible {
     outline: none;
     box-shadow: none;
+}
+
+input:focus {
+    outline: none;
+}
+
+input {
+    -webkit-tap-highlight-color: transparent;
 }

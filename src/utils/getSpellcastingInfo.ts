@@ -1,4 +1,4 @@
-import classesData from '../data/classes.json';
+import {classesData} from '../constants/classesData';
 import { getModifier } from './getModifier';
 import { getProficiencyBonus } from './getProficiencyBonus';
 import type { ClassKey, Classes, Characteristics } from '../types/dnd';

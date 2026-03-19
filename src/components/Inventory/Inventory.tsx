@@ -68,6 +68,7 @@ function Inventory() {
     const onCalc = (key: keyof Currency) => {
         numberModal.openModal({
             title: `Изменение ${key}, введи +-`,
+            max: 100000,
             onConfirm: (value) => {
                 updateInventory(inv => {
                     const updated = { ...inv.currency, [key]: Math.max(0, inv.currency[key] + value) };
@@ -102,6 +103,7 @@ function Inventory() {
                 {numberModal.isOpen && numberModal.onConfirm && (
                     <ChangeHitsModal
                         title={numberModal.title}
+                        max={numberModal.max}
                         onConfirm={numberModal.onConfirm}
                         onClose={numberModal.closeModal}
                     />

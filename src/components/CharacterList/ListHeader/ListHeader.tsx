@@ -1,6 +1,6 @@
-import { TextClasses } from '../../../constants/TextClasses.ts';
+import { classesData } from '../../../constants/classesData.ts';
 import { TextSubClasses } from '../../../constants/TextSubClasses.ts';
-import { TextRace } from '../../../constants/TextRaces.ts';
+import { racesData } from '../../../constants/racesData.ts';
 import type { ClassKey } from '../../../types/dnd';
 import type { RaceKey } from '../../../types/dnd';
 import Btn from '../../UI/Btn/Btn.tsx';
@@ -37,8 +37,12 @@ function ListHeader({
                     </div>
                     <div>
                         <div className={styles.flex}>
-                            <p className={styles.race}>{TextRace[race]}</p>
-                            <p>{TextClasses[spec]}</p>
+                            <a className={styles.link} href={racesData[race]?.url} target='_blank'>
+                                {racesData[race]?.name}
+                            </a>
+                            <a className={styles.link} href={classesData[spec].url} target='_blank'>
+                                {classesData[spec].name}
+                            </a>
                         </div>
                         <div className={styles.charSubclass}>
                             {charSubclass ? TextSubClasses[spec]?.[charSubclass] : ''}

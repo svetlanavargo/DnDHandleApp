@@ -7,23 +7,45 @@ import CharacterList from './components/CharacterList/CharacterList.tsx';
 import BattleTracker from './components/BattleTracker/BattleTracker.tsx';
 import SpellsList from './components/Spells List/SpellsList.tsx';
 import Inventory from './components/Inventory/Inventory.tsx';
-import './App.css'
+import YandexMetrika from "./components/YandexMetrika.tsx";
+import './App.css';
 
 function App() {
     return (
-        <CharacterProvider>
-            <BrowserRouter>
-                <Header />
-                <Routes>
-                    <Route path="/" element={<MainPage />} />
-                    <Route path="/dice" element={<Dice />} />
-                    <Route path="/character_list" element={<CharacterList />} />
-                    <Route path="/spells_list" element={<SpellsList />} />
-                    <Route path="/battle_tracker" element={<BattleTracker />} />
-                    <Route path="/inventory" element={<Inventory />} />
-                </Routes>
-            </BrowserRouter>
-        </CharacterProvider>
+        <BrowserRouter>
+            <Header />
+            <Routes>
+                <Route path="/battle_tracker" element={<BattleTracker />} />
+                <Route path="/dice" element={<Dice />} />
+                <Route path="/" element={<MainPage />} />
+
+                <Route
+                    path="/character_list/*"
+                    element={
+                        <CharacterProvider>
+                            <CharacterList />
+                        </CharacterProvider>
+                    }
+                />
+                <Route
+                    path="/spells_list/*"
+                    element={
+                        <CharacterProvider>
+                            <SpellsList />
+                        </CharacterProvider>
+                    }
+                />
+                <Route
+                    path="/inventory/*"
+                    element={
+                        <CharacterProvider>
+                            <Inventory />
+                        </CharacterProvider>
+                    }
+                />
+            </Routes>
+            <YandexMetrika id={108149485}/>
+        </BrowserRouter>
     );
 }
 

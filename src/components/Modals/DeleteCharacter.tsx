@@ -12,7 +12,7 @@ function DeleteCharacter({ name, onClose, removeCharacter }: DeleteCharacterProp
         <div className={styles.expiredNoticesContent}>
             <h2>Удалить {name}?</h2>
             <div className={styles.modalButtons}>
-                <Btn onClick={removeCharacter} classBtn='textDelete'>Удалить</Btn>
+                <Btn onClick={removeCharacter} classBtn='btnColor'>Удалить</Btn>
                 <Btn onClick={onClose}>Закрыть</Btn>
             </div>
         </div>

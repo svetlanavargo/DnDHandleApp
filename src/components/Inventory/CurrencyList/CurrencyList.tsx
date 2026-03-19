@@ -1,4 +1,4 @@
-import type { Currency } from '../Inventory.tsx';
+import type { Currency } from '../../../types/dnd.ts';
 import CurrencyItem from '../CurrencyItem/CurrencyItem.tsx';
 import styles from './CurrencyList.module.css';
 

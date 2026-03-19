@@ -213,7 +213,7 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
                 </TextArea>
 
                 <div className={styles.modalButtons}>
-                    <Btn type="submit">
+                    <Btn type="submit"  classBtn='btnColor'>
                         {initialValues ? 'Сохранить' : 'Готово'}
                     </Btn>
                     <Btn onClick={onClose}>

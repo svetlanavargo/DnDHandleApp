@@ -16,6 +16,7 @@ export interface Character {
     subclass?: string;
     characteristics: Characteristics;
     skills: string[];
+    expertise: string[];
     languages: string[];
     weapons: string[];
     armors: string[];

@@ -30,12 +30,15 @@
     margin-right: 12px;
 }
 
-.race {
+.link {
     margin-right: 6px;
+    color: white;
+    text-decoration: none;
 }
 
-.charSubclass {
-
+.link:hover, .link:focus-visible {
+    color: white;
+    text-decoration: none;
 }
 
 .flex {

@@ -8,6 +8,8 @@ button {
     background-color: #1a1a1a;
     cursor: pointer;
     transition: border-color 0.25s;
+    color: #ffffff;
+    user-select: none;
 }
 button:hover {
 }
@@ -158,7 +160,7 @@ button:focus-visible {
     padding: 5px 15px;
 }
 
-.textDelete {
+.btnColor {
     background-color: #2eb9a1;
     color: #1F1F1F;
 }

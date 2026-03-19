@@ -17,5 +17,15 @@ body {
   margin: 0;
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body, input, textarea {
+  -webkit-text-size-adjust: 100%;
+}
+
+a, button, input {
+  -webkit-tap-highlight-color: transparent;
 }
