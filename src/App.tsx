@@ -17,13 +17,18 @@ function App() {
         <>
             <Helmet>
                 <title>{SEO_LANDING.title}</title>
+
                 <meta name="description" content={SEO_LANDING.description} />
                 <meta name="keywords" content={SEO_LANDING.keywords} />
+
+                {/* Open Graph */}
                 <meta property="og:title" content={SEO_LANDING.title} />
                 <meta property="og:description" content={SEO_LANDING.description} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={SEO_LANDING.url} />
                 <meta property="og:image" content={SEO_LANDING.image} />
+
+                {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={SEO_LANDING.title} />
                 <meta name="twitter:description" content={SEO_LANDING.description} />

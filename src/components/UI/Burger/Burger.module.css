@@ -1,5 +1,6 @@
 .burgerWrapper {
     position: relative;
+    display: flex;
 }
 
 .burger {
@@ -78,17 +79,16 @@
 /* Ссылки внутри меню */
 .menu a {
     text-decoration: none;
-    color: #2eb9a1;
+    color: #FBFAFA;
     font-weight: 500;
     transition: color 0.3s ease;
     white-space: nowrap;
 }
 
 .menu a:hover {
-    color: #ffffff;
+    color: #2eb9a1;
 }
 
-/* Показываем бургер только на маленьких экранах */
 @media (min-width: 1023px) {
     .burger {
         display: none;

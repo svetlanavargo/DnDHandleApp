@@ -32,12 +32,12 @@
 
 .link {
     margin-right: 6px;
-    color: white;
+    color: #FBFAFA;
     text-decoration: none;
 }
 
 .link:hover, .link:focus-visible {
-    color: white;
+    color: #FBFAFA;
     text-decoration: none;
 }
 

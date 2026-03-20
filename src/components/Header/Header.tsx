@@ -26,11 +26,11 @@ function Header() {
         <div className={styles.header}>
             <div className={styles.burgerContainer}>
                 <BurgerMenu isOpen={isOpen} toggleMenu={toggleMenu}>
-                    <Link to="/dice" onClick={() => setIsOpen(false)}>Кубы</Link>
-                    <Link to="/character_list" onClick={() => setIsOpen(false)}>Лист персонажа</Link>
+                    <Link to="/dice" onClick={() => setIsOpen(false)}>Дайсы</Link>
+                    <Link to="/character_list" onClick={() => setIsOpen(false)}>Персонажи</Link>
                     <Link to="/inventory" onClick={() => setIsOpen(false)}>Инвентарь</Link>
-                    <Link to="/spells_list" onClick={() => setIsOpen(false)}>Лист заклинаний</Link>
-                    <Link to="/battle_tracker" onClick={() => setIsOpen(false)}>ДМ Треккер</Link>
+                    <Link to="/spells_list" onClick={() => setIsOpen(false)}>Заклинания</Link>
+                    <Link to="/battle_tracker" onClick={() => setIsOpen(false)}>ДМ Трекер</Link>
                 </BurgerMenu>
             </div>
             <div className={styles.logoWrapper}>

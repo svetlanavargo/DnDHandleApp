@@ -45,18 +45,18 @@
     justify-content: space-between;
 }
 
+.iconAlive, .iconDied {
+    width: 25px;
+    height: 25px;
+    margin-left: 6px;
+}
+
 .iconAlive {
-    width: 20px;
-    height: 20px;
     background-image: url("/img/alive.svg");
-    margin: 4px 6px;
 }
 
 .iconDied {
-    width: 20px;
-    height: 20px;
     background-image: url("/img/dead.svg");
-    margin: 4px 6px;
 }
 
 .lineSaveRoll {

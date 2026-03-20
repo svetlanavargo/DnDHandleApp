@@ -22,7 +22,7 @@
 .proficiencyBonus, .initiative, .speed, .ac {
     font-size: 26px;
     font-weight: bold;
-    color: #FFFFFF;
+    color: #FBFAFA;
     width: 80px;
     height: 80px;
     display: flex;

@@ -1,6 +1,6 @@
 .label {
     display: grid;
-    color: white;
+    color: #FBFAFA;
     font-size: 10px;
     text-transform: uppercase;
     font-weight: bold;
@@ -8,13 +8,13 @@
     width: auto;
 }
 
-.label input:focus-visible {
+.label .input:focus-visible {
     box-shadow: none;
     outline: none;
     border: 1px solid #2eb9a1;
 }
 
-.label input {
+.label .input {
     height: 44px;
     padding: 6px 12px;
     border: 1px solid #3D3D3D;
@@ -23,11 +23,13 @@
     width: 100%;
     box-sizing: border-box;
     font-size: 16px;
+    color: #FBFAFA;
 }
 
 textarea {
     width: 100%;
     box-sizing: border-box;
+    color: #FBFAFA;
 }
 
 textarea:focus-visible {
@@ -35,10 +37,10 @@ textarea:focus-visible {
     box-shadow: none;
 }
 
-input:focus {
+.input:focus {
     outline: none;
 }
 
-input {
+.input {
     -webkit-tap-highlight-color: transparent;
 }

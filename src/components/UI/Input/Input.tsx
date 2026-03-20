@@ -15,7 +15,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ children, ...props }, 
     return (
         <label className={styles.label}>
             {children}
-            <input ref={ref} {...props}  autoComplete='off'/>
+            <input className={styles.input} ref={ref} {...props}  autoComplete='off'/>
         </label>
     );
 });
