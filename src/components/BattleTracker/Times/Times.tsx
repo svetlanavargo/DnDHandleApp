@@ -11,10 +11,11 @@ interface TimesProps {
     stopBattle: () => void
     battleCards?: BattleCard[],
     expiredConditions?: string[],
-    startFight: () => void
+    startFight: () => void,
+    nextMove: () => void
 }
 
-function Times({isBattle, round, timer, turnCounter, startFight, stopBattle, battleCards, expiredConditions }: TimesProps) {
+function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions }: TimesProps) {
     const currentTime = (timer: number) => {
         const min = Math.floor(timer / 60);
         const sec = timer % 60;
@@ -67,6 +68,9 @@ function Times({isBattle, round, timer, turnCounter, startFight, stopBattle, bat
                         </div>
                         <div className={styles.timersBtn}>
                             <Btn onClick={stopBattle} classBtn='stopBattle'/>
+                            {isBattle && (
+                                <Btn onClick={nextMove} classBtn='nextMoveBig'/>
+                            )}
                         </div>
                     </div>
                 ) : (

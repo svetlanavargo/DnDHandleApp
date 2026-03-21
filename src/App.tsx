@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { SEO_LANDING } from './constants/SEO_LANDING.ts';
 import CharacterProvider from './context/CharacterProvider.tsx';
 import Header from './components/Header/Header.tsx';

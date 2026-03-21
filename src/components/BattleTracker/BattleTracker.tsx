@@ -110,6 +110,7 @@ function BattleTracker() {
                     battleCards={battleCards}
                     expiredConditions={expiredConditions}
                     startFight={startFight}
+                    nextMove={nextMove}
                 />
                 <BattleField
                     isBattle={isBattle}

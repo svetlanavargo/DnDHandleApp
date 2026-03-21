@@ -80,8 +80,7 @@ export const useBattle = (
             }
 
             openNumberModal({
-                title: 'Введите инициативу',
-                name: card.name,
+                title: `Введите инициативу для ${card.name}`,
                 min: 0,
                 max: 1000,
                 onConfirm: (value) => {
