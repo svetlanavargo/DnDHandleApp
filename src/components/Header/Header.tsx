@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import {Link} from 'react-router-dom';
 import Logo from '../UI/Logo/Logo.tsx';
 import BurgerMenu from '../UI/Burger/Burger.tsx';
+import Home from '../../../public/img/home.svg';
 import styles from './Header.module.css';
-import {Link} from 'react-router-dom';
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ function Header() {
         <div className={styles.header}>
             <div className={styles.burgerContainer}>
                 <BurgerMenu isOpen={isOpen} toggleMenu={toggleMenu}>
+                    <Link to="/" onClick={() => setIsOpen(false)}><img className={styles.home} src={Home} alt=""/></Link>
                     <Link to="/dice" onClick={() => setIsOpen(false)}>Дайсы</Link>
                     <Link to="/character_list" onClick={() => setIsOpen(false)}>Персонажи</Link>
                     <Link to="/inventory" onClick={() => setIsOpen(false)}>Инвентарь</Link>

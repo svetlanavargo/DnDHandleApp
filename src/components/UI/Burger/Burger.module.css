@@ -97,11 +97,17 @@
         display: flex !important;
         position: static;
         flex-direction: row;
+        align-items: center;
         opacity: 1;
         transform: none;
         pointer-events: auto;
         box-shadow: none;
         gap: 20px;
         background: none;
+    }
+
+    .menu a {
+        display: flex;
+        align-items: center;
     }
 }

@@ -8,6 +8,11 @@
     z-index: 1;
 }
 
+.home {
+    width: 20px;
+    height: 20px;
+}
+
 /* левая зона */
 .burgerContainer {
     display: flex;

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO_LANDING } from './constants/SEO_LANDING.ts';
+import NotFound from './components/NotFound/NotFound.tsx';
 import CharacterProvider from './context/CharacterProvider.tsx';
 import Header from './components/Header/Header.tsx';
 import MainPage from './components/MainPage/MainPage.tsx';
@@ -65,6 +66,7 @@ function App() {
                             </CharacterProvider>
                         }
                     />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <YandexMetrika id={108149485}/>
             </BrowserRouter>
