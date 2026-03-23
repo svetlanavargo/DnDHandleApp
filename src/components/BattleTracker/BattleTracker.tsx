@@ -13,7 +13,6 @@ import ConditionModal from '../Modals/ConditionModal.tsx';
 import NoticesModal from '../Modals/NoticesModal.tsx';
 import styles from './BattleTracker.module.css';
 
-
 function BattleTracker() {
     const [cards, setCards] = useState<Card[]>(() => {
         const saved = localStorage.getItem('cards');
@@ -25,7 +24,6 @@ function BattleTracker() {
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
 
     const numberModal = useNumberModal();
-
 
     const {
         isBattle,

@@ -22,20 +22,28 @@ interface ListProps {
     isNoteOpen: boolean;
     toggleNoteOpen: () => void;
     updateCharacter: (updated: Character) => void;
+    addNote: () => void;
+    deleteNote: (index: number) => void;
+    activeIndex: number;
+    setActiveNote: (index: number) => void;
 }
 
-function List({
-                  activeCharacter,
-                  removeCharacter,
-                  openEditModal,
-                  longRest,
-                  addHits,
-                  subtractHits,
-                  subtractDice,
-                  isNoteOpen,
-                  toggleNoteOpen,
-                  updateCharacter,
-              }: ListProps) {
+export default function List({
+                                 activeCharacter,
+                                 removeCharacter,
+                                 openEditModal,
+                                 longRest,
+                                 addHits,
+                                 subtractHits,
+                                 subtractDice,
+                                 isNoteOpen,
+                                 toggleNoteOpen,
+                                 updateCharacter,
+                                 addNote,
+                                 deleteNote,
+                                 activeIndex,
+                                 setActiveNote
+                             }: ListProps) {
     const raceKey = activeCharacter.race as RaceKey;
     const classKey = activeCharacter.class as ClassKey;
 
@@ -53,11 +61,14 @@ function List({
                 />
 
                 <Note
-                    text={activeCharacter.note || ''}
-                    isOpen={isNoteOpen}
-                    toggleOpen={toggleNoteOpen}
                     character={activeCharacter}
                     updateCharacter={updateCharacter}
+                    isOpen={isNoteOpen}
+                    toggleOpen={toggleNoteOpen}
+                    addNote={addNote}
+                    deleteNote={deleteNote}
+                    activeIndex={activeIndex}
+                    setActiveNote={setActiveNote}
                 />
 
                 <InfoField
@@ -110,5 +121,3 @@ function List({
         </div>
     );
 }
-
-export default List;

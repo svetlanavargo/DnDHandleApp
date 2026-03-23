@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CharacterContext } from './CharacterContext';
 import type { Character } from '../types/Character';
 

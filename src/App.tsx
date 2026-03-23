@@ -10,7 +10,7 @@ import CharacterList from './components/CharacterList/CharacterList.tsx';
 import BattleTracker from './components/BattleTracker/BattleTracker.tsx';
 import SpellsList from './components/Spells List/SpellsList.tsx';
 import Inventory from './components/Inventory/Inventory.tsx';
-import YandexMetrika from "./components/YandexMetrika.tsx";
+import YandexMetrika from "./utils/YandexMetrika.tsx";
 import './App.css';
 
 function App() {

@@ -21,7 +21,7 @@ export interface Character {
     weapons: string[];
     armors: string[];
     tools: string[]
-    note?: string;
+    note: string[];
     spellSlots?: SpellSlotsState;
     inventory: {
         note: string;

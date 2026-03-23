@@ -16,7 +16,7 @@ function InfoField({speed, initiative, level, ac}: InfofieldProps) {
                 <div className={styles.proficiencyBonus}>
                     {proficiencyBonus}
                 </div>
-                <p className={styles.text}>Бонус владения</p>
+                <p className={styles.text}>Бонус мастерства</p>
             </div>
             <div className={styles.infoWrapper}>
                 <div className={styles.initiative}>

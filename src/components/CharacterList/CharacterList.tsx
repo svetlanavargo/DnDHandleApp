@@ -24,6 +24,7 @@ export default function CharacterList() {
     const [deletingCharacter, setDeletingCharacter] = useState<Character | null>(null);
     const [creatingCharacter, setCreatingCharacter] = useState(false);
     const [isNoteOpen, setIsNoteOpen] = useState(false);
+    const [activeNoteIndex, setActiveNoteIndex] = useState(0);
 
     const numberModal = useNumberModal();
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
@@ -161,6 +162,27 @@ export default function CharacterList() {
         updateCharacter(updated);
     };
 
+    const addNote = () => {
+        if (!activeCharacter) return;
+        const updatedNotes = [...(activeCharacter.note || []), ''];
+        updateCharacter({ ...activeCharacter, note: updatedNotes });
+        setActiveNoteIndex(updatedNotes.length - 1);
+    };
+
+    const deleteNote = (index: number) => {
+        if (!activeCharacter) return;
+        const updatedNotes = [...(activeCharacter.note || [])];
+        updatedNotes.splice(index, 1);
+        updateCharacter({ ...activeCharacter, note: updatedNotes });
+
+        // Корректируем активный индекс
+        if (index === activeNoteIndex && updatedNotes.length > 0) {
+            setActiveNoteIndex(Math.max(0, index - 1));
+        } else if (updatedNotes.length === 0) {
+            setActiveNoteIndex(0);
+        }
+    };
+
     // === Remove Character ===
     const handleRemoveCharacter = (id: string) => {
         removeCharacterFromContext(id); // используем функцию из контекста
@@ -189,6 +211,10 @@ export default function CharacterList() {
                         isNoteOpen={isNoteOpen}
                         toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
                         updateCharacter={saveCharacter}
+                        addNote={addNote}
+                        deleteNote={deleteNote}
+                        setActiveNote={setActiveNoteIndex}
+                        activeIndex={activeNoteIndex}
                     />
                 )}
             </div>

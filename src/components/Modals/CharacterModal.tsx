@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useContext } from "react";
 import { CharacterContext } from "../../context/CharacterContext";
 import type { Character } from "../../types/Character";
@@ -69,7 +69,7 @@ const defaultForm: FormValues = {
     languages: [],
     weapons: [],
     armors: [],
-    tools: [],
+    tools: []
 };
 
 // ===== Компонент =====
@@ -181,6 +181,7 @@ function CharacterModal({ character, onClose }: Props) {
                 : character?.spellSlots ?? initSpellSlots(formValues.class, formValues.subclass, levelNum);
 
         const charToSave: Character = {
+            note: [],
             id: character?.id ?? crypto.randomUUID(),
             name: nameToUse,
             race: formValues.race,
@@ -205,7 +206,7 @@ function CharacterModal({ character, onClose }: Props) {
             inventory: character?.inventory ?? {
                 note: "",
                 currency: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
-            },
+            }
         };
 
         if (character) {
@@ -220,7 +221,7 @@ function CharacterModal({ character, onClose }: Props) {
     const fieldsConfig = {
         hits: { label: "Хиты", max: 1000 },
         speed: { label: "Скорость", max: 200 },
-        ac: { label: "AC", max: 40 },
+        ac: { label: "Класс Брони", max: 40 },
         initiative: { label: "Инициатива", max: 30 },
     };
 
