@@ -1,4 +1,4 @@
-import Btn from '../../UI/Btn/Btn.tsx';
+import Btn from '../../../UI/Btn/Btn.tsx';
 import styles from './Field.module.css';
 
 interface Roll {

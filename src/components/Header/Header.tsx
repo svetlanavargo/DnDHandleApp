@@ -5,7 +5,11 @@ import BurgerMenu from '../UI/Burger/Burger.tsx';
 import Home from '../../../public/img/home.svg';
 import styles from './Header.module.css';
 
-function Header() {
+interface HeaderProps {
+    setIsDiceOpen: () => void
+}
+
+function Header({setIsDiceOpen}: HeaderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +32,7 @@ function Header() {
             <div className={styles.burgerContainer}>
                 <BurgerMenu isOpen={isOpen} toggleMenu={toggleMenu}>
                     <Link to="/" onClick={() => setIsOpen(false)}><img className={styles.home} src={Home} alt=""/></Link>
-                    <Link to="/dice" onClick={() => setIsOpen(false)}>Дайсы</Link>
+                    <div onClick={setIsDiceOpen}>Дайсы</div>
                     <Link to="/character_list" onClick={() => setIsOpen(false)}>Персонажи</Link>
                     <Link to="/inventory" onClick={() => setIsOpen(false)}>Инвентарь</Link>
                     <Link to="/spells_list" onClick={() => setIsOpen(false)}>Заклинания</Link>

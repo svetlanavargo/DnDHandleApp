@@ -77,15 +77,16 @@
 }
 
 /* Ссылки внутри меню */
-.menu a {
+.menu a, .menu div {
     text-decoration: none;
     color: #FBFAFA;
     font-weight: 500;
     transition: color 0.3s ease;
     white-space: nowrap;
+    cursor: pointer;
 }
 
-.menu a:hover {
+.menu a:hover, .menu div:hover {
     color: #2eb9a1;
 }
 

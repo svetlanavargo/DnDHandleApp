@@ -61,13 +61,15 @@ export default function Note({
                 </div>
 
                 <div className={styles.noteWrapper}>
+                    <div className={styles.deleteWrap}>
+                        <Btn onClick={() => deleteNote(activeIndex)} classBtn='delete' />
+                    </div>
                     <textarea
                         className={styles.contentEditable}
                         value={(character.note && character.note[activeIndex]) || ''}
                         onChange={handleChange}
                         placeholder="Заметка..."
                     />
-                    <Btn onClick={() => deleteNote(activeIndex)} classBtn='delete' />
                 </div>
             </div>
         </div>
