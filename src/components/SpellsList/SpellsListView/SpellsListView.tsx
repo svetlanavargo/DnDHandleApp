@@ -10,14 +10,11 @@ interface SpellsListViewProps {
 function SpellsListView({ spells, fill }: SpellsListViewProps) {
     return (
         <div className={styles.spellsListViewContainer}>
-            {spells.map((spell, i) => (
+            {spells.map((spell) => (
                 <SpellCard
                     key={spell.url}
                     spell={spell}
                     fill={fill}
-                    style={{
-                        zIndex: spells.length - i
-                    }}
                 />
             ))}
         </div>
