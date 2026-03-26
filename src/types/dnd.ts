@@ -175,6 +175,34 @@ export type Skill = {
     ability: keyof Characteristics;
 };
 
+export type SpellSchool =
+    | 'abjuration'
+    | 'conjuration'
+    | 'divination'
+    | 'enchantment'
+    | 'evocation'
+    | 'illusion'
+    | 'necromancy'
+    | 'transmutation';
+
+export interface Spell {
+    url: string;
+    nameRu: string;
+    nameEn: string;
+    lvl: number;
+    time: string;
+    distant: string;
+    school: SpellSchool;
+    components: string;
+    duration: string;
+
+    classes: Partial<Record<string, string>>;
+    subclass: Partial<Record<string, string>>;
+    races: Partial<Record<string, string>>;
+
+    description: string;
+}
+
 // ===== ВАЛЮТА =====
 export interface Currency {
     platinum: number;

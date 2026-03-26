@@ -27,4 +27,5 @@ export interface Character {
         note: string;
         currency: Currency;
     };
+    fill: string
 }

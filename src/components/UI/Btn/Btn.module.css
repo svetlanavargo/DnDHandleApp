@@ -18,7 +18,7 @@ button:focus-visible {
     outline: none;
 }
 
-.addCard, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
+.addCard, .settings, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
     background-repeat: no-repeat;
     background-color: transparent;
     background-size: contain;
@@ -31,6 +31,12 @@ button:focus-visible {
     width: 25px;
     height: 25px;
     background-image: url("/img/close.svg");
+}
+
+.settings {
+    width: 25px;
+    height: 25px;
+    background-image: url("/img/settings.svg");
 }
 
 .addCard {

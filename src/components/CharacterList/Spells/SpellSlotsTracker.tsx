@@ -55,21 +55,24 @@ function SpellSlotsTracker({ character, updateCharacter }: Props) {
             </div>
 
             <div className={styles.spellsSlots}>
-                {Object.entries(character.spellSlots).map(([lvl, slots]) => (
-                    <div key={lvl} className={styles.col}>
-                        <p className={styles.level}>{lvl}</p>
+                {Object.entries(character.spellSlots)
+                    .filter(([lvl]) => Number(lvl) !== 0)
+                    .map(([lvl, slots]) => (
+                        <div key={lvl} className={styles.col}>
+                            <p className={styles.level}>{lvl}</p>
 
-                        <div className={styles.slotsWrapper}>
-                            {slots.map((used, i) => (
-                                <div
-                                    key={i}
-                                    className={`${styles.slot} ${used ? styles.used : ""}`}
-                                    onClick={() => toggleSlot(Number(lvl), i)}
-                                />
-                            ))}
+                            <div className={styles.slotsWrapper}>
+                                {slots.map((used, i) => (
+                                    <div
+                                        key={i}
+                                        className={`${styles.slot} ${used ? styles.used : ""}`}
+                                        onClick={() => toggleSlot(Number(lvl), i)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                }
             </div>
         </div>
     )

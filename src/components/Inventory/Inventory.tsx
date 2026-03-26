@@ -12,12 +12,10 @@ import styles from './Inventory.module.css';
 function Inventory() {
     const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
 
-    // Если персонаж выбран, берём его; иначе null
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
 
     const numberModal = useNumberModal();
 
-    // Локальные состояния для note и currency
     const [text, setText] = useState<string>('');
     const [currency, setCurrency] = useState<Currency>({
         platinum: 0,
@@ -26,7 +24,6 @@ function Inventory() {
         bronze: 0
     });
 
-    // Синхронизируем локальные состояния при смене персонажа
     useEffect(() => {
         if (!activeCharacter) return;
 
@@ -36,14 +33,12 @@ function Inventory() {
         });
     }, [activeCharacter]);
 
-    // Обновление inventory персонажа
     const updateInventory = (updateFn: (inv: CharacterType['inventory']) => CharacterType['inventory']) => {
         if (!activeCharacter) return;
         const updatedInventory = updateFn(activeCharacter.inventory);
         updateCharacter({ ...activeCharacter, inventory: updatedInventory });
     };
 
-    // ===== Обработчики =====
     const handleTextChange = (newText: string) => {
         setText(newText);
         updateInventory(inv => ({ ...inv, note: newText }));

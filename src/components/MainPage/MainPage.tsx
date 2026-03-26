@@ -6,7 +6,7 @@ const tetxs = [
         title: `Лист персонажа – онлайн и мобильный`,
         description: `Наш <strong>лист персонажа</strong> продуман для максимального удобства: все <em>модификаторы</em>, навыки
                                 и характеристики считаются автоматически.<br/><br/> Введите свои <strong>характеристики</strong>, <strong>классовые способности</strong> и
-                                остальное сделает приложение.<br/><br/> <em>Треккер заклинаний</em> позволяет редактировать ячейки
+                                остальное сделает приложение.<br/><br/> <em>Трекер заклинаний</em> позволяет редактировать ячейки
                                 заклинаний прямо во время игры, повышая эффективность каждого хода`,
         link: '/character_list'
     },
@@ -25,7 +25,7 @@ const tetxs = [
                                 полного погружения в атмосферу <em>настольной игры</em>.<br/><br/>
                                 Приложение помогает отслеживать <em>уровень заклинаний</em>, количество подготовленных
                                 заклинаний и те, которые персонаж знает по умолчанию.<br/><br/> Экономьте место на столе и
-                                ускоряйте подготовку сессии, используя наш <strong>магический треккер</strong> и функцию
+                                ускоряйте подготовку сессии, используя наш <strong>магический трекер</strong> и функцию
                                 быстрого поиска по выбранному классу вашего персонажа`,
         link: '/spells_list'
     },
@@ -57,9 +57,9 @@ function MainPage() {
                 <div className={styles.descriptionsWrap}>
                     <div className={styles.cardContainer}>
                         <h3 className={styles.cardHeader}>
-                            <Link className={styles.cardLink} to="/battle_tracker">ДМ треккер для мастеров подземелий</Link>
+                            <Link className={styles.cardLink} to="/battle_tracker">ДМ трекер для мастеров подземелий</Link>
                         </h3>
-                        <p className={styles.cardDescription}>Для каждого <strong>Dungeon Master</strong> наш <strong>ДМ треккер</strong> станет
+                        <p className={styles.cardDescription}>Для каждого <strong>Dungeon Master</strong> наш <strong>ДМ трекер</strong> станет
                             незаменимым помощником в <em>подземельях</em> и <em>боевых сценах</em>.<br className={styles.br}/><br className={styles.br}/> Приложение
                             автоматически считает <em>раунды</em>, <em>инициативу</em> и <em>время хода</em>,
                             освобождая вас от ручного подсчета. <br className={styles.br}/><br className={styles.br}/> Легко заполняйте <strong>список карт</strong>,

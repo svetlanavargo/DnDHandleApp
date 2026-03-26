@@ -185,7 +185,7 @@ export default function CharacterList() {
 
     // === Remove Character ===
     const handleRemoveCharacter = (id: string) => {
-        removeCharacterFromContext(id); // используем функцию из контекста
+        removeCharacterFromContext(id);
         closeDeleteModal();
     };
 
