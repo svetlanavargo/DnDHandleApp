@@ -1,0 +1,167 @@
+.spellCard {
+    width: 286px;
+    height: 397px;
+    border-radius: 16px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 24px 24px 47px 24px;
+    overflow: hidden;
+    font-family: 'Marker Felt', sans-serif;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    position: relative;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.level {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+}
+
+.left, .right {
+    padding: 20px 0 12px 0;
+}
+
+.title {
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.time, .components, .distant, .duration {
+    width: 150px;
+    height: 35px;
+}
+
+.description {
+    height: 267px;
+    overflow: hidden;
+    font-size: 13px;
+    text-overflow: ellipsis;
+}
+
+@media (min-width: 424px) {
+    .spellCard {
+        width: 335px;
+        height: 463px;
+        padding: 30px 30px 60px 30px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .level {
+        top: 32px;
+        right: 32px;
+    }
+
+    .left, .right {
+        padding: 27px 0 18px 0;
+    }
+
+    .time, .components, .distant, .duration {
+        font-size: 17px;
+        width: 180px;
+        height: 40px;
+    }
+
+    .description {
+        font-size: 15px;
+        height: 317px;
+    }
+}
+
+.cardFillBard {
+    background-image: url("/img/CardsFill/Bard.svg");
+    color: #4f1e7a;
+}
+.cardFillBard .title {
+    color: #4f1e7a;
+}
+.cardFillBard .color {
+    color: #1a1a1a;
+}
+
+.cardFillCleric {
+    background-image: url("/img/CardsFill/Cleric.svg");
+    color: #7a5a1a;
+}
+.cardFillCleric .title {
+    color: #7a5a1a;
+}
+.cardFillCleric .color {
+    color: #1a1a1a;
+}
+
+.cardFillDruid {
+    background-image: url("/img/CardsFill/Druid.svg");
+    color: #755436;
+}
+.cardFillDruid .title {
+    color: #755436;
+}
+.cardFillDruid .color {
+    color: #1a1a1a;
+}
+
+.cardFillPaladin {
+    background-image: url("/img/CardsFill/Paladin.svg");
+    color: #1c7293;
+}
+.cardFillPaladin .title {
+    color: #1c7293;
+}
+.cardFillPaladin .color {
+    color: #1a1a1a;
+}
+
+.cardFillRanger {
+    background-image: url("/img/CardsFill/Ranger.svg");
+    color: #113317;
+}
+.cardFillRanger .title {
+    color: #113317;
+}
+.cardFillRanger .color {
+    color: #1a1a1a;
+}
+
+.cardFillSorcerer {
+    background-image: url("/img/CardsFill/Sorcerer.svg");
+    color: #2c7a65;
+}
+.cardFillSorcerer .title {
+    color: #2c7a65;
+}
+.cardFillSorcerer .color {
+    color: #1a1a1a;
+}
+
+.cardFillWarlock {
+    background-image: url("/img/CardsFill/Warlock.svg");
+    color: #72111d;
+}
+.cardFillWarlock .title {
+    color: #72111d;
+}
+.cardFillWarlock .color {
+    color: #1a1a1a;
+}
+
+.cardFillWizard {
+    background-image: url("/img/CardsFill/Wizard.svg");
+    color: #161951;
+}
+.cardFillWizard .title {
+    color: #161951;
+}
+.cardFillWizard .color {
+    color: #1a1a1a;
+}
+
