@@ -46,51 +46,6 @@
     align-items: center;
 }
 
-.artificer, .barbarian, .bard, .cleric, .druid, .fighter, .monk, .paladin, .ranger, .rogue, .sorcerer, .warlock, .wizard {
-    width: 50px;
-    height: 50px;
-    margin-right: 12px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.artificer {
-    background-image: url("/img/ClassesIcon/artificer.svg");
-}
-.barbarian {
-    background-image: url("/img/ClassesIcon/barbarian.svg");
-}
-.bard {
-    background-image: url("/img/ClassesIcon/bard.svg");
-}
-.cleric {
-    background-image: url("/img/ClassesIcon/cleric.svg");
-}
-.druid {
-    background-image: url("/img/ClassesIcon/druid.svg");
-}
-.fighter {
-    background-image: url("/img/ClassesIcon/fighter.svg");
-}
-.monk {
-    background-image: url("/img/ClassesIcon/monk.svg");
-}
-.paladin {
-    background-image: url("/img/ClassesIcon/paladin.svg");
-}
-.ranger {
-    background-image: url("/img/ClassesIcon/ranger.svg");
-}
-.rogue {
-    background-image: url("/img/ClassesIcon/rogue.svg");
-}
-.sorcerer {
-    background-image: url("/img/ClassesIcon/sorcerer.svg");
-}
-.warlock {
-    background-image: url("/img/ClassesIcon/warlock.svg");
-}
-.wizard {
-    background-image: url("/img/ClassesIcon/wizard.svg");
+.margin {
+    margin-left: 12px;
 }

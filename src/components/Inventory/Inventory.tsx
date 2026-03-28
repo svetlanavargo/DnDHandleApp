@@ -7,6 +7,7 @@ import CurrencyList from './CurrencyList/CurrencyList.tsx';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
+import NoCharacter from '../Stubs/NoCharacter/NoCharacter.tsx';
 import styles from './Inventory.module.css';
 
 function Inventory() {
@@ -76,7 +77,7 @@ function Inventory() {
 
     // Если персонаж не выбран, показываем заглушку
     if (!activeCharacter) {
-        return <div className={styles.inventoryContainer}>Выберите персонажа для просмотра инвентаря</div>;
+        return <NoCharacter text='Для просмотра инвентаря - необходимо '/>;
     }
 
     return (

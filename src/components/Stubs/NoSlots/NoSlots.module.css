@@ -1,0 +1,18 @@
+.noSlotsContainer {
+    padding: 80px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    padding: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.classText {
+    color: #2eb9a1;
+    font-weight: bold;
+}

@@ -49,6 +49,12 @@
     margin: 10px;
     max-width: 90%;
 }
+@media (min-width: 426px) {
+    .small {
+        width: 405px;
+        max-width: 90%;
+    }
+}
 
 .large {
     width: 600px;

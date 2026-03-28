@@ -12,10 +12,6 @@ import type {
 import { classesData } from "../constants/classesData";
 import { spellSlotProgression } from "../constants/spellSlotProgression";
 
-// ===== EMPTY SPELLS =====
-const createEmptySpells = (): SpellsList => ({});
-
-// ===== FORM TYPE =====
 type FormValues = {
     name: string;
     race: RaceKey;
@@ -34,7 +30,6 @@ type FormValues = {
     armors: string[];
     tools: string[];
     fill: string;
-    spells?: SpellsList;
 };
 
 const defaultForm: FormValues = {
@@ -61,10 +56,9 @@ const defaultForm: FormValues = {
     weapons: [],
     armors: [],
     tools: [],
-    fill: "fighter",
+    fill: "fighter"
 };
 
-// ===== HOOK =====
 export function useCharacterForm(character: Character | null) {
     const [formValues, setFormValues] = useState<FormValues>(defaultForm);
 
@@ -76,8 +70,10 @@ export function useCharacterForm(character: Character | null) {
         }
 
         setFormValues({
-            ...defaultForm,
-            ...character,
+            name: character.name,
+            race: character.race,
+            class: character.class,
+            subclass: character.subclass,
             speed: String(character.speed),
             ac: String(character.ac),
             hits: String(character.hits),
@@ -85,36 +81,25 @@ export function useCharacterForm(character: Character | null) {
             initiative: String(character.initiative),
             characteristics: { ...character.characteristics },
             skills: [...character.skills],
-            expertise: character.expertise ? [...character.expertise] : [],
-            spells: character.spells ?? createEmptySpells()
+            expertise: [...character.expertise],
+            languages: [...character.languages],
+            weapons: [...character.weapons],
+            armors: [...character.armors],
+            tools: [...character.tools],
+            fill: character.fill
         });
     }, [character]);
 
-    // ================= UTILS =================
+    // ================= HELPERS =================
     function getExpertiseLimit(level: number) {
         return level >= 6 ? 4 : 2;
     }
 
-    function getProgressionSlots(
-        progression: Record<number, number[]>,
-        level: number
-    ): number[] {
-        const levels = Object.keys(progression)
-            .map(Number)
-            .filter(l => l <= level);
-
-        if (levels.length === 0) return [];
-
-        const bestLevel = Math.max(...levels);
-
-        return progression[bestLevel];
-    }
-
-    // ================= CASTER CHECK =================
     function getCaster(className: ClassKey, subclassName?: string) {
         const classData = classesData[className];
-        if (!classData?.caster) return null;
+        if (!classData) return null;
 
+        // 1. сначала проверяем subclass (ВАЖНО!)
         if (
             subclassName &&
             classData.subclasses?.[subclassName]?.caster
@@ -122,11 +107,31 @@ export function useCharacterForm(character: Character | null) {
             return classData.subclasses[subclassName].caster;
         }
 
-        return classData.caster;
+        // 2. потом base class
+        if (classData.caster) {
+            return classData.caster;
+        }
+
+        return null;
     }
 
     function isCasterClass(className: ClassKey, subclassName?: string) {
         return !!getCaster(className, subclassName);
+    }
+
+    function getProgressionSlots(
+        progression: Record<number, number[]> | undefined,
+        level: number
+    ): number[] {
+        if (!progression) return [];
+
+        const keys = Object.keys(progression)
+            .map(Number)
+            .filter(l => l <= level);
+
+        if (keys.length === 0) return [];
+
+        return progression[Math.max(...keys)] ?? [];
     }
 
     // ================= SPELL SLOTS =================
@@ -138,14 +143,18 @@ export function useCharacterForm(character: Character | null) {
         const caster = getCaster(className, subclassName);
         if (!caster) return {};
 
-        const progression =
-            spellSlotProgression[caster.progression ?? "full"] ?? {};
+        const progressionKey = caster.progression;
+
+        const progression = spellSlotProgression[progressionKey as keyof typeof spellSlotProgression];
+
+        if (!progression) return {}; // 💣 FIX №1
 
         const slotsPerLevel = getProgressionSlots(progression, level);
 
+        if (!slotsPerLevel.length) return {}; // 💣 FIX №2
+
         const state: SpellSlotsState = {};
 
-        // ❌ NO 0 HERE EVER
         slotsPerLevel.forEach((count, index) => {
             const slotLevel = index + 1;
             state[slotLevel] = Array.from({ length: count }, () => false);
@@ -154,26 +163,22 @@ export function useCharacterForm(character: Character | null) {
         return state;
     }
 
-    // ================= SPELL NORMALIZATION =================
-    function normalizeSpells(spells?: SpellsList): SpellsList {
-        return spells ? { ...spells } : {};
-    }
-
-    function syncSpellsWithSlots(
+    // ================= SPELLS =================
+    function syncSpells(
         slots: SpellSlotsState,
-        prev: SpellsList | undefined,
+        existing: SpellsList | undefined,
         caster: boolean
     ): SpellsList {
-        const base = normalizeSpells(prev);
+        const base = existing ?? {};
+
         const result: SpellsList = {};
 
-        // ✅ CANTRIPS ONLY FOR CASTERS
         if (caster) {
             result[0] = base[0] ?? [];
         }
 
-        (Object.keys(slots) as SpellLevel[]).forEach((lvl) => {
-            result[lvl] = base[lvl] ?? [];
+        Object.keys(slots).forEach((lvl) => {
+            result[lvl as SpellLevel] = base[lvl as SpellLevel] ?? [];
         });
 
         return result;
@@ -186,6 +191,7 @@ export function useCharacterForm(character: Character | null) {
     ) {
         setFormValues(prev => {
             const updated = { ...prev, [field]: value };
+
             const level = Number(updated.level);
 
             return {
@@ -228,10 +234,7 @@ export function useCharacterForm(character: Character | null) {
         const level = Number(formValues.level) || 1;
         const hits = Number(formValues.hits) || 1;
 
-        const caster = isCasterClass(
-            formValues.class,
-            formValues.subclass
-        );
+        const caster = isCasterClass(formValues.class, formValues.subclass);
 
         const spellSlots = initSpellSlots(
             formValues.class,
@@ -239,9 +242,9 @@ export function useCharacterForm(character: Character | null) {
             level
         );
 
-        const spells = syncSpellsWithSlots(
+        const spells = syncSpells(
             spellSlots,
-            formValues.spells,
+            existing?.spells,
             caster
         );
 
@@ -267,14 +270,14 @@ export function useCharacterForm(character: Character | null) {
             armors: [...formValues.armors],
             tools: [...formValues.tools],
             spellSlots,
+            spells,
             diceHitsCount: existing?.diceHitsCount ?? level,
             inventory: existing?.inventory ?? {
                 note: "",
                 currency: { platinum: 0, gold: 0, silver: 0, bronze: 0 }
             },
             fill: formValues.class,
-            note: existing?.note ?? [],
-            spells
+            note: existing?.note ?? []
         };
     }
 

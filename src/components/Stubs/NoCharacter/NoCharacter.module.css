@@ -1,0 +1,24 @@
+.noCharContainer {
+    padding: 80px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.noCharContainer a {
+    color: #2eb9a1;
+    text-decoration: none;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    background-image: url("/img/dnd.svg");
+}
+
+.text {
+    padding: 20px;
+    font-size: 20px;
+    text-align: center;
+}

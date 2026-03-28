@@ -6,11 +6,13 @@ import Modal from '../Modals/Modal.tsx';
 import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
 import SpellsDeleteCard from '../Modals/SpellsDeleteCard.tsx';
 import SpellsSettings from '../Modals/SpellsSettings.tsx';
+import NoSlots from '../Stubs/NoSlots/NoSlots.tsx';
 import { CharacterContext } from '../../context/CharacterContext.ts';
 import rawSpellsJson from '../../data/Spells/spells.json';
 
 import type { Spell, SpellSchool, SpellLevel } from '../../types/dnd';
 import styles from './SpellsList.module.css';
+import NoCharacter from "../Stubs/NoCharacter/NoCharacter.tsx";
 
 type ModalType = "add" | "delete" | "settings" | null;
 
@@ -45,10 +47,13 @@ function SpellsList() {
             }));
     }, [activeCharacter, activeTab, spellsMap]);
 
-    if (!activeCharacter) return null;
+    if (!activeCharacter) {
+        return <NoCharacter text='Для просмотра заклинаний - необходимо '/>;
+    }
+
 
     if (!activeCharacter.spells || Object.keys(activeCharacter.spells).length === 0) {
-        return <div>нет слотов</div>;
+        return <NoSlots chClass={activeCharacter.class}/>;
     }
 
     const openModal = (type: ModalType) => setActiveModal(type);

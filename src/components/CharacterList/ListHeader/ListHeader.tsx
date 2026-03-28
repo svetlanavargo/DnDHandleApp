@@ -4,6 +4,7 @@ import { racesData } from '../../../constants/racesData.ts';
 import type { ClassKey } from '../../../types/dnd';
 import type { RaceKey } from '../../../types/dnd';
 import Btn from '../../UI/Btn/Btn.tsx';
+import ClassIcon from '../../UI/ClassIcon/ClassIcon.tsx';
 import styles from './ListHeader.module.css';
 
 interface ListHeaderProps {
@@ -28,8 +29,8 @@ function ListHeader({
     return (
         <div className={styles.listHeader}>
             <div className={styles.flex}>
-                <div className={styles[spec]} />
-                <div>
+                <ClassIcon spec={spec} size='small'/>
+                <div className={styles.margin}>
                     <div className={styles.flex}>
                         <h3 className={styles.name}>{name}</h3>
                         <div className={styles.level}>{level}</div>

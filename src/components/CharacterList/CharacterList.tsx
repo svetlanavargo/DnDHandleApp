@@ -198,7 +198,7 @@ export default function CharacterList() {
                     addCharacter={handleAddCharacter}
                 />
 
-                {activeCharacter && (
+                {activeCharacter ? (
                     <List
                         activeCharacter={activeCharacter}
                         removeCharacter={() => setDeletingCharacter(activeCharacter)}
@@ -215,6 +215,18 @@ export default function CharacterList() {
                         setActiveNote={setActiveNoteIndex}
                         activeIndex={activeNoteIndex}
                     />
+                )
+                : (
+                    <Modal isOpen={true} size="small">
+                        <CharacterModal
+                            character={null}
+                            onClose={() => setCreatingCharacter(false)}
+                            onSave={(newChar) => {
+                                addCharacter(newChar);
+                                setCreatingCharacter(false);
+                            }}
+                        />
+                    </Modal>
                 )}
             </div>
 
