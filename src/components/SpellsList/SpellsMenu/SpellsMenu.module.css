@@ -1,0 +1,8 @@
+.spellsMenuContainer {
+    padding: 12px 20px;
+    background-color: #1F1F1F;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 12px;
+}

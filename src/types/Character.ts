@@ -1,4 +1,4 @@
-import type { ClassKey, RaceKey, Characteristics, SpellSlotsState, Currency } from './dnd.ts';
+import type { ClassKey, RaceKey, Characteristics, SpellSlotsState, Currency, SpellsList } from './dnd.ts';
 
 export interface Character {
     id: string;
@@ -23,6 +23,7 @@ export interface Character {
     tools: string[]
     note: string[];
     spellSlots?: SpellSlotsState;
+    spells?: SpellsList;
     inventory: {
         note: string;
         currency: Currency;

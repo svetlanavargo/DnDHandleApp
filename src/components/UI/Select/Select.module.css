@@ -43,7 +43,7 @@
     border-radius: 4px;
     background-color: #242424;
     margin-top: 4px;
-    z-index: 10;
+    z-index: 100;
     max-height: 200px;
     overflow-y: auto;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);

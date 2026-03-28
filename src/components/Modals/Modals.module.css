@@ -35,7 +35,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     /* Firefox */
     scrollbar-width: none;
     /* IE и старые Edge */
@@ -44,7 +45,8 @@
 }
 
 .small {
-    width: 320px;
+    width: 100%;
+    margin: 10px;
     max-width: 90%;
 }
 
@@ -121,4 +123,33 @@ button {
     width: 20px;
     height: 20px;
     background-image: url("/img/close.svg");
+}
+
+.modalWrapperFlex {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.designCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.designImg {
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    border-radius: 8px;
+}
+
+.designCard:hover .designImg {
+    transform: scale(1.05);
+}
+
+.active .designImg {
+    transform: scale(1.1);
 }

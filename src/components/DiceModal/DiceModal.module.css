@@ -7,7 +7,7 @@
     align-items: center;
     justify-content: end;
 
-    z-index: 1000;
+    z-index: 1000000000;
 }
 
 .modal {

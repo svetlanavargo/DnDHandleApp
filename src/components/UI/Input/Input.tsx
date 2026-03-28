@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import styles from './Input.module.css';
 
-interface InputProps {
-    children?: React.ReactNode;
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+children?: React.ReactNode;
     type: "text" | "number";
     inputMode?: "text" | "numeric";
     value: string | number | undefined;

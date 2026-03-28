@@ -1,49 +1,103 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
+import SpellsMenu from './SpellsMenu/SpellsMenu.tsx';
 import SpellsTabs from './SpellsTabs/SpellsTabs.tsx';
 import SpellsListView from './SpellsListView/SpellsListView.tsx';
-import type { Spell } from '../../types/dnd.ts';
+import Modal from '../Modals/Modal.tsx';
+import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
+import SpellsDeleteCard from '../Modals/SpellsDeleteCard.tsx';
+import SpellsSettings from '../Modals/SpellsSettings.tsx';
 import { CharacterContext } from '../../context/CharacterContext.ts';
-import spellsRaw from '../../data/Spells/spells.json';
+import rawSpellsJson from '../../data/Spells/spells.json';
+
+import type { Spell, SpellSchool, SpellLevel } from '../../types/dnd';
 import styles from './SpellsList.module.css';
 
-const spells = spellsRaw as Spell[];
+type ModalType = "add" | "delete" | "settings" | null;
 
 function SpellsList() {
-    const [activeTab, setActiveTab] = useState<string>('0');
-    const { characters, activeCharacterId } = useContext(CharacterContext);
+    const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [activeTab, setActiveTab] = useState<SpellLevel>('0');
+    const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
 
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
 
-    useEffect(() => {
-        if (!activeCharacter) return;
-    }, [activeCharacter]);
+    const spellsJson = rawSpellsJson as Spell[];
 
-    console.log(activeCharacter);
+    // map url → spell
+    const spellsMap = useMemo(() => {
+        return Object.fromEntries(
+            spellsJson.map((s) => [s.url, s])
+        );
+    }, [spellsJson]);
+
+    // 👉 подготовленные спеллы по выбранному уровню
+    const preparedSpells = useMemo(() => {
+        if (!activeCharacter?.spells) return [];
+
+        const levelSpells = activeCharacter.spells[activeTab] || [];
+
+        return levelSpells
+            .map((url: string) => spellsMap[url])
+            .filter((spell: Spell | undefined): spell is Spell => Boolean(spell))
+            .map((spell) => ({
+                ...spell,
+                school: spell.school as SpellSchool
+            }));
+    }, [activeCharacter, activeTab, spellsMap]);
 
     if (!activeCharacter) return null;
 
-    if (!activeCharacter.spellSlots || Object.keys(activeCharacter.spellSlots).length === 0) {
+    if (!activeCharacter.spells || Object.keys(activeCharacter.spells).length === 0) {
         return <div>нет слотов</div>;
     }
 
-    const filteredSpells = spells.filter(
-        spell => String(spell.lvl) === activeTab
-    );
+    const openModal = (type: ModalType) => setActiveModal(type);
+    const closeModal = () => setActiveModal(null);
 
     return (
         <div className={styles.spellsContainer}>
             <div className={styles.spellsWrap}>
+                <SpellsMenu
+                    onAdd={() => openModal("add")}
+                    onDelete={() => openModal("delete")}
+                    onSettings={() => openModal("settings")}
+                />
+
                 <SpellsTabs
-                    slots={activeCharacter.spellSlots}
+                    spells={activeCharacter.spells}
                     activeTab={activeTab}
                     onChange={setActiveTab}
                 />
 
                 <SpellsListView
-                    spells={filteredSpells}
+                    spells={preparedSpells}
                     fill={activeCharacter.fill}
                 />
             </div>
+
+            <Modal isOpen={activeModal === "add"} size="small">
+                <SpellsAddCard
+                    handleModalToggle={closeModal}
+                    character={activeCharacter}
+                    updateCharacter={updateCharacter}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "delete"} size="small">
+                <SpellsDeleteCard
+                    handleModalToggle={closeModal}
+                    character={activeCharacter}
+                    updateCharacter={updateCharacter}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "settings"} size="small">
+                <SpellsSettings
+                    handleModalToggle={closeModal}
+                    character={activeCharacter}
+                    updateCharacter={updateCharacter}
+                />
+            </Modal>
         </div>
     );
 }

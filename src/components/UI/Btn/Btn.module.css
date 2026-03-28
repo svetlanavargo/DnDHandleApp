@@ -177,3 +177,8 @@ button:focus-visible {
     background-color: #2eb9a1;
     color: #1F1F1F;
 }
+
+.btnRed {
+    background-color: #8A0000;
+    color: #FBFAFA;
+}

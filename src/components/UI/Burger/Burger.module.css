@@ -67,6 +67,7 @@
     transition: all 0.35s ease;
     border-radius: 6px;
     background-color: rgba(30, 30, 30, 0.95); /* Немного прозрачный фон */
+    z-index: 999999;
 }
 
 /* Меню открыто */
@@ -74,6 +75,7 @@
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    z-index: 9999;
 }
 
 /* Ссылки внутри меню */

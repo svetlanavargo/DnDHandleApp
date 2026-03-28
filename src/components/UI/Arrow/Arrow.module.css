@@ -1,0 +1,11 @@
+.arrow {
+    border: solid #2eb9a1;
+    border-width: 0 2px 2px 0;
+    padding: 3px;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+
+.arrow.open {
+    transform: rotate(-135deg);
+}

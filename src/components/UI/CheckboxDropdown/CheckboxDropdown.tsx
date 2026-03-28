@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import Сheckbox from "../Checkbox/Checkbox";
+import Arrow from '../Arrow/Arrow.tsx';
+import Checkbox from "../Checkbox/Checkbox";
 import styles from './CheckboxDropdown.module.css';
 
 interface Option {
@@ -46,14 +47,14 @@ export default function CheckboxDropdown({ label, options, selected, onChange }:
                 onClick={() => setOpen(prev => !prev)}
             >
                 {label} ({selected.length})
-                <span className={`${styles.arrow} ${open ? styles.open : ""}`} />
+                <Arrow open={open}/>
             </button>
 
             {open && (
                 <div className={styles.options}>
                     {options.map(opt => (
                         <div key={opt.value} className={styles.optionLabel}>
-                            <Сheckbox
+                            <Checkbox
                                 label={opt.label}
                                 checked={selected.includes(opt.value)}
                                 onChange={() => toggleOption(opt.value)}

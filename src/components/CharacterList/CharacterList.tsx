@@ -3,7 +3,7 @@ import { CharacterContext } from '../../context/CharacterContext';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
 import type { Character } from '../../types/Character.ts';
-import rawSpellSlotProgression from '../../data/Spells/spellSlotProgression.json';
+import {spellSlotProgression} from '../../constants/spellSlotProgression.ts';
 import {classesData} from '../../constants/classesData.ts';
 import { getModifier } from '../../utils/getModifier';
 import Tabs from './Tabs/Tabs';
@@ -15,7 +15,6 @@ import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
 
 const classes: Classes = classesData as unknown as Classes;
-const spellSlotProgression = rawSpellSlotProgression as unknown as Record<string, Record<number, number[]>>;
 
 export default function CharacterList() {
     const { characters, activeCharacterId, setActiveCharacterId, addCharacter, updateCharacter, removeCharacter: removeCharacterFromContext } = useContext(CharacterContext);

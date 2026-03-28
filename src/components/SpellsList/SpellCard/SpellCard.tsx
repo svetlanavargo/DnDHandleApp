@@ -1,12 +1,47 @@
 import type { Spell } from '../../../types/dnd.ts'
+import type { CSSProperties } from 'react';
 import styles from './SpellCard.module.css';
 
 interface SpellCardProps {
     fill: string,
     spell: Spell,
+    style?: CSSProperties;
+    size?: 'small' | 'big';
+    isAdded?: boolean | undefined
 }
 
-function SpellCard({fill, spell}: SpellCardProps) {
+const sizeClasses = {
+    big: {
+        card: styles.spellCardBig,
+        flex: styles.flexBig,
+        level: styles.levelBig,
+        left: styles.leftBig,
+        right: styles.rightBig,
+        title: styles.titleBig,
+        time: styles.timeBig,
+        components: styles.componentsBig,
+        distant: styles.distantBig,
+        duration: styles.durationBig,
+        description: styles.descriptionBig,
+    },
+    small: {
+        card: styles.spellCardSmall,
+        flex: styles.flexSmall,
+        level: styles.levelSmall,
+        left: styles.leftSmall,
+        right: styles.rightSmall,
+        title: styles.titleSmall,
+        time: styles.timeSmall,
+        components: styles.componentsSmall,
+        distant: styles.distantSmall,
+        duration: styles.durationSmall,
+        description: styles.descriptionSmall,
+    }
+} as const;
+
+function SpellCard({fill, spell, size = 'big', style}: SpellCardProps) {
+    const s = sizeClasses[size];
+
     const getFillClass = (fill: string) => {
         switch (fill) {
             case 'bard':
@@ -50,25 +85,31 @@ function SpellCard({fill, spell}: SpellCardProps) {
         });
     };
 
-    return(
-        <div className={`${styles.spellCard} ${getFillClass(fill)}`}>
-            <div className={styles.level}>{spell.lvl}</div>
-            <a className={styles.title} href={spell.url} target='_blank'>{spell.nameRu}</a>
-            <div className={styles.flex}>
-                <div className={styles.left}>
-                    <p className={styles.time}>{spell.time}</p>
-                    <p className={styles.components}>{spell.components}</p>
+    return (
+        <div className={`${styles.spellCard} ${getFillClass(fill)} ${s.card}`} style={style}>
+            <div className={s.level}>{String(spell.lvl)}</div>
+
+            <a className={s.title} href={spell.url} target="_blank">
+                {spell.nameRu}
+            </a>
+
+            <div className={s.flex}>
+                <div className={s.left}>
+                    <p className={s.time}>{spell.time}</p>
+                    <p className={s.components}>{spell.components}</p>
                 </div>
-                <div className={styles.right}>
-                    <p className={styles.distant}>{spell.distant}</p>
-                    <p className={styles.duration}>{spell.duration}</p>
+
+                <div className={s.right}>
+                    <p className={s.distant}>{spell.distant}</p>
+                    <p className={s.duration}>{spell.duration}</p>
                 </div>
             </div>
-            <p className={styles.description}>
+
+            <p className={s.description}>
                 {formatDescription(spell.description)}
             </p>
         </div>
-    )
+    );
 }
 
 export default SpellCard

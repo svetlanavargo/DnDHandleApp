@@ -53,10 +53,12 @@ export type Classes = Record<string, Class>;
 
 // ===== SPELL SLOTS =====
 export type SpellSlotsState = Record<number, boolean[]>;
-export type SpellSlotProgression = Record<
-    ProgressionType,
-    Record<number, number[]>
->;
+export type SpellSlotProgression = {
+    full: Record<number, number[]>;
+    half: Record<number, number[]>;
+    third: Record<number, number[]>;
+    pact: Record<number, number[]>;
+};
 
 // ===== КЛАССЫ (ключи) =====
 export type ClassKey =
@@ -185,11 +187,15 @@ export type SpellSchool =
     | 'necromancy'
     | 'transmutation';
 
+export type SpellsList = Partial<Record<SpellLevel, string[]>>;
+
+export type SpellLevel = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
 export interface Spell {
     url: string;
     nameRu: string;
     nameEn: string;
-    lvl: number;
+    lvl: SpellLevel;
     time: string;
     distant: string;
     school: SpellSchool;
