@@ -54,6 +54,7 @@ export default function List({
                     name={activeCharacter.name}
                     level={activeCharacter.level}
                     race={raceKey}
+                    subrace={activeCharacter.subrace}
                     spec={classKey}
                     charSubclass={activeCharacter.subclass}
                     onEdit={openEditModal}

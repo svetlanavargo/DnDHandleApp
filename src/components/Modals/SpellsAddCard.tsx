@@ -8,10 +8,12 @@ import styles from './Modals.module.css';
 
 import type { Character } from '../../types/Character';
 import type { ClassKey, SpellLevel, Spell } from '../../types/dnd';
-import { TextSubClasses } from '../../constants/TextSubClasses';
+import { SubclassesData } from '../../constants/subclassesData.ts';
 import { classesData } from '../../constants/classesData';
 
 import spellsJson from '../../data/Spells/spells.json';
+
+// ================= TYPES =================
 
 interface SpellsSettingsProps {
     character?: Character;
@@ -28,44 +30,55 @@ type Filters = {
     search: string;
 };
 
-// ================= DnD LOGIC =================
+// ================= SPELL SOURCE =================
 
-function getMaxSpellLevel(level: number, classKey?: ClassKey): SpellLevel {
-    if (!classKey) return "0";
+// 👉 для подклассов типа Arcane Trickster
+const SPELL_LIST_BY_CLASS: Record<ClassKey, ClassKey> = {
+    rogue: "wizard",
+    fighter: "wizard",
+    wizard: "wizard",
+    cleric: "cleric",
+    druid: "druid",
+    bard: "bard",
+    sorcerer: "sorcerer",
+    warlock: "warlock",
+    paladin: "paladin",
+    ranger: "ranger",
+    artificer: "artificer",
+    barbarian: "barbarian",
+    monk: "monk"
+};
 
-    const FULL = ["wizard", "sorcerer", "cleric", "druid", "bard"];
-    const HALF = ["paladin", "ranger"];
+// ================= MAX SPELL LEVEL =================
 
-    if (FULL.includes(classKey)) {
-        if (level >= 17) return "9";
-        if (level >= 15) return "8";
-        if (level >= 13) return "7";
-        if (level >= 11) return "6";
-        if (level >= 9) return "5";
-        if (level >= 7) return "4";
-        if (level >= 5) return "3";
-        if (level >= 3) return "2";
-        return "1";
-    }
+function getMaxSpellLevel(
+    level: number,
+    classKey?: ClassKey,
+    subclass?: string
+): number {
+    if (!classKey) return 0;
 
-    if (HALF.includes(classKey)) {
-        if (level >= 17) return "5";
-        if (level >= 13) return "4";
-        if (level >= 9) return "3";
-        if (level >= 5) return "2";
-        if (level >= 2) return "1";
-        return "0";
-    }
+    const classData = classesData[classKey];
 
-    if (classKey === "warlock") {
-        if (level >= 17) return "5";
-        if (level >= 7) return "4";
-        if (level >= 5) return "3";
-        if (level >= 3) return "2";
-        return "1";
-    }
+    const caster =
+        subclass &&
+        classData?.subclasses?.[subclass]?.caster
+            ? classData.subclasses[subclass].caster
+            : classData?.caster;
 
-    return "0";
+    if (!caster || !caster.maxSpellLevel) return 0;
+
+    const table = caster.maxSpellLevel;
+
+    const levels = Object.keys(table)
+        .map(Number)
+        .filter(l => l <= level);
+
+    if (!levels.length) return 0;
+
+    const bestLevel = Math.max(...levels);
+
+    return table[bestLevel] ?? 0;
 }
 
 // ================= COMPONENT =================
@@ -108,6 +121,8 @@ function SpellsAddCard({
         }));
     }
 
+    // ================= SELECT OPTIONS =================
+
     const levelOptions: Record<string, string> = {
         all: "Доступные",
         "0": "Заговоры",
@@ -130,7 +145,7 @@ function SpellsAddCard({
 
     const subclassOptions = useMemo(() => {
         if (!filters.class) return {};
-        return TextSubClasses?.[filters.class] ?? {};
+        return SubclassesData?.[filters.class] ?? {};
     }, [filters.class]);
 
     // ================= FILTER =================
@@ -139,28 +154,33 @@ function SpellsAddCard({
         if (!character) return spellsJson as Spell[];
 
         const activeClass = (filters.class || character.class) as ClassKey;
+        const effectiveClass = SPELL_LIST_BY_CLASS[activeClass];
 
-        const maxLevel = Number(
-            getMaxSpellLevel(character.level, activeClass)
+        const maxLevel = getMaxSpellLevel(
+            character.level,
+            activeClass,
+            filters.subclass || character.subclass
         );
 
         return (spellsJson as Spell[]).filter((spell) => {
             const spellLevel = Number(spell.lvl);
 
-            const classMatch =
-                !filters.class ||
-                Object.keys(spell.classes || {}).length === 0 ||
-                Object.keys(spell.classes).includes(filters.class);
+            const isClassSpell =
+                !spell.classes ||
+                Object.keys(spell.classes).includes(effectiveClass);
 
-            const subclassMatch =
-                !filters.subclass ||
-                Object.keys(spell.subclass || {}).length === 0 ||
-                Object.keys(spell.subclass).includes(filters.subclass);
+            const isSubclassSpell =
+                filters.subclass &&
+                spell.subclass &&
+                spell.subclass[filters.subclass];
+
+            const classMatch =
+                !filters.class || isClassSpell || isSubclassSpell;
 
             const levelMatch =
                 filters.level === "all"
                     ? spellLevel <= maxLevel
-                    : spell.lvl === filters.level;
+                    : Number(filters.level) === spellLevel;
 
             const search = filters.search.toLowerCase();
 
@@ -169,9 +189,11 @@ function SpellsAddCard({
                 spell.nameRu.toLowerCase().includes(search) ||
                 spell.nameEn.toLowerCase().includes(search);
 
-            return classMatch && subclassMatch && levelMatch && searchMatch;
+            return classMatch && levelMatch && searchMatch;
         });
     }, [character, filters]);
+
+    // ================= RANDOM PLACEHOLDER =================
 
     function getRandomSpellName(spells: Spell[]) {
         if (!spells.length) return "";
@@ -181,6 +203,8 @@ function SpellsAddCard({
     useEffect(() => {
         setRandomSpellName(getRandomSpellName(availableSpells));
     }, [availableSpells]);
+
+    // ================= ADD / REMOVE =================
 
     function handleToggleSpell() {
         if (!character || !activeSpell) return;
@@ -211,11 +235,13 @@ function SpellsAddCard({
         return character.spells?.[levelKey]?.includes(activeSpell.url);
     }, [character, activeSpell]);
 
+    // ================= UI =================
+
     return (
         <div className={styles.modalWrapperFlex}>
             <div className={styles.flex}>
                 <h3>Добавление заклинаний</h3>
-                <Btn onClick={handleModalToggle} classBtn='close'/>
+                <Btn onClick={handleModalToggle} classBtn="close" />
             </div>
 
             <Select
@@ -284,7 +310,9 @@ function SpellsAddCard({
                                 onClick={handleToggleSpell}
                                 classBtn={isActiveSpellAdded ? "btnRed" : "btnColor"}
                             >
-                                {isActiveSpellAdded ? "Удалить заклинание" : "Добавить заклинание"}
+                                {isActiveSpellAdded
+                                    ? "Удалить заклинание"
+                                    : "Добавить заклинание"}
                             </Btn>
                         </div>
                     </>

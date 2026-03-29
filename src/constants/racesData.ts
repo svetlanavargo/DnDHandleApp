@@ -46,16 +46,6 @@ export const racesData: Record<RaceKey, Race> = {
         name: "Гит",
         url: "https://dnd.su/race/165-gith/"
     },
-    githzerai: {
-        nameEn: "Githzerai",
-        name: "Гитцерай",
-        url: "https://dnd.su/multiverse/race/293-githzerai/"
-    },
-    githyanki: {
-        nameEn: "Githyanki",
-        name: "Гитъянки",
-        url: "https://dnd.su/multiverse/race/292-githyanki/"
-    },
     giff: {
         nameEn: "Giff",
         name: "Гифф",
@@ -96,16 +86,6 @@ export const racesData: Record<RaceKey, Race> = {
         name: "Драконорождённый",
         url: "https://dnd.su/race/82-dragonborn/"
     },
-    deepGnome: {
-        nameEn: "Deep Gnome",
-        name: "Глубинный гном",
-        url: "https://dnd.su/multiverse/race/286-deep-gnome/"
-    },
-    duergar: {
-        nameEn: "Duergar",
-        name: "Дуэргар",
-        url: "https://dnd.su/multiverse/race/287-duergar/"
-    },
     harengon: {
         nameEn: "Harengon",
         name: "Зайцегон",
@@ -136,11 +116,6 @@ export const racesData: Record<RaceKey, Race> = {
         name: "Кобольд",
         url: "https://dnd.su/race/175-kobold/"
     },
-    koboldsOfMidgard: {
-        nameEn: "Kobolds of Midgard",
-        name: "Кобольд Мидгарда",
-        url: "https://dnd.su/homebrew/race/438-kobolds-of-midgard/"
-    },
     warforged: {
         nameEn: "Warforged",
         name: "Кованый",
@@ -166,36 +141,6 @@ export const racesData: Record<RaceKey, Race> = {
         name: "Локсодон",
         url: "https://dnd.su/race/177-loxodon/"
     },
-    eladrin: {
-        nameEn: "Eladrin",
-        name: "Эладрин",
-        url: "https://dnd.su/multiverse/race/288-eladrin/"
-    },
-    seaElf: {
-        nameEn: "Sea Elf",
-        name: "Морской эльф",
-        url: "https://dnd.su/multiverse/race/304-sea-elf/"
-    },
-    shadarKai: {
-        nameEn: "Shadar-Kai",
-        name: "Шадар-кай",
-        url: "https://dnd.su/multiverse/race/305-shadar-kai/"
-    },
-    glitchling: {
-        nameEn: "Glitchling",
-        name: "Глючный",
-        url: "https://dnd.su/homebrew/race/367-glitchling/"
-    },
-    aven: {
-        nameEn: "Aven",
-        name: "Авен",
-        url: "https://dnd.su/homebrew/race/329-aven/"
-    },
-    revenant: {
-        nameEn: "Revenant",
-        name: "Ревенант",
-        url: "https://dnd.su/homebrew/race/275-revenant/"
-    },
     lizardfolk: {
         nameEn: "Lizardfolk",
         name: "Людоящер",
@@ -211,21 +156,6 @@ export const racesData: Record<RaceKey, Race> = {
         name: "Орк",
         url: "https://dnd.su/race/187-orc/"
     },
-    accursedTiefling: {
-        nameEn: "Accursed Tiefling",
-        name: "Анафемный тифлинг",
-        url: "https://dnd.su/homebrew/race/461-accursed-tiefling/"
-    },
-    hobgoblinFeywild: {
-        nameEn: "Hobgoblin of the Feywild",
-        name: "Хобгоблин из Страны Фей",
-        url: "https://dnd.su/homebrew/race/205-hobgoblin-of-the-feywild/"
-    },
-    humanOfMidgard: {
-        nameEn: "Human of Midgard",
-        name: "Люди Мидгарда",
-        url: "https://dnd.su/homebrew/race/437-human-of-midgard/"
-    },
     plasmoid: {
         nameEn: "Plasmoid",
         name: "Плазмоид",
@@ -240,11 +170,6 @@ export const racesData: Record<RaceKey, Race> = {
         nameEn: "Halfling",
         name: "Полурослик",
         url: "https://dnd.su/race/80-halfling/"
-    },
-    winterfolkHalflings: {
-        nameEn: "Winterfolk halflings",
-        name: "Зиморождённые полурослики",
-        url: "https://dnd.su/homebrew/race/444-winterfolk-halflings/"
     },
     halfElf: {
         nameEn: "Half-elf",
@@ -330,25 +255,5 @@ export const racesData: Record<RaceKey, Race> = {
         nameEn: "Yuan-ti Pureblood",
         name: "Юань-ти",
         url: "https://dnd.su/race/189-yuan-ti-pureblood/"
-    },
-    hexblood: {
-        nameEn: "Hexblood",
-        name: "Ведьмовская кровь",
-        url: "https://dnd.su/race/192-hexblood/"
-    },
-    reborn: {
-        nameEn: "Reborn",
-        name: "Возрождённый",
-        url: "https://dnd.su/race/193-reborn/"
-    },
-    dhampir: {
-        nameEn: "Dhampir",
-        name: "Дампир",
-        url: "https://dnd.su/race/191-dhampir/"
-    },
-    customLineage: {
-        nameEn: "Custom lineage",
-        name: "Своё происхождение",
-        url: "https://dnd.su/race/223-custom-lineage/"
-    },
+    }
 } as const;

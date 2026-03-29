@@ -3,6 +3,7 @@ import type { ClassKey, RaceKey, Characteristics, SpellSlotsState, Currency, Spe
 export interface Character {
     id: string;
     race: RaceKey;
+    subrace?: string;
     speed: number;
     ac: number;
     name: string;

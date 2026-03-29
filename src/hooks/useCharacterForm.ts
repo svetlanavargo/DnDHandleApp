@@ -15,6 +15,7 @@ import { spellSlotProgression } from "../constants/spellSlotProgression";
 type FormValues = {
     name: string;
     race: RaceKey;
+    subrace?: string;
     class: ClassKey;
     subclass?: string;
     speed: string;
@@ -35,6 +36,7 @@ type FormValues = {
 const defaultForm: FormValues = {
     name: "",
     race: "human",
+    subrace: undefined,
     class: "fighter",
     subclass: undefined,
     speed: "30",
@@ -72,6 +74,7 @@ export function useCharacterForm(character: Character | null) {
         setFormValues({
             name: character.name,
             race: character.race,
+            subrace: character.subrace,
             class: character.class,
             subclass: character.subclass,
             speed: String(character.speed),
@@ -253,6 +256,7 @@ export function useCharacterForm(character: Character | null) {
             id: existing?.id ?? crypto.randomUUID(),
             name: formValues.name || "Персонаж",
             race: formValues.race,
+            subrace: formValues.subrace,
             class: formValues.class,
             subclass: formValues.subclass,
             speed: Number(formValues.speed),

@@ -1,6 +1,7 @@
 import { classesData } from '../../../constants/classesData.ts';
-import { TextSubClasses } from '../../../constants/TextSubClasses.ts';
+import { SubclassesData } from '../../../constants/subclassesData.ts';
 import { racesData } from '../../../constants/racesData.ts';
+import { SubracesData } from "../../../constants/subracesData.ts";
 import type { ClassKey } from '../../../types/dnd';
 import type { RaceKey } from '../../../types/dnd';
 import Btn from '../../UI/Btn/Btn.tsx';
@@ -11,6 +12,7 @@ interface ListHeaderProps {
     name: string;
     level: number;
     race: RaceKey;
+    subrace?: string;
     spec: ClassKey;
     charSubclass?: string;
     onEdit: () => void;
@@ -21,6 +23,7 @@ function ListHeader({
                         name,
                         level,
                         race,
+                        subrace,
                         spec,
                         charSubclass,
                         onEdit,
@@ -39,14 +42,16 @@ function ListHeader({
                     <div>
                         <div className={styles.flex}>
                             <a className={styles.link} href={racesData[race]?.url} target='_blank'>
-                                {racesData[race]?.name}
+                                {subrace
+                                    ? SubracesData[race]?.[subrace] ?? racesData[race]?.name
+                                    : racesData[race]?.name}
                             </a>
                             <a className={styles.link} href={classesData[spec].url} target='_blank'>
                                 {classesData[spec].name}
                             </a>
                         </div>
                         <div className={styles.charSubclass}>
-                            {charSubclass ? TextSubClasses[spec]?.[charSubclass] : ''}
+                            {charSubclass ? SubclassesData[spec]?.[charSubclass] : ''}
                         </div>
                     </div>
                 </div>

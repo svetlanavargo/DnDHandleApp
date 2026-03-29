@@ -188,6 +188,8 @@ export default function CharacterList() {
         closeDeleteModal();
     };
 
+    console.log(activeCharacter)
+
     return (
         <div className={styles.characterListContainer}>
             <div className={styles.characterList}>

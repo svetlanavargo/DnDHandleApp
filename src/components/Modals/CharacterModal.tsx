@@ -7,8 +7,9 @@ import Input from "../UI/Input/Input";
 import Select from "../UI/Select/Select";
 import CheckboxDropdown from "../UI/CheckboxDropdown/CheckboxDropdown";
 
-import { TextSubClasses } from "../../constants/TextSubClasses";
+import { SubclassesData } from "../../constants/subclassesData.ts";
 import { racesData } from "../../constants/racesData";
+import { SubracesData } from "../../constants/subracesData.ts";
 import { classesData } from "../../constants/classesData";
 
 import { TextLanguages } from "../../constants/TextLanguages";
@@ -72,6 +73,8 @@ function CharacterModal({ character, onClose, onSave }: Props) {
         return Math.min(Number(digits), max).toString();
     }
 
+    const subraceOptions = SubracesData[formValues.race] ?? null;
+
     return (
         <form className={styles.form} onSubmit={handleSubmit} onClick={e => e.stopPropagation()}>
             <div className={styles.flex}>
@@ -97,6 +100,16 @@ function CharacterModal({ character, onClose, onSave }: Props) {
                 onChange={v => v && handleChange("race", v as RaceKey)}
             />
 
+            {subraceOptions && (
+                <Select
+                    label="Подраса"
+                    value={formValues.subrace}
+                    options={subraceOptions}
+                    placeholder="— Нет —"
+                    onChange={v => handleChange("subrace", v)}
+                />
+            )}
+
             <Select
                 label="Класс"
                 value={formValues.class}
@@ -113,7 +126,7 @@ function CharacterModal({ character, onClose, onSave }: Props) {
             <Select
                 label="Сабкласс"
                 value={formValues.subclass}
-                options={TextSubClasses[formValues.class] ?? {}}
+                options={SubclassesData[formValues.class] ?? {}}
                 placeholder="— Нет —"
                 onChange={v => handleChange("subclass", v)}
             />
