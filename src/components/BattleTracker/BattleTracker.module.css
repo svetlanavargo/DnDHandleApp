@@ -1,10 +1,15 @@
+.battleTrackerContainer {
+    height: calc(100% - 60px);
+    overflow: hidden;
+    background-color: #242424;
+    width: 100%;
+}
+
 .container {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    height: calc(100% - 60px);
-    overflow: hidden;
-    background-color: #1a1a1a;
+    height: calc(100% - 43.5px);
+    padding: 12px 20px 0 20px;
 }
 
 /* центральный блок */

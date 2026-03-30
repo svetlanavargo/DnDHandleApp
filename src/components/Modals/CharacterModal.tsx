@@ -31,8 +31,6 @@ interface Props {
 type NumericField = "hits" | "speed" | "ac" | "initiative";
 
 function CharacterModal({ character, onClose, onSave }: Props) {
-    // const { addCharacter, updateCharacter } = useContext(CharacterContext);
-
     const {
         formValues,
         handleChange,
@@ -124,7 +122,7 @@ function CharacterModal({ character, onClose, onSave }: Props) {
             />
 
             <Select
-                label="Сабкласс"
+                label="Подкласс"
                 value={formValues.subclass}
                 options={SubclassesData[formValues.class] ?? {}}
                 placeholder="— Нет —"

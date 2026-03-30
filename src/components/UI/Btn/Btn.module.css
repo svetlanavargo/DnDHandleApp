@@ -182,3 +182,9 @@ button:focus-visible {
     background-color: #8A0000;
     color: #FBFAFA;
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}

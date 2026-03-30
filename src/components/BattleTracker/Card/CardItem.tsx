@@ -1,8 +1,7 @@
 import { useRef, useEffect, forwardRef } from 'react';
 import type { Card } from '../../../types/CardInBattleTracker.ts';
 import type { BattleCard } from '../BattleField/BattleField.tsx';
-import type { Condition } from '../../../hooks/useBattle.ts';
-import { remainingTimeInMinutes } from '../../../utils/getTime.ts';
+import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Card.module.css';
 
@@ -141,15 +140,7 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
                     {mode === 'battle' && (
                         <div className={styles.conditionWrap}>
                             {isBattle && isCurrentTurn && <Btn onClick={() => addCondition?.(id)} classBtn='addCondition' />}
-                            <ul>
-                                {('conditions' in card ? card.conditions : undefined)?.map((cond: Condition) => (
-                                    <li key={cond.id}>
-                                        {cond.name} - {cond.type === 'time'
-                                        ? `${remainingTimeInMinutes(cond.remaining)} min`
-                                        : `${cond.remaining} rounds`}
-                                    </li>
-                                ))}
-                            </ul>
+                            <ConditionsList conditions={'conditions' in card ? card.conditions : undefined} />
                         </div>
                     )}
 

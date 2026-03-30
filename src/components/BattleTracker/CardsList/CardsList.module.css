@@ -5,6 +5,8 @@
     flex-direction: column;
     height: 100%;
     position: relative;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 .tabs {
@@ -19,20 +21,17 @@
     align-items: center;
     justify-content: end;
     background-color: #1a1a1a;
-    padding: 10px 20px;
-    position: fixed;
-    width: 21%;
-    top: 0;
-    right: 0;
-    z-index: 99;
+    padding: 12px;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
 }
 
 .cardsWrapper {
     overflow-y: auto;
-    padding: 15px 20px;
+    padding: 12px;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     /* Firefox */
     scrollbar-width: none;
@@ -47,6 +46,7 @@
     background-repeat: no-repeat;
     background-size: 25px;
     background-position: center;
+    border-top-right-radius: 8px;
 }
 .dead {
     width: 100%;
@@ -55,6 +55,7 @@
     background-repeat: no-repeat;
     background-size: 25px;
     background-position: center;
+    border-top-left-radius: 8px;
 }
 
 .activeTab {

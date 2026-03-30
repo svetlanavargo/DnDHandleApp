@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { SEO_LANDING } from './constants/SEO_LANDING.ts';
 import NotFound from './components/NotFound/NotFound.tsx';
 import CharacterProvider from './context/CharacterProvider.tsx';
+import { GameProvider } from './context/GameProvider.tsx';
 import Header from './components/Header/Header.tsx';
 import DiceModal from './components/DiceModal/DiceModal.tsx';
 import MainPage from './components/MainPage/MainPage.tsx';
@@ -39,42 +40,50 @@ function App() {
                 <meta name="twitter:image" content={SEO_LANDING.image} />
             </Helmet>
             <BrowserRouter>
-                <Header setIsDiceOpen={() => setIsDiceOpen(true)} />
-                <Routes>
-                    <Route path="/battle_tracker" element={<BattleTracker />} />
-                    <Route path="/dice" element={<Dice />} />
-                    <Route path="/" element={<MainPage />} />
+                <GameProvider>
+                    <Header setIsDiceOpen={() => setIsDiceOpen(true)} />
 
-                    <Route
-                        path="/character_list/*"
-                        element={
-                            <CharacterProvider>
-                                <CharacterList />
-                            </CharacterProvider>
-                        }
-                    />
-                    <Route
-                        path="/spells_list/*"
-                        element={
-                            <CharacterProvider>
-                                <SpellsList />
-                            </CharacterProvider>
-                        }
-                    />
-                    <Route
-                        path="/inventory/*"
-                        element={
-                            <CharacterProvider>
-                                <Inventory />
-                            </CharacterProvider>
-                        }
-                    />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+                    <Routes>
+                        <Route path="/battle_tracker" element={<BattleTracker />} />
+                        <Route path="/dice" element={<Dice />} />
+                        <Route path="/" element={<MainPage />} />
+
+                        <Route
+                            path="/character_list/*"
+                            element={
+                                <CharacterProvider>
+                                    <CharacterList />
+                                </CharacterProvider>
+                            }
+                        />
+
+                        <Route
+                            path="/spells_list/*"
+                            element={
+                                <CharacterProvider>
+                                    <SpellsList />
+                                </CharacterProvider>
+                            }
+                        />
+
+                        <Route
+                            path="/inventory/*"
+                            element={
+                                <CharacterProvider>
+                                    <Inventory />
+                                </CharacterProvider>
+                            }
+                        />
+
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </GameProvider>
+
                 <DiceModal
                     isOpen={isDiceOpen}
                     onClose={() => setIsDiceOpen(false)}
                 />
+
                 <YandexMetrika id={108149485}/>
             </BrowserRouter>
         </>

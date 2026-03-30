@@ -1,5 +1,5 @@
 import type { BattleCard } from '../../../hooks/useBattle.ts';
-import { remainingTimeInMinutes } from '../../../utils/getTime.ts';
+import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Times.module.css';
 
@@ -12,15 +12,17 @@ interface TimesProps {
     battleCards?: BattleCard[],
     expiredConditions?: string[],
     startFight: () => void,
-    nextMove: () => void
+    nextMove: () => void,
+    onOpenSettings: () => void;
 }
 
-function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions }: TimesProps) {
+function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, onOpenSettings }: TimesProps) {
     const currentTime = (timer: number) => {
-        const min = Math.floor(timer / 60);
-        const sec = timer % 60;
+        const totalSeconds = Math.floor(timer);
 
-        // добавляем ведущий ноль, если число меньше 10
+        const min = Math.floor(totalSeconds / 60);
+        const sec = totalSeconds % 60;
+
         const formattedMin = String(min).padStart(2, '0');
         const formattedSec = String(sec).padStart(2, '0');
 
@@ -29,9 +31,18 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
 
     return (
         <div className={styles.times}>
+            <div className={styles.settings}>
+                <div className={styles.btnFlex}>
+                    <Btn
+                        onClick={onOpenSettings}
+                        classBtn="settings"
+                        disabled={isBattle}
+                    />
+                </div>
+            </div>
             {
                 isBattle ? (
-                    <div  className={styles.timersFlex}>
+                    <div className={styles.timersFlex}>
                         <div>
                             <div className={styles.baseTimers}>
                                 <h3>Общие таймеры:</h3>
@@ -46,15 +57,7 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                                             card.conditions && card.conditions.length > 0 && (
                                                 <div key={card.id} className={styles.cardConditions}>
                                                     <b>{card.name}:</b>
-                                                    <ul>
-                                                        {card.conditions.map(cond => (
-                                                            <li key={cond.id}>
-                                                                {cond.name} - {cond.type === 'time'
-                                                                ? `${remainingTimeInMinutes(cond.remaining)} min`
-                                                                : `${cond.remaining} rounds`}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
+                                                    <ConditionsList conditions={'conditions' in card ? card.conditions : undefined} />
                                                 </div>
                                             )
                                     )}
@@ -74,7 +77,6 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                         </div>
                     </div>
                 ) : (
-
                     <div className={styles.startBattleBtn}>
                         {battleCards && battleCards.length > 1 && (
                             <Btn onClick={startFight} classBtn='startBattle'/>

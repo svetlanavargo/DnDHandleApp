@@ -1,20 +1,53 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { Condition } from '../../hooks/useBattle.ts';
+import type { CreateCondition } from '../../hooks/useBattle';
+import type { BattleCard } from "../../hooks/useBattle.ts";
 import styles from './Modals.module.css';
 import Input from "../UI/Input/Input.tsx";
+import CheckboxDropdown from '../UI/CheckboxDropdown/CheckboxDropdown.tsx';
 import Select from '../UI/Select/Select.tsx';
 import Btn from "../UI/Btn/Btn.tsx";
 
 interface Props {
     onClose: () => void;
-    onAdd: (condition: Condition) => void;
+    onAdd: (condition: CreateCondition, targetIds: string[]) => void;
+    cards: BattleCard[];
 }
 
-export default function ConditionModal({ onClose, onAdd }: Props) {
-    const [name, setName] = useState('');
+const CONDITIONS: Record<string, string> = {
+    blinded: "Ослеплён",
+    charmed: "Очарован",
+    deafened: "Ошеломленный",
+    frightened: "Испуган",
+    grappled: "Схвачен",
+    incapacitated: "Недееспособен",
+    invisible: "Невидим",
+    petrified: "Окаменел",
+    poisoned: "Отравлен",
+    prone: "Сбит с ног",
+    restrained: "Опутан",
+    stunned: "Ошеломлён",
+    unconscious: "Без сознания",
+    concentration: "Концентрирующийся"
+};
+
+function findBestMatch(input: string): string | undefined {
+    const lower = input.toLowerCase();
+
+    return Object.entries(CONDITIONS).find(([key, label]) =>
+        key.includes(lower) || label.toLowerCase().includes(lower)
+    )?.[0];
+}
+
+export default function ConditionModal({ onClose, onAdd, cards }: Props) {
+    const [search, setSearch] = useState('');
+    const [selectedCondition, setSelectedCondition] = useState<string | undefined>();
+
+    const [customCondition, setCustomCondition] = useState<string>('');
+
+    const [targets, setTargets] = useState<string[]>([]);
     const [type, setType] = useState<'round' | 'time'>('round');
     const [duration, setDuration] = useState<number>(1);
-    const [durationInput, setDurationInput] = useState<string>(duration.toString());
+    const [durationInput, setDurationInput] = useState<string>('1');
 
     const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,23 +59,35 @@ export default function ConditionModal({ onClose, onAdd }: Props) {
         return () => clearTimeout(id);
     }, []);
 
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        onAdd({
-            id: Math.random().toString(36).slice(2, 11),
-            name,
-            type,
-            duration,
-            remaining: duration
-        });
+        const finalKey = selectedCondition ?? customCondition;
 
-        setName('');
-        setDuration(1);
-        setType('round');
+        if (!finalKey) return;
+
+        onAdd(
+            {
+                id: Math.random().toString(36).slice(2, 11),
+                name: finalKey,
+                label: CONDITIONS[finalKey] ?? finalKey,
+                type,
+                duration
+            },
+            targets
+        );
         onClose();
     };
+
+    const targetOptions = cards.map(card => ({
+        value: card.id,
+        label: card.name
+    }));
+
+    const selectedTargetsLabel =
+        targets.length === 0
+            ? "По умолчанию: сам персонаж"
+            : "Цели";
 
     return (
         <div>
@@ -53,15 +98,71 @@ export default function ConditionModal({ onClose, onAdd }: Props) {
             >
                 <h2>Добавить состояние</h2>
 
+                <CheckboxDropdown
+                    label={selectedTargetsLabel}
+                    options={targetOptions}
+                    selected={targets}
+                    onChange={setTargets}
+                />
+
+                {/* INPUT */}
                 <Input
                     ref={nameInputRef}
                     type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    value={search}
+                    onChange={e => {
+                        const val = e.target.value;
+
+                        setSearch(val);
+
+                        const match = findBestMatch(val);
+
+                        if (match) {
+                            setSelectedCondition(match);
+                            setCustomCondition('');
+                        } else {
+                            setSelectedCondition(undefined);
+                            setCustomCondition(val); // 👈 ВАЖНО
+                        }
+                    }}
                 >
-                    Название состояния:
+                    Введите состояние
                 </Input>
 
+                {/* fallback select */}
+                <Select
+                    label="или выберите стандартное"
+                    value={selectedCondition}
+                    placeholder="Выбрать состояние"
+                    options={CONDITIONS}
+                    onChange={(value) => {
+                        setSelectedCondition(value);
+                        setCustomCondition('');
+                        setSearch('');
+                    }}
+                />
+
+                {/* duration */}
+                <Input
+                    type="text"
+                    inputMode="numeric"
+                    value={durationInput}
+                    onChange={e => {
+                        const val = e.target.value.replace(/\D/g, '');
+                        setDurationInput(val);
+                        if (val) setDuration(Math.max(1, Number(val)));
+                    }}
+                    onBlur={() => {
+                        if (!durationInput) {
+                            setDurationInput('1');
+                            setDuration(1);
+                        }
+                    }}
+                >
+                    Продолжительность
+                </Input>
+
+                {/* type */}
                 <Select
                     label="Тип"
                     value={type}
@@ -73,28 +174,13 @@ export default function ConditionModal({ onClose, onAdd }: Props) {
                     onChange={(value) => setType(value as 'round' | 'time')}
                 />
 
-                <Input
-                    type="text"
-                    inputMode="numeric"
-                    value={durationInput}
-                    onChange={e => {
-                        const val = e.target.value.replace(/\D/g, ''); // оставляем только цифры
-                        setDurationInput(val);
-                        if (val) setDuration(Math.max(1, Number(val))); // обновляем число только если есть цифры
-                    }}
-                    onBlur={() => {
-                        if (!durationInput) {
-                            setDurationInput('1');
-                            setDuration(1);
-                        }
-                    }}
-                >
-                    Продолжительность:
-                </Input>
-
                 <div className={styles.modalButtons}>
-                    <Btn type="submit" classBtn='btnColor'>Добавить</Btn>
-                    <Btn onClick={onClose}>Отмена</Btn>
+                    <Btn type="submit" classBtn="btnColor">
+                        Добавить
+                    </Btn>
+                    <Btn onClick={onClose}>
+                        Отмена
+                    </Btn>
                 </div>
             </form>
         </div>

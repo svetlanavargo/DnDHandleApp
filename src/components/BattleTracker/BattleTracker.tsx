@@ -1,27 +1,40 @@
-import {useEffect, useState} from "react";
-import type { Card } from '../../types/CardInBattleTracker.ts';
+import { useState, useEffect } from "react";
 import { useBattle } from '../../hooks/useBattle.ts';
+import { useGame } from "../../context/GameProvider";
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
-import type { Condition } from '../../hooks/useBattle';
+import type { CreateCondition } from '../../hooks/useBattle';
+import type { Card } from '../../types/CardInBattleTracker.ts';
+
+import Tabs from '../UI/Tabs/Tabs.tsx';
 import CardsList from './CardsList/CardsList.tsx';
 import Times from './Times/Times.tsx';
 import BattleField from './BattleField/BattleField.tsx';
+
 import Modal from '../Modals/Modal.tsx';
+import GameSettings from '../Modals/GameSettings.tsx';
+import Delete from '../Modals/Delete.tsx';
+import CreateGame from '../Modals/CreateGame.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import CreateCardModal from '../Modals/CreateCardModal.tsx';
 import ConditionModal from '../Modals/ConditionModal.tsx';
 import NoticesModal from '../Modals/NoticesModal.tsx';
+
 import styles from './BattleTracker.module.css';
 
 function BattleTracker() {
-    const [cards, setCards] = useState<Card[]>(() => {
-        const saved = localStorage.getItem('cards');
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCardId, setEditingCardId] = useState<string | null>(null);
-    const [conditionModalOpen, setConditionModalOpen] = useState(false);
-    const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
+    const {
+        currentGame,
+        setCards,
+        games,
+        setTurnTimeMode,
+        setCurrentGame,
+        createGame,
+        deleteGame
+    } = useGame();
+
+    const turnMode = currentGame?.turnTimeMode ?? 'turn';
+
+    const cards = currentGame?.cards || [];
 
     const numberModal = useNumberModal();
 
@@ -48,13 +61,28 @@ function BattleTracker() {
         addCondition,
         clearExpiredConditions,
         resurrectCard
-    } = useBattle(cards, setCards, numberModal.openModal);
+    } = useBattle(
+        currentGame?.id || null,
+        cards,
+        turnMode,
+        setCards,
+        numberModal.openModal,
+    );
 
     const { turnCounter, timer, round, currentTurnIndex } = turnState;
 
+    const [isCreateGameOpen, setIsCreateGameOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [deleteGameModalOpen, setDeleteGameModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingCardId, setEditingCardId] = useState<string | null>(null);
+    const [conditionModalOpen, setConditionModalOpen] = useState(false);
+    const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
+
+    // 🔥 СБРОС БОЯ ПРИ СМЕНЕ ИГРЫ (доп. защита)
     useEffect(() => {
-        localStorage.setItem('cards', JSON.stringify(cards));
-    }, [cards]);
+        stopBattle();
+    }, [currentGame?.id]);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => { setIsModalOpen(false); setEditingCardId(null); };
@@ -63,32 +91,83 @@ function BattleTracker() {
         setCurrentCardForCondition(cardId);
         setConditionModalOpen(true);
     };
+
+    const openDeleteGameModal = () => {
+        if (!currentGame) return;
+        setDeleteGameModalOpen(true);
+    };
+
+    const handleDeleteGame = () => {
+        if (!currentGame) return;
+
+        deleteGame(currentGame.id);
+        setDeleteGameModalOpen(false);
+        setIsSettingsOpen(false);
+    };
+
+    const openSettingsModal = () => {
+        if (!currentGame) return;
+        setIsSettingsOpen(true);
+    };
+
     const closeConditionModal = () => {
         setCurrentCardForCondition(null);
         setConditionModalOpen(false);
     };
-    const handleAddCondition = (cond: Condition) => {
+
+    const handleAddCondition = (cond: CreateCondition, targetIds: string[]) => {
         if (!currentCardForCondition) return;
 
-        const remaining = cond.type === 'time' ? cond.duration * 10 : cond.duration;
+        const sourceId = currentCardForCondition;
 
-        addCondition(currentCardForCondition, { ...cond, remaining });
+        const finalTargets =
+            targetIds.length > 0
+                ? targetIds
+                : [sourceId];
+
+        finalTargets.forEach(id => {
+            const remaining =
+                cond.type === 'time'
+                    ? cond.duration * 10
+                    : cond.duration;
+
+            addCondition(id, {
+                ...cond,
+                remaining,
+                sourceId
+            });
+        });
     };
 
     const handleSubmit = (data: Omit<Card, 'id'>) => {
+        if (!currentGame) return;
+
         if (editingCardId) {
             setCards(prev =>
-                prev.map(card => card.id === editingCardId ? { ...card, ...data } : card)
+                prev.map(card =>
+                    card.id === editingCardId ? { ...card, ...data } : card
+                )
             );
         } else {
-            const newCard: Card = { id: Math.random().toString(36).substr(2, 9), ...data };
+            const newCard = {
+                id: Math.random().toString(36).substr(2, 9),
+                ...data
+            };
+
             setCards(prev => [...prev, newCard]);
         }
+
         closeModal();
     };
 
-    const handleDelete = (id: string) => setCards(prev => prev.filter(c => c.id !== id));
-    const handleEdit = (id: string) => { setEditingCardId(id); setIsModalOpen(true); };
+    const handleDelete = (id: string) =>
+        setCards(prev => prev.filter(c => c.id !== id));
+
+    const handleEdit = (id: string) => {
+        setEditingCardId(id);
+        setIsModalOpen(true);
+    };
+
     const handleAddUserToBattle = (id: string) => {
         const card = cards.find(c => c.id === id);
         if (card) addUserToBattle(card);
@@ -97,7 +176,17 @@ function BattleTracker() {
     const editingCard = cards.find(c => c.id === editingCardId);
 
     return (
-        <>
+        <div className={styles.battleTrackerContainer}>
+            <Tabs
+                items={games.map(game => ({
+                    id: game.id,
+                    label: game.name
+                }))}
+                activeId={currentGame?.id || ''}
+                setActive={setCurrentGame}
+                onAdd={() => setIsCreateGameOpen(true)}
+            />
+
             <div className={styles.container}>
                 <Times
                     isBattle={isBattle}
@@ -109,7 +198,9 @@ function BattleTracker() {
                     expiredConditions={expiredConditions}
                     startFight={startFight}
                     nextMove={nextMove}
+                    onOpenSettings={openSettingsModal}
                 />
+
                 <BattleField
                     isBattle={isBattle}
                     countCards={cards.length}
@@ -126,6 +217,7 @@ function BattleTracker() {
                     changeNoteDraft={setNoteDraft}
                     saveNote={saveNote}
                 />
+
                 <CardsList
                     cards={cards}
                     battleCards={battleCards}
@@ -139,45 +231,58 @@ function BattleTracker() {
                 />
             </div>
 
+            {/* Modals */}
+            {isSettingsOpen && currentGame && (
+                <Modal isOpen size="small">
+                    <GameSettings
+                        game={currentGame}
+                        onClose={() => setIsSettingsOpen(false)}
+                        onOpenDeleteGame={openDeleteGameModal}
+                        onChangeMode={setTurnTimeMode}
+                    />
+                </Modal>
+            )}
+            {isCreateGameOpen && (
+                <Modal isOpen size="small">
+                    <CreateGame
+                        onCreate={createGame}
+                        onClose={() => setIsCreateGameOpen(false)}
+                    />
+                </Modal>
+            )}
+
             {isModalOpen && (
-                <Modal
-                    isOpen={isModalOpen}
-                    size="small"
-                >
+                <Modal isOpen size="small">
                     <CreateCardModal
-                        initialValues={editingCard ? {
-                            name: editingCard.name,
-                            maxHits: editingCard.maxHits,
-                            currentHits: editingCard.currentHits,
-                            ac: editingCard.ac,
-                            isPlayer: editingCard.isPlayer,
-                            initiativeBonus: editingCard.initiativeBonus,
-                            note: editingCard.note,
-                            color: editingCard.color,
-                        } : undefined}
+                        initialValues={editingCard}
                         onSubmit={handleSubmit}
                         onClose={closeModal}
                     />
                 </Modal>
             )}
 
+            {deleteGameModalOpen && currentGame && (
+                <Modal isOpen size="small">
+                    <Delete
+                        name={currentGame.name}
+                        onClose={() => setDeleteGameModalOpen(false)}
+                        remove={handleDeleteGame}
+                    />
+                </Modal>
+            )}
+
             {conditionModalOpen && (
-                <Modal
-                    isOpen={conditionModalOpen}
-                    size="small"
-                >
+                <Modal isOpen size="small">
                     <ConditionModal
                         onAdd={handleAddCondition}
                         onClose={closeConditionModal}
+                        cards={battleCards}
                     />
                 </Modal>
             )}
 
             {expiredConditions.length > 0 && (
-                <Modal
-                    isOpen={expiredConditions.length > 0}
-                    size="small"
-                >
+                <Modal isOpen size="small">
                     <NoticesModal
                         message={expiredConditions}
                         onClose={clearExpiredConditions}
@@ -197,8 +302,8 @@ function BattleTracker() {
                     />
                 )}
             </Modal>
-        </>
+        </div>
     );
 }
 
-export default BattleTracker
+export default BattleTracker;

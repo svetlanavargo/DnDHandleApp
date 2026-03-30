@@ -75,6 +75,7 @@ h2 {
     margin-top: 30px;
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
     gap: 1rem;
 }
@@ -158,4 +159,11 @@ button {
 
 .active .designImg {
     transform: scale(1.1);
+}
+
+.deleteGame {
+    font-weight: bold;
+    display: block;
+    text-wrap: nowrap;
+    width: 200px;
 }

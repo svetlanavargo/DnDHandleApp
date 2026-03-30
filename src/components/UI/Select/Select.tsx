@@ -10,7 +10,6 @@ interface SelectProps {
 }
 
 function Select({value, placeholder, options, label, onChange}: SelectProps) {
-
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 

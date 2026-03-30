@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState } from 'react';
+import Tabs from '../UI/Tabs/Tabs.tsx';
 import SpellsMenu from './SpellsMenu/SpellsMenu.tsx';
-import SpellsTabs from './SpellsTabs/SpellsTabs.tsx';
 import SpellsListView from './SpellsListView/SpellsListView.tsx';
 import Modal from '../Modals/Modal.tsx';
 import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
@@ -59,6 +59,15 @@ function SpellsList() {
     const openModal = (type: ModalType) => setActiveModal(type);
     const closeModal = () => setActiveModal(null);
 
+    function getSpellLevelLabel(level: SpellLevel): string {
+        if (level === "0") return "Заговоры";
+        return `${level}`;
+    }
+
+    const spellEntries = Object.entries(
+        activeCharacter.spells ?? {}
+    ) as [SpellLevel, string[]][];
+
     return (
         <div className={styles.spellsContainer}>
             <div className={styles.spellsWrap}>
@@ -68,10 +77,13 @@ function SpellsList() {
                     onSettings={() => openModal("settings")}
                 />
 
-                <SpellsTabs
-                    spells={activeCharacter.spells}
-                    activeTab={activeTab}
-                    onChange={setActiveTab}
+                <Tabs
+                    items={spellEntries.map(([level]) => ({
+                        id: level,
+                        label: getSpellLevelLabel(level)
+                    }))}
+                    activeId={activeTab}
+                    setActive={(id) => setActiveTab(id as SpellLevel)}
                 />
 
                 <SpellsListView

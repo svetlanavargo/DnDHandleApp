@@ -6,11 +6,11 @@ import type { Character } from '../../types/Character.ts';
 import {spellSlotProgression} from '../../constants/spellSlotProgression.ts';
 import {classesData} from '../../constants/classesData.ts';
 import { getModifier } from '../../utils/getModifier';
-import Tabs from './Tabs/Tabs';
+import Tabs from '../UI/Tabs/Tabs';
 import List from './List/List';
 import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
-import DeleteCharacter from '../Modals/DeleteCharacter.tsx';
+import DeleteCharacter from '../Modals/Delete.tsx';
 import CharacterModal from '../Modals/CharacterModal';
 import styles from './CharacterList.module.css';
 
@@ -188,16 +188,18 @@ export default function CharacterList() {
         closeDeleteModal();
     };
 
-    console.log(activeCharacter)
 
     return (
         <div className={styles.characterListContainer}>
             <div className={styles.characterList}>
                 <Tabs
-                    characters={characters}
+                    items={characters.map(c => ({
+                        id: c.id,
+                        label: c.name
+                    }))}
                     activeId={activeCharacterId ?? ''}
                     setActive={setActiveCharacterId}
-                    addCharacter={handleAddCharacter}
+                    onAdd={handleAddCharacter}
                 />
 
                 {activeCharacter ? (
@@ -268,7 +270,7 @@ export default function CharacterList() {
             {deletingCharacter && (
                 <Modal isOpen={!!deletingCharacter} size="small">
                     <DeleteCharacter
-                        removeCharacter={() => handleRemoveCharacter(deletingCharacter.id)}
+                        remove={() => handleRemoveCharacter(deletingCharacter.id)}
                         onClose={closeDeleteModal}
                         name={deletingCharacter.name}
                     />
