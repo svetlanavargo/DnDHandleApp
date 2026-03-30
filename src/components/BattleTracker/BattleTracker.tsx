@@ -5,6 +5,8 @@ import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import type { CreateCondition } from '../../hooks/useBattle';
 import type { Card } from '../../types/CardInBattleTracker.ts';
 
+import NoGames from '../Stubs/NoGames/NoGames.tsx';
+
 import Tabs from '../UI/Tabs/Tabs.tsx';
 import CardsList from './CardsList/CardsList.tsx';
 import Times from './Times/Times.tsx';
@@ -177,59 +179,66 @@ function BattleTracker() {
 
     return (
         <div className={styles.battleTrackerContainer}>
-            <Tabs
-                items={games.map(game => ({
-                    id: game.id,
-                    label: game.name
-                }))}
-                activeId={currentGame?.id || ''}
-                setActive={setCurrentGame}
-                onAdd={() => setIsCreateGameOpen(true)}
-            />
+            {games.length === 0 ?
+                (<NoGames onAdd={() => setIsCreateGameOpen(true)}/>)
+                :
+                (
+                <div className={styles.content}>
+                    <Tabs
+                        items={games.map(game => ({
+                            id: game.id,
+                            label: game.name
+                        }))}
+                        activeId={currentGame?.id || ''}
+                        setActive={setCurrentGame}
+                        onAdd={() => setIsCreateGameOpen(true)}
+                    />
+                    <div className={styles.container}>
+                        <Times
+                            isBattle={isBattle}
+                            turnCounter={turnCounter}
+                            timer={timer}
+                            round={round}
+                            stopBattle={stopBattle}
+                            battleCards={battleCards}
+                            expiredConditions={expiredConditions}
+                            startFight={startFight}
+                            nextMove={nextMove}
+                            onOpenSettings={openSettingsModal}
+                        />
 
-            <div className={styles.container}>
-                <Times
-                    isBattle={isBattle}
-                    turnCounter={turnCounter}
-                    timer={timer}
-                    round={round}
-                    stopBattle={stopBattle}
-                    battleCards={battleCards}
-                    expiredConditions={expiredConditions}
-                    startFight={startFight}
-                    nextMove={nextMove}
-                    onOpenSettings={openSettingsModal}
-                />
+                        <BattleField
+                            isBattle={isBattle}
+                            countCards={cards.length}
+                            cards={battleCards}
+                            getOutOfBattle={getOutOfBattle}
+                            currentTurnIndex={currentTurnIndex}
+                            nextMove={nextMove}
+                            addHits={addHits}
+                            subtractHits={subtractHits}
+                            addCondition={openConditionModal}
+                            editingNoteId={editingNoteId}
+                            noteDraft={noteDraft}
+                            startEditNote={startEditNote}
+                            changeNoteDraft={setNoteDraft}
+                            saveNote={saveNote}
+                        />
 
-                <BattleField
-                    isBattle={isBattle}
-                    countCards={cards.length}
-                    cards={battleCards}
-                    getOutOfBattle={getOutOfBattle}
-                    currentTurnIndex={currentTurnIndex}
-                    nextMove={nextMove}
-                    addHits={addHits}
-                    subtractHits={subtractHits}
-                    addCondition={openConditionModal}
-                    editingNoteId={editingNoteId}
-                    noteDraft={noteDraft}
-                    startEditNote={startEditNote}
-                    changeNoteDraft={setNoteDraft}
-                    saveNote={saveNote}
-                />
-
-                <CardsList
-                    cards={cards}
-                    battleCards={battleCards}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    isBattle={isBattle}
-                    addUserToBattle={handleAddUserToBattle}
-                    resurrectCard={resurrectCard}
-                    onAddCard={openModal}
-                    onLongRest={longRest}
-                />
-            </div>
+                        <CardsList
+                            cards={cards}
+                            battleCards={battleCards}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            isBattle={isBattle}
+                            addUserToBattle={handleAddUserToBattle}
+                            resurrectCard={resurrectCard}
+                            onAddCard={openModal}
+                            onLongRest={longRest}
+                        />
+                    </div>
+                </div>
+                )
+            }
 
             {/* Modals */}
             {isSettingsOpen && currentGame && (

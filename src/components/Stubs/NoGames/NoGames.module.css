@@ -1,0 +1,23 @@
+.noGamesContainer {
+    padding: 80px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.noGameTitle {
+    margin: 0;
+    font-size: 36px;
+}
+.noGameText {
+    margin: 12px 0;
+    text-align: center;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    background-image: url("/img/dnd.svg");
+    margin-bottom: 20px;
+}
