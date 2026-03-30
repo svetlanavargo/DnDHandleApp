@@ -47,7 +47,7 @@ function SpellsListView({ spells, fill }: SpellsListViewProps) {
                                 ${isActive ? "translateY(-20px)" : ""}
                                 scale(${isActive ? 1.04 : 1})
                             `,
-                            zIndex: isActive ? 999 : i,
+                            zIndex: isActive ? 10 : i,
                             cursor: "pointer"
                         }}
                     >
