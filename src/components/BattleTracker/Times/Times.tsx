@@ -45,13 +45,13 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                     <div className={styles.timersFlex}>
                         <div>
                             <div className={styles.baseTimers}>
-                                <h3>Общие таймеры:</h3>
+                                <h3 className={styles.subtitle}>Общие таймеры:</h3>
                                 <p><b>Всего ходов:</b> {turnCounter}</p>
                                 <p><b>Таймер:</b> {currentTime(timer)}</p>
                                 <p><b>Раунд:</b> {round}</p>
                             </div>
                             <div className={styles.baseTimers}>
-                                <h3>Состояния:</h3>
+                                <h3 className={styles.subtitle}>Состояния:</h3>
                                 <div className={styles.conditionsPanel}>
                                     {battleCards?.map(card =>
                                             card.conditions && card.conditions.length > 0 && (
