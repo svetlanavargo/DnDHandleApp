@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import type { Card } from "../types/CardInBattleTracker.ts";
+import React, {useEffect, useState} from "react";
+import type {Card} from "../types/CardInBattleTracker.ts";
 
 export type CreateCondition = {
     id: string;
@@ -236,7 +236,7 @@ export const useBattle = (
         setBattleCards(prev => {
             const updated = prev.filter(c => c.id !== id);
 
-            syncBattleHitsToCards(updated);
+            // syncBattleHitsToCards(updated);
 
             if (updated.length <= 1) {
                 setIsBattle(false);
@@ -256,7 +256,6 @@ export const useBattle = (
     const subtractHits = (id: string) => {
         const card = battleCards.find(c => c.id === id);
         if (!card) return;
-
         openNumberModal({
             title: `Нанести урон ${card.name}`,
             min: 0,
@@ -264,28 +263,34 @@ export const useBattle = (
             onConfirm: (damage) => {
                 if (damage <= 0) return;
 
-                let shouldRemove = false;
-
-                setBattleCards(prev => {
-                    const updated = prev.map(c => {
-                        if (c.id !== id) return c;
-
-                        const newHits = Math.max(0, c.currentHits - damage);
-
-                        if (newHits === 0) shouldRemove = true;
-
-                        return { ...c, currentHits: newHits };
-                    });
-
-                    return updated;
-                });
-
-                if (shouldRemove) {
-                    getOutOfBattle(id);
-                }
+                setBattleCards(prev =>
+                    prev.map(c =>
+                        c.id === id
+                            ? {
+                                ...c,
+                                currentHits: Math.max(0, c.currentHits - damage),
+                                isDead: c.currentHits - damage <= 0
+                            }
+                            : c
+                    )
+                );
             }
         });
     };
+
+    useEffect(() => {
+        const deadCards = battleCards.filter(c => c.currentHits === 0);
+        if (deadCards.length === 0) return;
+
+        syncBattleHitsToCards(battleCards);
+
+        const timer = setTimeout(() => {
+            // ✅ 2. ПОТОМ удаляем
+            setBattleCards(prev => prev.filter(c => c.currentHits > 0));
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [battleCards]);
 
     const addHits = (id: string) => {
         const card = battleCards.find(c => c.id === id);

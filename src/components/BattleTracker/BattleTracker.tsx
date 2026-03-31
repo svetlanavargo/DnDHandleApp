@@ -31,7 +31,8 @@ function BattleTracker() {
         setTurnTimeMode,
         setCurrentGame,
         createGame,
-        deleteGame
+        deleteGame,
+        renameGame
     } = useGame();
 
     const turnMode = currentGame?.turnTimeMode ?? 'turn';
@@ -248,6 +249,7 @@ function BattleTracker() {
                         onClose={() => setIsSettingsOpen(false)}
                         onOpenDeleteGame={openDeleteGameModal}
                         onChangeMode={setTurnTimeMode}
+                        onRename={renameGame}
                     />
                 </Modal>
             )}

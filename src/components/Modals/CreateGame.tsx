@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Btn from '../UI/Btn/Btn.tsx';
 import Input from '../UI/Input/Input.tsx';
 import styles from './Modals.module.css';
@@ -10,6 +10,11 @@ interface CreateGameProps {
 
 function CreateGame({ onCreate, onClose }: CreateGameProps) {
     const [name, setName] = useState('');
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const handleSubmit = () => {
         const trimmed = name.trim();
@@ -25,6 +30,7 @@ function CreateGame({ onCreate, onClose }: CreateGameProps) {
             <h2>Введите название игры</h2>
 
             <Input
+                ref={inputRef}
                 type='text'
                 value={name}
                 onChange={(e) => setName(e.target.value)}

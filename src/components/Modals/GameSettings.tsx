@@ -1,25 +1,41 @@
+import { useState, } from 'react';
 import Btn from '../UI/Btn/Btn.tsx';
+import Input from '../UI/Input/Input.tsx';
 import Select from '../UI/Select/Select.tsx';
 import styles from './Modals.module.css';
-import type {Game} from "../../context/GameProvider.tsx";
+import type {Game} from '../../context/GameProvider.tsx';
 
 interface GameSettingsProps {
     game: Game;
     onClose: () => void;
     onOpenDeleteGame: () => void;
     onChangeMode: (gameId: string, mode: 'turn' | 'round') => void;
+    onRename: (gameId: string, name: string) => void;
 }
 
 function GameSettings({
                           game,
                           onClose,
                           onOpenDeleteGame,
-                          onChangeMode
+                          onChangeMode,
+                          onRename
                       }: GameSettingsProps) {
+    const [name, setName] = useState(game.name);
 
     return (
         <div className={styles.createGame}>
             <h2>Настройки</h2>
+            <Input
+                type='text'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={() => {
+                    if (name.trim() && name !== game.name) {
+                        onRename(game.id, name.trim());
+                    }
+                }}
+                placeholder="Например: Кампания в подземелье"
+            > Изменить название </Input>
             <Select
                 label="Режим Мамикона"
                 value={game.turnTimeMode}

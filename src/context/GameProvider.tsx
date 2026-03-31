@@ -26,6 +26,7 @@ type GameContextType = {
     addCard: (card: Card) => void;
     updateCard: (id: string, data: Partial<Card>) => void;
     deleteCard: (id: string) => void;
+    renameGame: (id: string, name: string) => void;
 
     setCards: React.Dispatch<React.SetStateAction<Card[]>>;
     setTurnTimeMode: (gameId: string, mode: TurnTimeMode) => void;
@@ -122,6 +123,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         );
     };
 
+    const renameGame = (id: string, name: string) => {
+        setState(prev => ({
+            ...prev,
+            games: prev.games.map(g =>
+                g.id === id ? { ...g, name } : g
+            )
+        }));
+    };
+
     return (
         <GameContext.Provider
             value={{
@@ -136,7 +146,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 updateCard,
                 deleteCard,
                 setCards,
-                setTurnTimeMode
+                setTurnTimeMode,
+                renameGame
             }}
         >
             {children}

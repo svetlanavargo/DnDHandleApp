@@ -167,3 +167,9 @@ button {
     text-wrap: nowrap;
     width: 200px;
 }
+
+.createGame {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
