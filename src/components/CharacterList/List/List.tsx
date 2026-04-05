@@ -77,6 +77,8 @@ export default function List({
                     initiative={activeCharacter.initiative}
                     level={activeCharacter.level}
                     ac={activeCharacter.ac}
+                    characteristics={activeCharacter.characteristics}
+                    proficientSkills={activeCharacter.skills}
                 />
 
                 <HitsField

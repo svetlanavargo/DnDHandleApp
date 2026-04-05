@@ -23,6 +23,7 @@ const sizeClasses = {
         distant: styles.distantBig,
         duration: styles.durationBig,
         description: styles.descriptionBig,
+        link: styles.cardLinkBig,
     },
     small: {
         card: styles.spellCardSmall,
@@ -36,6 +37,7 @@ const sizeClasses = {
         distant: styles.distantSmall,
         duration: styles.durationSmall,
         description: styles.descriptionSmall,
+        link: styles.cardLinkSmall,
     }
 } as const;
 
@@ -89,9 +91,7 @@ function SpellCard({fill, spell, size = 'big', style}: SpellCardProps) {
         <div className={`${styles.spellCard} ${getFillClass(fill)} ${s.card}`} style={style}>
             <div className={s.level}>{String(spell.lvl)}</div>
 
-            <a className={s.title} href={spell.url} target="_blank">
-                {spell.nameRu}
-            </a>
+            <p className={s.title}>{spell.nameRu}</p>
 
             <div className={s.flex}>
                 <div className={s.left}>
@@ -108,6 +108,9 @@ function SpellCard({fill, spell, size = 'big', style}: SpellCardProps) {
             <p className={s.description}>
                 {formatDescription(spell.description)}
             </p>
+            <a className={s.link} href={spell.url} target="_blank">
+                Подробное описание: <div></div>
+            </a>
         </div>
     );
 }

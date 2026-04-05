@@ -15,16 +15,16 @@
 
 .text {
     text-transform: uppercase;
-    font-size: 9px;
+    font-size: 7px;
     font-weight: bold;
 }
 
-.proficiencyBonus, .initiative, .speed, .ac {
-    font-size: 26px;
+.proficiencyBonus, .initiative, .speed, .ac, .perception {
+    font-size: 20px;
     font-weight: bold;
     color: #FBFAFA;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     display: flex;
     padding-bottom: 9px;
     justify-content: center;
@@ -36,6 +36,7 @@
 
 .proficiencyBonus {
     background-image: url("/img/frame/proficiencyBonus.svg");
+    background-position: top;
 }
 
 .initiative {
@@ -48,4 +49,9 @@
 
 .ac {
     background-image: url("/img/frame/ac.svg");
+}
+
+.perception {
+    background-image: url("/img/frame/Perception.svg");
+    background-position: top;
 }

@@ -24,6 +24,7 @@ export default function CharacterList() {
     const [creatingCharacter, setCreatingCharacter] = useState(false);
     const [isNoteOpen, setIsNoteOpen] = useState(false);
     const [activeNoteIndex, setActiveNoteIndex] = useState(0);
+    const [deleteNoteIndex, setDeleteNoteIndex] = useState<number | null>(null);
 
     const numberModal = useNumberModal();
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
@@ -168,18 +169,18 @@ export default function CharacterList() {
         setActiveNoteIndex(updatedNotes.length - 1);
     };
 
-    const deleteNote = (index: number) => {
-        if (!activeCharacter) return;
-        const updatedNotes = [...(activeCharacter.note || [])];
-        updatedNotes.splice(index, 1);
-        updateCharacter({ ...activeCharacter, note: updatedNotes });
+    const requestDeleteNote = (index: number) => {
+        setDeleteNoteIndex(index);
+    };
 
-        // Корректируем активный индекс
-        if (index === activeNoteIndex && updatedNotes.length > 0) {
-            setActiveNoteIndex(Math.max(0, index - 1));
-        } else if (updatedNotes.length === 0) {
-            setActiveNoteIndex(0);
-        }
+    const confirmDeleteNote = () => {
+        if (deleteNoteIndex === null || !activeCharacter) return;
+
+        const updatedNotes = [...(activeCharacter.note || [])];
+        updatedNotes.splice(deleteNoteIndex, 1);
+
+        updateCharacter({ ...activeCharacter, note: updatedNotes });
+        setDeleteNoteIndex(null);
     };
 
     // === Remove Character ===
@@ -215,7 +216,7 @@ export default function CharacterList() {
                         toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
                         updateCharacter={saveCharacter}
                         addNote={addNote}
-                        deleteNote={deleteNote}
+                        deleteNote={requestDeleteNote}
                         setActiveNote={setActiveNoteIndex}
                         activeIndex={activeNoteIndex}
                     />
@@ -263,6 +264,16 @@ export default function CharacterList() {
                         character={editingCharacter}
                         onClose={closeEditModal}
                         onSave={saveCharacter}
+                    />
+                </Modal>
+            )}
+
+            {deleteNoteIndex !== null && (
+                <Modal isOpen={true} size="small">
+                    <DeleteCharacter
+                        name="заметку"
+                        onClose={() => setDeleteNoteIndex(null)}
+                        remove={confirmDeleteNote}
                     />
                 </Modal>
             )}

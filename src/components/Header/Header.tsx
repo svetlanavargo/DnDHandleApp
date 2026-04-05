@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
 import {Link} from 'react-router-dom';
 import Logo from '../UI/Logo/Logo.tsx';
-import BurgerMenu from '../UI/Burger/Burger.tsx';
 import Home from '../../../public/img/home.svg';
+import DiceImg from "../../../public/img/dnd.svg"
+import ListImg from '../../../public/img/User.svg';
+import Pouch from "../../../public/img/pouch.svg";
+import Spells from "../../../public/img/spells.svg";
+import Battle from '../../../public/img/battleUser.svg';
 import styles from './Header.module.css';
 
 interface HeaderProps {
@@ -10,39 +13,49 @@ interface HeaderProps {
 }
 
 function Header({setIsDiceOpen}: HeaderProps) {
-    const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
-    }, []);
-
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
-
-    return (
+    return(
         <div className={styles.header}>
-            <div className={styles.burgerContainer}>
-                <BurgerMenu isOpen={isOpen} toggleMenu={toggleMenu}>
-                    <Link to="/" onClick={() => setIsOpen(false)}><img className={styles.home} src={Home} alt=""/></Link>
-                    <div onClick={setIsDiceOpen}>Дайсы</div>
-                    <Link to="/character_list" onClick={() => setIsOpen(false)}>Персонажи</Link>
-                    <Link to="/inventory" onClick={() => setIsOpen(false)}>Инвентарь</Link>
-                    <Link to="/spells_list" onClick={() => setIsOpen(false)}>Заклинания</Link>
-                    <Link to="/battle_tracker" onClick={() => setIsOpen(false)}>ДМ Трекер</Link>
-                </BurgerMenu>
-            </div>
             <div className={styles.logoWrapper}>
                 <Logo />
             </div>
-            <div className={styles.null}/>
+            <div className={styles.linkContainer}>
+                <Link to="/">
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={Home} alt=""/>
+                        <p className={styles.menuText}>Главная</p>
+                    </div>
+                </Link>
+                <div onClick={setIsDiceOpen}>
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={DiceImg} alt=""/>
+                        <p className={styles.menuText}>Дайсы</p>
+                    </div>
+                </div>
+                <Link to="/character_list">
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={ListImg} alt=""/>
+                        <p className={styles.menuText}>Персонажи</p>
+                    </div>
+                </Link>
+                <Link to="/inventory">
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={Pouch} alt=""/>
+                        <p className={styles.menuText}>Инвентарь</p>
+                    </div>
+                </Link>
+                <Link to="/spells_list">
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={Spells} alt=""/>
+                        <p className={styles.menuText}>Заклинания</p>
+                    </div>
+                </Link>
+                <Link to="/battle_tracker">
+                    <div className={styles.wrapperLink}>
+                        <img className={styles.icon} src={Battle} alt=""/>
+                        <p className={styles.menuText}>ДМ Трекер</p>
+                    </div>
+                </Link>
+            </div>
         </div>
     )
 }

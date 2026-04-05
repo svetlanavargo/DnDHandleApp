@@ -1,6 +1,6 @@
 import type { Characteristics, Ability } from '../../../types/dnd.ts';
 import { getProficiencyBonus } from '../../../utils/getProficiencyBonus.ts';
-import { getModifier } from '../../../utils/getModifier.ts';
+import { getAbilityModifier } from '../../../utils/getAbilityModifier.ts';
 import { classesData } from '../../../constants/classesData.ts';
 import styles from './CharacteristicsField.module.css';
 
@@ -14,13 +14,15 @@ function CharacteristicsField({ characteristics, level, charClass }: Characteris
     const savingThrows =
         classesData[charClass as keyof typeof classesData]?.savingThrows ?? [];
 
+    const proficiencyBonus = getProficiencyBonus(level);
+
     return (
         <div className={styles.characteristicsFieldContainer}>
             {Object.entries(characteristics).map(([key, value]) => {
                 const abilityKey = key as Ability;
                 const isSelected = savingThrows.includes(abilityKey);
-                const abilityMod = getModifier(value);
-                const proficiencyBonus = getProficiencyBonus(level);
+
+                const abilityMod = getAbilityModifier(characteristics, abilityKey);
                 const savingThrow = abilityMod + (isSelected ? proficiencyBonus : 0);
 
                 return (

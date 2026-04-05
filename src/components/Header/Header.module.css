@@ -1,66 +1,77 @@
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: #1a1a1a;
     height: 60px;
     padding: 0 20px;
     position: relative;
     z-index: 999999;
+    gap: 12px;
 }
 
-.home {
-    width: 20px;
-    height: 20px;
-}
-
-/* левая зона */
-.burgerContainer {
+.linkContainer {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
-/* центр */
+.icon {
+    width: 35px;
+    height: 35px;
+}
+
+.menuText {
+    display: none;
+}
+
 .logoWrapper {
-    flex: 1;
     display: flex;
-    justify-content: center;
 }
 
-/* правая пустая зона */
-.null {
-    width: 130px;
-}
-
-/* ===== mobile ===== */
-@media (max-width: 1023px) {
-    .burgerContainer {
-        width: 130px;
-        order: 0;
-    }
-
-    .logoWrapper {
-        order: 1;
-    }
-
-    .null {
-        order: 2;
+@media (min-width: 767px) {
+    .linkContainer {
+        width: 50%;
     }
 }
 
-/* ===== desktop ===== */
-@media (min-width: 1024px) {
-    .burgerContainer {
-        order: 1;
+@media (min-width: 1023px) {
+    .linkContainer {
+        width: 100%;
+    }
+    .linkContainer a {
+        text-decoration: none;
+        color: #2eb9a1;
+    }
+    .wrapperLink {
+        display: flex;
+        align-items: center;
     }
 
-    .logoWrapper {
-        order: 0;
-        flex: 0;              /* ВАЖНО */
-        justify-content: flex-start;
+    .icon {
+        width: 25px;
+        height: 25px;
+        margin-right: 6px;
     }
 
-    .null {
-        order: 2;
+    .menuText {
+        color: #2eb9a1;
+        display: inline-block;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+}
+
+@media (min-width: 1200px) {
+    .header {
+        justify-content: start;
+    }
+
+    .linkContainer {
+        gap: 20px;
+        width: max-content;
     }
 }

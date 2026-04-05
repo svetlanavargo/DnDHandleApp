@@ -7,5 +7,6 @@ export const TextTools: Record<string, string> = {
     musicalInstruments: 'Музыкальные инструменты',
     disguiseKit: 'Набор для грима',
     forgeryKit: 'Набор для фальсификации',
-    herbalismKit: 'Набор травника'
+    herbalismKit: 'Набор травника',
+
 };

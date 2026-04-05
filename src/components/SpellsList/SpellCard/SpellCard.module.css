@@ -7,6 +7,7 @@
     user-select: none;
     font-weight: bold;
     flex-shrink: 0;
+    position: relative;
 }
 
 /* =========================
@@ -24,9 +25,10 @@
 }
 
 .levelBig {
-    position: absolute;
-    top: 25px;
-    right: 25px;
+    /*position: absolute;*/
+    /*top: 25px;*/
+    /*right: 25px;*/
+    display: none;
 }
 
 .leftBig,
@@ -56,6 +58,23 @@
     text-overflow: ellipsis;
 }
 
+.cardLinkBig {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 16px;
+    right: 39px;
+    color: #FBFAFA;
+    text-decoration: none;
+}
+
+.cardLinkBig div {
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    background-image: url("/img/link.svg");
+}
+
 /* =========================
    BIG CARD (media)
    ========================= */
@@ -71,12 +90,6 @@
         font-size: 20px;
     }
 
-    .levelBig {
-        top: 32px;
-        right: 32px;
-    }
-
-    .leftBig,
     .rightBig {
         padding: 27px 0 18px 0;
     }
@@ -114,6 +127,7 @@
     position: absolute;
     top: 18px;
     right: 18px;
+    font-size: 14px;
 }
 
 .leftSmall,
@@ -146,6 +160,23 @@
     scrollbar-width: none;
     /* IE и старые Edge */
     -ms-overflow-style: none;
+}
+
+.cardLinkSmall {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 5px;
+    right: 18px;
+    color: #FBFAFA;
+    text-decoration: none;
+}
+
+.cardLinkSmall div {
+    width: 15px;
+    height: 15px;
+    margin-left: 6px;
+    background-image: url("/img/link.svg");
 }
 
 .cardFillBard {
