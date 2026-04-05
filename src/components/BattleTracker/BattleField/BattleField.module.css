@@ -1,6 +1,6 @@
 .battleField {
     flex: 1;
-    padding: 1px 20px;
+    padding: 1px 0;
     overflow-y: auto;
     /* Firefox */
     scrollbar-width: none;

@@ -30,6 +30,11 @@
     display: flex;
 }
 
+.wrapperLink {
+    display: flex;
+    align-items: center;
+}
+
 @media (min-width: 767px) {
     .linkContainer {
         width: 50%;
@@ -43,10 +48,6 @@
     .linkContainer a {
         text-decoration: none;
         color: #2eb9a1;
-    }
-    .wrapperLink {
-        display: flex;
-        align-items: center;
     }
 
     .icon {
