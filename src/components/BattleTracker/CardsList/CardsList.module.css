@@ -1,12 +1,35 @@
 .cardsList {
-    width: 350px;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 91%;
+    height: 100%;
+
     background-color: #1F1F1F;
+
     display: flex;
     flex-direction: column;
-    height: 100%;
-    position: relative;
-    border-top-left-radius: 8px;
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    will-change: transform;
+
     border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+
+    z-index: 10;
+}
+
+.open {
+    transform: translateX(0);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9;
 }
 
 .tabs {
@@ -60,4 +83,25 @@
 
 .activeTab {
     background-color: #1F1F1F;
+}
+
+@media (min-width: 1023px) {
+    .cardsList {
+        width: 350px;
+        background-color: #1F1F1F;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        left: auto;
+        right: 0;
+        transform: none;
+        transition: none;
+    }
+
+    .open {
+        transform: none;
+    }
 }

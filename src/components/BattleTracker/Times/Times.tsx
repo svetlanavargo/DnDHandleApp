@@ -2,6 +2,7 @@ import type { BattleCard } from '../../../hooks/useBattle.ts';
 import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Times.module.css';
+import React from "react";
 
 interface TimesProps {
     isBattle: boolean,
@@ -14,9 +15,10 @@ interface TimesProps {
     startFight: () => void,
     nextMove: () => void,
     onOpenSettings: () => void;
+    listOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, onOpenSettings }: TimesProps) {
+function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, onOpenSettings, listOpen }: TimesProps) {
     const currentTime = (timer: number) => {
         const totalSeconds = Math.floor(timer);
 
@@ -33,11 +35,23 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
         <div className={styles.times}>
             <div className={styles.settings}>
                 <div className={styles.btnFlex}>
+                    <div className={styles.listBtn}>
+                        <Btn
+                            onClick={() => listOpen(true)}
+                            classBtn="openCardList"
+                        />
+                    </div>
                     <Btn
                         onClick={onOpenSettings}
                         classBtn="settings"
                         disabled={isBattle}
                     />
+                    {isBattle && (
+                        <Btn onClick={stopBattle} classBtn='stopBattle'/>
+                    )}
+                    {isBattle && (
+                        <Btn onClick={nextMove} classBtn='nextMove'/>
+                    )}
                 </div>
             </div>
             {
@@ -50,7 +64,7 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                                 <p><b>Таймер:</b> {currentTime(timer)}</p>
                                 <p><b>Раунд:</b> {round}</p>
                             </div>
-                            <div className={styles.baseTimers}>
+                            <div className={styles.conditionsWrapper}>
                                 <h3 className={styles.subtitle}>Состояния:</h3>
                                 <div className={styles.conditionsPanel}>
                                     {battleCards?.map(card =>
@@ -68,12 +82,6 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                                     ))}
                                 </div>
                             </div>
-                        </div>
-                        <div className={styles.timersBtn}>
-                            <Btn onClick={stopBattle} classBtn='stopBattle'/>
-                            {isBattle && (
-                                <Btn onClick={nextMove} classBtn='nextMoveBig'/>
-                            )}
                         </div>
                     </div>
                 ) : (

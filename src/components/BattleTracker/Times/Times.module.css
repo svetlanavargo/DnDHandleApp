@@ -1,15 +1,20 @@
 .times {
-    width: 230px;
+    height: 250px;
+    border-radius: 8px;
     background-color: #1F1F1F;
     display: flex;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     flex-direction: column;
-    gap: 12px;
+    margin: 12px 20px;
+}
+
+.listBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .startBattleBtn {
-    /*height: 100%;*/
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,6 +22,11 @@
 
 .timersFlex {
     /*height: 100%;*/
+    overflow-y: auto;
+    /* Firefox */
+    scrollbar-width: none;
+    /* IE и старые Edge */
+    -ms-overflow-style: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -25,6 +35,10 @@
 .baseTimers {
     padding: 12px;
     border-bottom: 1px solid #333333;
+}
+
+.conditionsWrapper {
+    padding: 12px;
 }
 
 .subtitle {
@@ -55,5 +69,20 @@ ul {
 .btnFlex {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
+}
+
+@media (min-width: 1023px) {
+    .times {
+        width: 230px;
+        height: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin: 0;
+    }
+
+    .listBtn {
+        display: none;
+    }
 }

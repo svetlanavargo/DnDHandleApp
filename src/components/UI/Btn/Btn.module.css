@@ -18,13 +18,19 @@ button:focus-visible {
     outline: none;
 }
 
-.addCard, .settings, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
+.addCard, .openCardList, .settings, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
     background-repeat: no-repeat;
     background-color: transparent;
     background-size: contain;
     background-position: center;
     cursor: pointer;
     padding: 0;
+}
+
+.openCardList {
+    width: 40px;
+    height: 40px;
+    background-image: url("/img/openCardList.svg");
 }
 
 .close {
@@ -34,8 +40,8 @@ button:focus-visible {
 }
 
 .settings {
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
     background-image: url("/img/settings.svg");
 }
 
@@ -76,13 +82,6 @@ button:focus-visible {
     background-image: url("/img/next.svg");
 }
 
-.nextMoveBig {
-    width: 80px;
-    height: 80px;
-    background-color: transparent;
-    background-image: url("/img/next.svg");
-}
-
 .getOutOfBattle {
     width: 40px;
     height: 40px;
@@ -102,9 +101,10 @@ button:focus-visible {
 }
 
 .stopBattle {
-    width: 80px;
-    height: 80px;
-    background-image: url("/img/exit.svg");
+    width: 40px;
+    height: 40px;
+    background-image: url("/img/stop.svg");
+    background-position: center;
 }
 
 .reset {

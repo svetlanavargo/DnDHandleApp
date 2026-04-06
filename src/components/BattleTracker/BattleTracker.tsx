@@ -81,6 +81,7 @@ function BattleTracker() {
     const [editingCardId, setEditingCardId] = useState<string | null>(null);
     const [conditionModalOpen, setConditionModalOpen] = useState(false);
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     // 🔥 СБРОС БОЯ ПРИ СМЕНЕ ИГРЫ (доп. защита)
     useEffect(() => {
@@ -206,6 +207,7 @@ function BattleTracker() {
                             startFight={startFight}
                             nextMove={nextMove}
                             onOpenSettings={openSettingsModal}
+                            listOpen={setIsOpen}
                         />
 
                         <BattleField
@@ -235,6 +237,8 @@ function BattleTracker() {
                             resurrectCard={resurrectCard}
                             onAddCard={openModal}
                             onLongRest={longRest}
+                            isOpen={isOpen}
+                            onClose={() => setIsOpen(false)}
                         />
                     </div>
                 </div>

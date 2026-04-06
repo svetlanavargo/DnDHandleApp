@@ -1,10 +1,9 @@
 .battleField {
     flex: 1;
-    padding: 1px 0;
+    min-height: 0;
+    padding: 12px 20px;
     overflow-y: auto;
-    /* Firefox */
     scrollbar-width: none;
-    /* IE и старые Edge */
     -ms-overflow-style: none;
 }
 
