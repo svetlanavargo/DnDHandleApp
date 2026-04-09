@@ -5,7 +5,7 @@ interface NoSpellProps {
     onAdd?: () => void;
 }
 
-function NoSpell({ onAdd }: NoSpellProps) {
+function NoGames({ onAdd }: NoSpellProps) {
     return(
         <div className={styles.noGamesContainer}>
             <div className={styles.img}/>
@@ -16,4 +16,4 @@ function NoSpell({ onAdd }: NoSpellProps) {
     )
 }
 
-export default NoSpell;
+export default NoGames;

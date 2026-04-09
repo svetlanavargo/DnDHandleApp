@@ -6,6 +6,7 @@ import type { Character } from '../../types/Character.ts';
 import {spellSlotProgression} from '../../constants/spellSlotProgression.ts';
 import {classesData} from '../../constants/classesData.ts';
 import { getModifier } from '../../utils/getModifier';
+import NoUser from '../Stubs/NoUser/NoUser.tsx';
 import Tabs from '../UI/Tabs/Tabs';
 import List from './List/List';
 import Modal from '../Modals/Modal.tsx';
@@ -192,48 +193,38 @@ export default function CharacterList() {
 
     return (
         <div className={styles.characterListContainer}>
-            <div className={styles.characterList}>
-                <Tabs
-                    items={characters.map(c => ({
-                        id: c.id,
-                        label: c.name
-                    }))}
-                    activeId={activeCharacterId ?? ''}
-                    setActive={setActiveCharacterId}
-                    onAdd={handleAddCharacter}
-                />
+            {!activeCharacter ?
+                (<NoUser onAdd={() => setCreatingCharacter(true)}/>) :
+                (<div className={styles.characterList}>
+            <Tabs
+                items={characters.map(c => ({
+                    id: c.id,
+                    label: c.name
+                }))}
+                activeId={activeCharacterId ?? ''}
+                setActive={setActiveCharacterId}
+                onAdd={handleAddCharacter}
+            />
 
-                {activeCharacter ? (
-                    <List
-                        activeCharacter={activeCharacter}
-                        removeCharacter={() => setDeletingCharacter(activeCharacter)}
-                        openEditModal={() => setEditingCharacter(activeCharacter)}
-                        addHits={addHits}
-                        subtractHits={subtractHits}
-                        subtractDice={subtractDice}
-                        longRest={longRest}
-                        isNoteOpen={isNoteOpen}
-                        toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
-                        updateCharacter={saveCharacter}
-                        addNote={addNote}
-                        deleteNote={requestDeleteNote}
-                        setActiveNote={setActiveNoteIndex}
-                        activeIndex={activeNoteIndex}
-                    />
-                )
-                : (
-                    <Modal isOpen={true} size="small">
-                        <CharacterModal
-                            character={null}
-                            onClose={() => setCreatingCharacter(false)}
-                            onSave={(newChar) => {
-                                addCharacter(newChar);
-                                setCreatingCharacter(false);
-                            }}
-                        />
-                    </Modal>
-                )}
-            </div>
+            {activeCharacter &&
+                <List
+                    activeCharacter={activeCharacter}
+                    removeCharacter={() => setDeletingCharacter(activeCharacter)}
+                    openEditModal={() => setEditingCharacter(activeCharacter)}
+                    addHits={addHits}
+                    subtractHits={subtractHits}
+                    subtractDice={subtractDice}
+                    longRest={longRest}
+                    isNoteOpen={isNoteOpen}
+                    toggleNoteOpen={() => setIsNoteOpen(prev => !prev)}
+                    updateCharacter={saveCharacter}
+                    addNote={addNote}
+                    deleteNote={requestDeleteNote}
+                    setActiveNote={setActiveNoteIndex}
+                    activeIndex={activeNoteIndex}
+                />
+            }
+        </div>)}
 
             <Modal isOpen={numberModal.isOpen} size="small">
                 <ChangeHitsModal
