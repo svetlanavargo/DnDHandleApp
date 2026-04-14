@@ -1,16 +1,7 @@
 import Btn from '../../../UI/Btn/Btn.tsx';
+import type { Roll } from '../../../../types/dnd.ts';
 import styles from './Field.module.css';
 
-type Roll =
-    | {
-    magnitude: 'manual';
-    type: 'plus' | 'minus';
-    value: number;
-}
-    | {
-    magnitude: number;
-    value: number;
-};
 
 interface Props {
     total: number;

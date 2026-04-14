@@ -1,14 +1,9 @@
 import {useState} from 'react';
+import type { Roll } from '../../../types/dnd.ts';
 import DiceContainer from './DiceContainer/DiceContainer.tsx';
 import Field from './Field/Field.tsx';
 import DiceItem from './DiceItem/DiceItem.tsx';
 import styles from './Dice.module.css';
-
-interface Roll {
-    magnitude: number | 'manual',
-    value: number,
-    type?: 'plus' | 'minus'
-}
 
 const dices:number[] = [2, 4, 6, 8, 10, 12, 20, 100]
 

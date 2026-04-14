@@ -212,3 +212,9 @@ export interface Currency {
     silver: number;
     bronze: number;
 }
+
+export type Roll = {
+    value: number;
+    magnitude: number | 'manual';
+    type?: 'plus' | 'minus';
+};
