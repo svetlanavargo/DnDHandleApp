@@ -1,9 +1,9 @@
 import { useState, } from 'react';
+import type { Game } from '../../types/Game.ts';
 import Btn from '../UI/Btn/Btn.tsx';
 import Input from '../UI/Input/Input.tsx';
 import Select from '../UI/Select/Select.tsx';
 import styles from './Modals.module.css';
-import type {Game} from '../../context/GameProvider.tsx';
 
 interface GameSettingsProps {
     game: Game;

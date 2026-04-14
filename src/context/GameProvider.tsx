@@ -1,42 +1,19 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import type { Card } from "../types/CardInBattleTracker";
+import React, {
+    useEffect,
+    useState,
+    useMemo,
+    useCallback
+} from 'react';
 
-export type TurnTimeMode = 'turn' | 'round';
+import { GameContext } from './GameContext';
 
-export type Game = {
-    id: string;
-    name: string;
-    cards: Card[];
-    turnTimeMode?: TurnTimeMode;
-};
-
-type GamesState = {
-    games: Game[];
-    currentGameId: string | null;
-};
-
-type GameContextType = {
-    games: Game[];
-    currentGame: Game | null;
-
-    setCurrentGame: (id: string) => void;
-    createGame: (name: string) => void;
-    deleteGame: (id: string) => void;
-
-    addCard: (card: Card) => void;
-    updateCard: (id: string, data: Partial<Card>) => void;
-    deleteCard: (id: string) => void;
-    renameGame: (id: string, name: string) => void;
-
-    setCards: React.Dispatch<React.SetStateAction<Card[]>>;
-    setTurnTimeMode: (gameId: string, mode: TurnTimeMode) => void;
-};
-
-const GameContext = createContext<GameContextType | null>(null);
+import type { Card } from '../types/CardInBattleTracker';
+import type { Game, GamesState, TurnTimeMode, GameContextType } from '../types/Game';
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<GamesState>(() => {
         const saved = localStorage.getItem("games");
+
         return saved
             ? JSON.parse(saved)
             : { games: [], currentGameId: null };
@@ -46,15 +23,18 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem("games", JSON.stringify(state));
     }, [state]);
 
-    const currentGame = state.games.find(g => g.id === state.currentGameId) || null;
+    const currentGame = useMemo(
+        () => state.games.find(g => g.id === state.currentGameId) || null,
+        [state.games, state.currentGameId]
+    );
 
-    const setCurrentGame = (id: string) => {
+    const setCurrentGame = useCallback((id: string) => {
         setState(prev => ({ ...prev, currentGameId: id }));
-    };
+    }, []);
 
-    const createGame = (name: string) => {
+    const createGame = useCallback((name: string) => {
         const newGame: Game = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: crypto.randomUUID(),
             name,
             cards: [],
             turnTimeMode: 'round'
@@ -64,35 +44,39 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             games: [...prev.games, newGame],
             currentGameId: newGame.id
         }));
-    };
+    }, []);
 
-    const setTurnTimeMode = (gameId: string, mode: TurnTimeMode) => {
+    const deleteGame = useCallback((id: string) => {
+        setState(prev => {
+            const updated = prev.games.filter(g => g.id !== id);
+            const isCurrent = prev.currentGameId === id;
+
+            return {
+                games: updated,
+                currentGameId: isCurrent ? updated[0]?.id ?? null : prev.currentGameId
+            };
+        });
+    }, []);
+
+    const renameGame = useCallback((id: string, name: string) => {
         setState(prev => ({
             ...prev,
             games: prev.games.map(g =>
-                g.id === gameId
-                    ? { ...g, turnTimeMode: mode }
-                    : g
+                g.id === id ? { ...g, name } : g
             )
         }));
-    };
+    }, []);
 
-    const deleteGame = (id: string) => {
-        setState(prev => {
-            const updatedGames = prev.games.filter(g => g.id !== id);
+    const setTurnTimeMode = useCallback((gameId: string, mode: TurnTimeMode) => {
+        setState(prev => ({
+            ...prev,
+            games: prev.games.map(g =>
+                g.id === gameId ? { ...g, turnTimeMode: mode } : g
+            )
+        }));
+    }, []);
 
-            const isDeletingCurrent = prev.currentGameId === id;
-
-            return {
-                games: updatedGames,
-                currentGameId: isDeletingCurrent
-                    ? updatedGames[0]?.id ?? null
-                    : prev.currentGameId
-            };
-        });
-    };
-
-    const updateCards = (updater: (cards: Card[]) => Card[]) => {
+    const updateCards = useCallback((updater: (cards: Card[]) => Card[]) => {
         setState(prev => ({
             ...prev,
             games: prev.games.map(game =>
@@ -101,62 +85,63 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     : game
             )
         }));
-    };
+    }, []);
 
-    const addCard = (card: Card) => {
+    const addCard = useCallback((card: Card) => {
         updateCards(cards => [...cards, card]);
-    };
+    }, [updateCards]);
 
-    const updateCard = (id: string, data: Partial<Card>) => {
+    const updateCard = useCallback((id: string, data: Partial<Card>) => {
         updateCards(cards =>
-            cards.map(c => (c.id === id ? { ...c, ...data } : c))
+            cards.map(c => c.id === id ? { ...c, ...data } : c)
         );
-    };
+    }, [updateCards]);
 
-    const deleteCard = (id: string) => {
+    const deleteCard = useCallback((id: string) => {
         updateCards(cards => cards.filter(c => c.id !== id));
-    };
+    }, [updateCards]);
 
-    const setCards: React.Dispatch<React.SetStateAction<Card[]>> = (value) => {
-        updateCards(prevCards =>
-            typeof value === "function" ? value(prevCards) : value
-        );
-    };
+    const setCards = useCallback<React.Dispatch<React.SetStateAction<Card[]>>>(
+        (value) => {
+            updateCards(prev =>
+                typeof value === 'function' ? value(prev) : value
+            );
+        },
+        [updateCards]
+    );
 
-    const renameGame = (id: string, name: string) => {
-        setState(prev => ({
-            ...prev,
-            games: prev.games.map(g =>
-                g.id === id ? { ...g, name } : g
-            )
-        }));
-    };
+    const value = useMemo<GameContextType>(() => ({
+        games: state.games,
+        currentGame,
+
+        setCurrentGame,
+        createGame,
+        deleteGame,
+
+        renameGame,
+        setTurnTimeMode,
+
+        addCard,
+        updateCard,
+        deleteCard,
+        setCards
+    }), [
+        state.games,
+        currentGame,
+        setCurrentGame,
+        createGame,
+        deleteGame,
+        renameGame,
+        setTurnTimeMode,
+        addCard,
+        updateCard,
+        deleteCard,
+        setCards
+    ]);
 
     return (
-        <GameContext.Provider
-            value={{
-                games: state.games,
-                currentGame,
-
-                setCurrentGame,
-                createGame,
-                deleteGame,
-
-                addCard,
-                updateCard,
-                deleteCard,
-                setCards,
-                setTurnTimeMode,
-                renameGame
-            }}
-        >
+        <GameContext.Provider value={value}>
             {children}
         </GameContext.Provider>
     );
-};
-
-export const useGame = () => {
-    const ctx = useContext(GameContext);
-    if (!ctx) throw new Error("useGame must be used inside GameProvider");
-    return ctx;
 };

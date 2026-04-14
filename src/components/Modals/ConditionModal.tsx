@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { CreateCondition } from '../../hooks/useBattle';
+import type { CreateCondition } from '../../types/dnd.ts';
 import type { BattleCard } from "../../hooks/useBattle.ts";
 import styles from './Modals.module.css';
 import Input from "../UI/Input/Input.tsx";

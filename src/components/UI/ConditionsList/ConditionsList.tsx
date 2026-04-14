@@ -1,4 +1,4 @@
-import type { Condition } from "../../../hooks/useBattle";
+import type { Condition } from "../../../types/dnd.ts";
 import { remainingTimeInMinutes } from "../../../utils/getTime";
 
 interface Props {

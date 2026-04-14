@@ -1,4 +1,4 @@
-.noGamesContainer {
+.container {
     padding: 80px 20px 20px 20px;
     display: flex;
     flex-direction: column;
@@ -6,18 +6,17 @@
     align-items: center;
 }
 
-.noGameTitle {
+.container a {
+    color: #2eb9a1;
+    text-decoration: none;
+}
+
+.title {
+    text-align: center;
     margin: 0;
     font-size: 36px;
 }
-.noGameText {
+.text {
     margin: 12px 0;
     text-align: center;
-}
-
-.img {
-    width: 100px;
-    height: 100px;
-    background-image: url("/img/dnd.svg");
-    margin-bottom: 20px;
 }

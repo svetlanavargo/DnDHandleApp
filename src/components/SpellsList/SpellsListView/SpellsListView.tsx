@@ -1,6 +1,6 @@
-import { useState } from "react";
-import SpellCard from "../SpellCard/SpellCard.tsx";
-import NoSpell from "../../Stubs/NoSpell/NoSpell.tsx";
+import { useState } from 'react';
+import SpellCard from '../SpellCard/SpellCard.tsx';
+import EmptyState from '../../UI/EmptyState/EmptyState.tsx';
 import styles from "./SpellsListView.module.css";
 
 import type { Spell } from "../../../types/dnd";
@@ -16,7 +16,10 @@ function SpellsListView({ spells, fill }: SpellsListViewProps) {
     if (!spells || spells.length === 0) {
         return (
             <div className={styles.spellsListViewContainer}>
-                <NoSpell />
+                <EmptyState
+                    image={<div className={styles.cards} />}
+                    text="В списке заклинаний пусто :("
+                />
             </div>
         );
     }

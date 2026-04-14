@@ -21,7 +21,6 @@ function DiceItem({ magnitude, onRoll, clickCount }: Props)  {
                     clickCount > 0 ?
                         <span className={styles.clickCount}>{clickCount}</span> : null
                 }
-                <span>{magnitude}</span>
             </div>
         </div>
     )

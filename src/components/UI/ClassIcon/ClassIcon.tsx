@@ -3,7 +3,7 @@ import type { ClassKey } from "../../../types/dnd.ts";
 
 interface ClassIconProps {
     spec: ClassKey;
-    size: 'big' | 'small';
+    size: 'big' | 'medium' | 'small';
 }
 
 function ClassIcon({ spec, size }: ClassIconProps) {

@@ -1,12 +1,12 @@
 import { useState, useContext } from 'react';
 import { CharacterContext } from '../../context/CharacterContext';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
-import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
-import type { Character } from '../../types/Character.ts';
 import {spellSlotProgression} from '../../constants/spellSlotProgression.ts';
 import {classesData} from '../../constants/classesData.ts';
 import { getModifier } from '../../utils/getModifier';
-import NoUser from '../Stubs/NoUser/NoUser.tsx';
+import type { Classes, ClassKey, ProgressionType, SpellSlotsState } from '../../types/dnd';
+import type { Character } from '../../types/Character.ts';
+import EmptyState from '../UI/EmptyState/EmptyState.tsx';
 import Tabs from '../UI/Tabs/Tabs';
 import List from './List/List';
 import Modal from '../Modals/Modal.tsx';
@@ -194,7 +194,13 @@ export default function CharacterList() {
     return (
         <div className={styles.characterListContainer}>
             {!activeCharacter ?
-                (<NoUser onAdd={() => setCreatingCharacter(true)}/>) :
+                (<EmptyState
+                    image={<div className={styles.img} />}
+                    title="Привет игрок!"
+                    text="Для создания листа персонажа нажми"
+                    buttonText="Создать"
+                    onButtonClick={() => setCreatingCharacter(true)}
+                />) :
                 (<div className={styles.characterList}>
             <Tabs
                 items={characters.map(c => ({

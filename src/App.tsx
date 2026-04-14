@@ -18,6 +18,17 @@ import './App.css';
 
 function App() {
     const [isDiceOpen, setIsDiceOpen] = useState(false);
+    console.log('=== localStorage dump ===');
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+
+        const value = localStorage.getItem(key);
+
+        console.log(key, value);
+    }
+
     return (
         <>
             <Helmet>

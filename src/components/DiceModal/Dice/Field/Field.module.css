@@ -37,7 +37,10 @@
 }
 
 .historyRollValue {
+    display: flex;
+    justify-content: center;
     font-size: 12px;
+    width: 16px;
     font-weight: bold;
     color: darkgray;
 }

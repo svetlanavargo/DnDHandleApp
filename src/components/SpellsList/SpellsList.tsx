@@ -1,4 +1,5 @@
 import { useContext, useMemo, useState } from 'react';
+import {classesData} from '../../constants/classesData.ts';
 import Tabs from '../UI/Tabs/Tabs.tsx';
 import SpellsMenu from './SpellsMenu/SpellsMenu.tsx';
 import SpellsListView from './SpellsListView/SpellsListView.tsx';
@@ -6,13 +7,12 @@ import Modal from '../Modals/Modal.tsx';
 import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
 import SpellsDeleteCard from '../Modals/SpellsDeleteCard.tsx';
 import SpellsSettings from '../Modals/SpellsSettings.tsx';
-import NoSlots from '../Stubs/NoSlots/NoSlots.tsx';
+import EmptyState from '../UI/EmptyState/EmptyState.tsx';
 import { CharacterContext } from '../../context/CharacterContext.ts';
 import rawSpellsJson from '../../data/Spells/spells.json';
 
 import type { Spell, SpellSchool, SpellLevel } from '../../types/dnd';
 import styles from './SpellsList.module.css';
-import NoCharacter from "../Stubs/NoCharacter/NoCharacter.tsx";
 
 type ModalType = "add" | "delete" | "settings" | null;
 
@@ -25,14 +25,12 @@ function SpellsList() {
 
     const spellsJson = rawSpellsJson as Spell[];
 
-    // map url → spell
     const spellsMap = useMemo(() => {
         return Object.fromEntries(
             spellsJson.map((s) => [s.url, s])
         );
     }, [spellsJson]);
 
-    // 👉 подготовленные спеллы по выбранному уровню
     const preparedSpells = useMemo(() => {
         if (!activeCharacter?.spells) return [];
 
@@ -48,12 +46,24 @@ function SpellsList() {
     }, [activeCharacter, activeTab, spellsMap]);
 
     if (!activeCharacter) {
-        return <NoCharacter text='Для просмотра заклинаний - необходимо '/>;
+        return <EmptyState
+            image={<div className={styles.img} />}
+            text="Для просмотра заклинаний - необходимо "
+            linkText="создать персонажа"
+            linkTo="/character_list"
+        />
     }
 
 
     if (!activeCharacter.spells || Object.keys(activeCharacter.spells).length === 0) {
-        return <NoSlots chClass={activeCharacter.class}/>;
+        return <EmptyState
+            classIcon={{
+                spec: activeCharacter.class,
+                size: 'big'
+            }}
+            title="К сожалению (или к счастью?)"
+            text={`твой персонаж ${classesData[activeCharacter.class].name} не может использовать заклинания`}
+        />
     }
 
     const openModal = (type: ModalType) => setActiveModal(type);

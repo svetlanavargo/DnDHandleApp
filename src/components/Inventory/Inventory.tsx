@@ -7,7 +7,7 @@ import CurrencyList from './CurrencyList/CurrencyList.tsx';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
-import NoCharacter from '../Stubs/NoCharacter/NoCharacter.tsx';
+import EmptyState from '../UI/EmptyState/EmptyState.tsx';
 import styles from './Inventory.module.css';
 
 function Inventory() {
@@ -75,9 +75,13 @@ function Inventory() {
         });
     };
 
-    // Если персонаж не выбран, показываем заглушку
     if (!activeCharacter) {
-        return <NoCharacter text='Для просмотра инвентаря - необходимо '/>;
+        return <EmptyState
+            image={<div className={styles.img} />}
+            text="Для просмотра инвентаря - необходимо "
+            linkText="создать персонажа"
+            linkTo="/character_list"
+        />
     }
 
     return (

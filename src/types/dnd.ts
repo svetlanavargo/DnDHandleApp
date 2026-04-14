@@ -31,6 +31,21 @@ export interface Caster {
     ritual?: boolean;
 }
 
+type BaseCondition = {
+    id: string;
+    name: string;
+    label: string;
+    type: 'round' | 'time';
+    duration: number;
+};
+
+export type CreateCondition = BaseCondition;
+
+export type Condition = BaseCondition & {
+    remaining: number;
+    sourceId: string;
+};
+
 // ===== САБКЛАСС =====
 export interface Subclass {
     caster?: Caster;

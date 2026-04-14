@@ -1,23 +1,6 @@
 import React, {useEffect, useState} from "react";
+import type { Condition } from '../types/dnd.ts';
 import type {Card} from "../types/CardInBattleTracker.ts";
-
-export type CreateCondition = {
-    id: string;
-    name: string;
-    label: string;
-    type: 'round' | 'time';
-    duration: number;
-};
-
-export type Condition = {
-    id: string;
-    name: string;
-    label: string;
-    type: 'round' | 'time';
-    duration: number;
-    remaining: number;
-    sourceId: string;
-};
 
 export interface BattleCard extends Card {
     initiative: number;

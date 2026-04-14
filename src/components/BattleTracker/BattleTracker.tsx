@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { useBattle } from '../../hooks/useBattle.ts';
-import { useGame } from "../../context/GameProvider";
+import { useGame } from '../../hooks/useGame.ts';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
-import type { CreateCondition } from '../../hooks/useBattle';
+import type { CreateCondition } from '../../types/dnd.ts';
 import type { Card } from '../../types/CardInBattleTracker.ts';
 
-import NoGames from '../Stubs/NoGames/NoGames.tsx';
+import EmptyState from '../UI/EmptyState/EmptyState.tsx';
 
 import Tabs from '../UI/Tabs/Tabs.tsx';
 import CardsList from './CardsList/CardsList.tsx';
@@ -83,7 +83,6 @@ function BattleTracker() {
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    // 🔥 СБРОС БОЯ ПРИ СМЕНЕ ИГРЫ (доп. защита)
     useEffect(() => {
         stopBattle();
     }, [currentGame?.id]);
@@ -182,7 +181,13 @@ function BattleTracker() {
     return (
         <div className={styles.battleTrackerContainer}>
             {games.length === 0 ?
-                (<NoGames onAdd={() => setIsCreateGameOpen(true)}/>)
+                (<EmptyState
+                    image={<div className={styles.img} />}
+                    title="Уважаемый мастер!"
+                    text="Благодарим Вас за вашу работу! Для создания новой игры нажмите"
+                    buttonText="Создать игру"
+                    onButtonClick={() => setIsCreateGameOpen(true)}
+                />)
                 :
                 (
                 <div className={styles.content}>
