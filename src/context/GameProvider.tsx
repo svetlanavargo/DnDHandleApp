@@ -1,5 +1,4 @@
 import React, {
-    useEffect,
     useState,
     useMemo,
     useCallback
@@ -8,29 +7,68 @@ import React, {
 import { GameContext } from './GameContext';
 
 import type { Card } from '../types/CardInBattleTracker';
-import type { Game, GamesState, TurnTimeMode, GameContextType } from '../types/Game';
+import type { Game, TurnTimeMode, GameContextType } from '../types/Game';
+
+import { getStore, setStore, createUser, ensureUser } from '../lib/storage';
+
+// === user ===
+const USER_ID_KEY = 'currentUserId';
+
+function getUserId() {
+    let id = localStorage.getItem(USER_ID_KEY);
+
+    if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem(USER_ID_KEY, id);
+    }
+
+    return id;
+}
 
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [state, setState] = useState<GamesState>(() => {
-        const saved = localStorage.getItem("games");
+    const userId = getUserId();
+    createUser(userId);
 
-        return saved
-            ? JSON.parse(saved)
-            : { games: [], currentGameId: null };
+    // === INIT ===
+    const [games, setGames] = useState<Game[]>(() => {
+        const store = getStore();
+        return store.games[userId] ?? [];
     });
 
-    useEffect(() => {
-        localStorage.setItem("games", JSON.stringify(state));
-    }, [state]);
+    const [currentGameId, setCurrentGameIdState] = useState<string | null>(() => {
+        const store = getStore();
 
+        return (
+            store.users[userId]?.currentGameId ??
+            store.games[userId]?.[0]?.id ??
+            null
+        );
+    });
+
+    // === sync ===
+    const syncStore = (newGames: Game[], newCurrentId: string | null) => {
+        const store = getStore();
+
+        ensureUser(store, userId);
+
+        store.games[userId] = newGames;
+        store.users[userId].currentGameId = newCurrentId;
+
+        setStore(store);
+    };
+
+    // === computed ===
     const currentGame = useMemo(
-        () => state.games.find(g => g.id === state.currentGameId) || null,
-        [state.games, state.currentGameId]
+        () => games.find(g => g.id === currentGameId) || null,
+        [games, currentGameId]
     );
 
+    // === API ===
+
     const setCurrentGame = useCallback((id: string) => {
-        setState(prev => ({ ...prev, currentGameId: id }));
-    }, []);
+        setCurrentGameIdState(id);
+        syncStore(games, id);
+    }, [games]);
 
     const createGame = useCallback((name: string) => {
         const newGame: Game = {
@@ -40,52 +78,57 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             turnTimeMode: 'round'
         };
 
-        setState(prev => ({
-            games: [...prev.games, newGame],
-            currentGameId: newGame.id
-        }));
-    }, []);
+        const newGames = [...games, newGame];
+
+        setGames(newGames);
+        setCurrentGameIdState(newGame.id);
+
+        syncStore(newGames, newGame.id);
+    }, [games]);
 
     const deleteGame = useCallback((id: string) => {
-        setState(prev => {
-            const updated = prev.games.filter(g => g.id !== id);
-            const isCurrent = prev.currentGameId === id;
+        const newGames = games.filter(g => g.id !== id);
+        const newCurrentId =
+            currentGameId === id
+                ? newGames[0]?.id ?? null
+                : currentGameId;
 
-            return {
-                games: updated,
-                currentGameId: isCurrent ? updated[0]?.id ?? null : prev.currentGameId
-            };
-        });
-    }, []);
+        setGames(newGames);
+        setCurrentGameIdState(newCurrentId);
+
+        syncStore(newGames, newCurrentId);
+    }, [games, currentGameId]);
 
     const renameGame = useCallback((id: string, name: string) => {
-        setState(prev => ({
-            ...prev,
-            games: prev.games.map(g =>
-                g.id === id ? { ...g, name } : g
-            )
-        }));
-    }, []);
+        const newGames = games.map(g =>
+            g.id === id ? { ...g, name } : g
+        );
+
+        setGames(newGames);
+        syncStore(newGames, currentGameId);
+    }, [games, currentGameId]);
 
     const setTurnTimeMode = useCallback((gameId: string, mode: TurnTimeMode) => {
-        setState(prev => ({
-            ...prev,
-            games: prev.games.map(g =>
-                g.id === gameId ? { ...g, turnTimeMode: mode } : g
-            )
-        }));
-    }, []);
+        const newGames = games.map(g =>
+            g.id === gameId ? { ...g, turnTimeMode: mode } : g
+        );
+
+        setGames(newGames);
+        syncStore(newGames, currentGameId);
+    }, [games, currentGameId]);
+
+    // === cards ===
 
     const updateCards = useCallback((updater: (cards: Card[]) => Card[]) => {
-        setState(prev => ({
-            ...prev,
-            games: prev.games.map(game =>
-                game.id === prev.currentGameId
-                    ? { ...game, cards: updater(game.cards) }
-                    : game
-            )
-        }));
-    }, []);
+        const newGames = games.map(game =>
+            game.id === currentGameId
+                ? { ...game, cards: updater(game.cards) }
+                : game
+        );
+
+        setGames(newGames);
+        syncStore(newGames, currentGameId);
+    }, [games, currentGameId]);
 
     const addCard = useCallback((card: Card) => {
         updateCards(cards => [...cards, card]);
@@ -111,7 +154,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     const value = useMemo<GameContextType>(() => ({
-        games: state.games,
+        games,
         currentGame,
 
         setCurrentGame,
@@ -126,7 +169,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         deleteCard,
         setCards
     }), [
-        state.games,
+        games,
         currentGame,
         setCurrentGame,
         createGame,

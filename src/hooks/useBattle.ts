@@ -339,27 +339,36 @@ export const useBattle = (
     };
 
     return {
-        isBattle,
-        battleCards,
-        turnState,
-        expiredConditions,
+        state: {
+            isBattle,
+            battleCards,
+            turnState,
+            expiredConditions
+        },
 
-        editingNoteId,
-        noteDraft,
-        startEditNote,
-        saveNote,
-        setNoteDraft,
+        notes: {
+            editingNoteId,
+            noteDraft,
+            startEditNote,
+            saveNote,
+            setNoteDraft
+        },
 
-        startFight,
-        stopBattle,
-        nextMove,
-        addUserToBattle,
-        getOutOfBattle,
-        subtractHits,
-        addHits,
-        longRest,
-        addCondition,
-        clearExpiredConditions,
-        resurrectCard
+        actions: {
+            startFight,
+            stopBattle,
+            nextMove,
+            addUserToBattle,
+            getOutOfBattle,
+            subtractHits,
+            addHits,
+            longRest,
+            addCondition,
+            resurrectCard
+        },
+
+        utils: {
+            clearExpiredConditions
+        }
     };
 };
