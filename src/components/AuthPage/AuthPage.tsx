@@ -109,6 +109,7 @@ export default function AuthPage({ pageType }: AuthPageProps) {
                 navigate('/');
             } else {
                 await register(email, password);
+                navigate('/login');
             }
         } catch (err: unknown) {
             setError(getAuthErrorMessage(err, pageType));

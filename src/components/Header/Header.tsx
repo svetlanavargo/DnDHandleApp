@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/auth/useAuth.ts';
 
 import Logo from '../UI/Logo/Logo.tsx';
+import Modal from '../Modals/Modal.tsx';
+import Confirm from '../Modals/Confirm.tsx';
 
 import Home from '../../../public/img/home.svg';
 import DiceImg from '../../../public/img/dnd.svg';
@@ -20,6 +23,7 @@ interface HeaderProps {
 
 export default function Header({ setIsDiceOpen }: HeaderProps) {
     const { user, logout } = useAuth();
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const menuItems = [
         {
@@ -92,7 +96,7 @@ export default function Header({ setIsDiceOpen }: HeaderProps) {
                 {menuItems.map(renderItem)}
 
                 {user ? (
-                    <div onClick={logout} className={styles.wrapperLink}>
+                    <div onClick={() => setIsLogoutModalOpen(true)} className={styles.wrapperLink}>
                         <img className={styles.icon} src={Logout} alt="" />
                         <p className={styles.menuText}>Выйти</p>
                     </div>
@@ -105,6 +109,18 @@ export default function Header({ setIsDiceOpen }: HeaderProps) {
                     </Link>
                 )}
             </div>
+
+            {isLogoutModalOpen && (
+                <Modal isOpen size="small">
+                    <Confirm
+                        onClose={() => setIsLogoutModalOpen(false)}
+                        onConfirm={() => {
+                            void logout();
+                            setIsLogoutModalOpen(false);
+                        }}
+                    />
+                </Modal>
+            )}
         </div>
     );
 }

@@ -32,7 +32,7 @@ const defaultForm: FormValues = {
     note: '',
     isPlayer: false,
     initiativeBonus: '0',
-    color: '#2eb9a1'
+    color: '#3D3D3D'
 };
 
 function getInitialFormValues(initialValues?: Omit<Card, 'id'>): FormValues {
@@ -48,7 +48,7 @@ function getInitialFormValues(initialValues?: Omit<Card, 'id'>): FormValues {
         note: initialValues.note ?? '',
         isPlayer: initialValues.isPlayer,
         initiativeBonus: initialValues.initiativeBonus.toString(),
-        color: initialValues.color ?? '#2eb9a1'
+        color: initialValues.color ?? '#3D3D3D'
     };
 }
 
@@ -71,7 +71,7 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
             }
 
             if (field === 'isPlayer' && value === true && !updated.color) {
-                updated.color = '#2eb9a1';
+                updated.color = '#3D3D3D';
             }
 
             return updated;
@@ -203,11 +203,11 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
                         <div className={styles.colorPickerPreviewRow}>
                             <div
                                 className={styles.colorPreview}
-                                style={{ backgroundColor: formValues.color || '#2eb9a1' }}
+                                style={{ backgroundColor: formValues.color || '#3D3D3D' }}
                             />
                             <Input
                                 type="text"
-                                value={formValues.color || '#2eb9a1'}
+                                value={formValues.color || '#3D3D3D'}
                                 onChange={(e) => handleChange('color', e.target.value)}
                             >
                                 HEX цвет:
@@ -215,7 +215,7 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
                         </div>
                         <div className={styles.colorPickerWrapper}>
                             <HexColorPicker
-                                color={formValues.color || '#2eb9a1'}
+                                color={formValues.color || '#3D3D3D'}
                                 onChange={(value) => handleChange('color', value)}
                             />
                         </div>

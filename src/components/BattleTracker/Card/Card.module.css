@@ -125,6 +125,7 @@ ul {
     border: none;
     padding: 0 1rem;
     color: var(--card-muted-text-color);
+    resize: vertical;
 }
 
 .noteTextarea:focus-visible {
