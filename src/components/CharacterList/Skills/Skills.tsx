@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import type { Characteristics, Skill } from '../../../types/dnd.ts';
 import { skillsListSorted } from '../../../constants/TextSkills.ts';
 import { getProficiencyBonus } from '../../../utils/getProficiencyBonus.ts';
@@ -12,7 +13,7 @@ interface SkillsDisplayProps {
 }
 
 function Skills({ characteristics, skills, expertise, level }: SkillsDisplayProps) {
-    const proficiencyBonus = getProficiencyBonus(level);
+    const proficiencyBonus = useMemo(() => getProficiencyBonus(level), [level]);
 
     return (
         <div className={styles.skillsContainer}>
@@ -46,4 +47,4 @@ function Skills({ characteristics, skills, expertise, level }: SkillsDisplayProp
     );
 }
 
-export default Skills;
+export default memo(Skills);

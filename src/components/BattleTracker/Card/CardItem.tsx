@@ -1,4 +1,5 @@
-import { useRef, useEffect, forwardRef } from 'react';
+import { useRef, useEffect, forwardRef, memo } from 'react';
+import type { CSSProperties } from 'react';
 import type { Card } from '../../../types/CardInBattleTracker.ts';
 import type { BattleCard } from '../BattleField/BattleField.tsx';
 import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
@@ -6,12 +7,36 @@ import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Card.module.css';
 
 type CardMode = 'list' | 'battle';
+type CardStyle = CSSProperties & {
+    '--card-text-color'?: string;
+    '--card-muted-text-color'?: string;
+    '--card-divider-color'?: string;
+    '--card-initiative-bg'?: string;
+};
+
+function getCardTextColor(color?: string) {
+    if (!color || !color.startsWith('#') || (color.length !== 7 && color.length !== 4)) {
+        return '#FBFAFA';
+    }
+
+    const normalized = color.length === 4
+        ? `#${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`
+        : color;
+
+    const red = parseInt(normalized.slice(1, 3), 16);
+    const green = parseInt(normalized.slice(3, 5), 16);
+    const blue = parseInt(normalized.slice(5, 7), 16);
+    const brightness = (red * 299 + green * 587 + blue * 114) / 1000;
+
+    return brightness > 165 ? '#1F1F1F' : '#FBFAFA';
+}
 
 interface CardProps {
     card: Card | BattleCard;
     mode: CardMode;
     onEdit?: (id: string) => void;
     onDelete?: (id: string) => void;
+    onCopy?: (id: string) => void;
     isBattle: boolean;
     addUserToBattle?: (id: string) => void;
     getOutOfBattle?: (id: string) => void;
@@ -29,11 +54,12 @@ interface CardProps {
     saveNote?: (id: string) => void;
 }
 
-const CardItem = forwardRef<HTMLDivElement, CardProps>(({
+const CardItem = memo(forwardRef<HTMLDivElement, CardProps>(({
                                                             card,
                                                             mode,
                                                             onEdit,
                                                             onDelete,
+                                                            onCopy,
                                                             isCurrentTurn,
                                                             isBattle,
                                                             addUserToBattle,
@@ -52,6 +78,29 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
     const { id, name, maxHits, currentHits, ac, isPlayer, color, initiativeBonus, note } = card;
     const initiative = 'initiative' in card ? card.initiative : 0;
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const resolvedColor = color === 'red'
+        ? '#610000'
+        : color === 'blue'
+            ? '#003161'
+            : color === 'green'
+                ? '#006131'
+                : color;
+    const textColor = getCardTextColor(resolvedColor);
+    const cardStyle: CardStyle | undefined = isPlayer && resolvedColor
+        ? {
+            backgroundColor: resolvedColor,
+            borderColor: resolvedColor,
+            color: textColor,
+            '--card-text-color': textColor,
+            '--card-muted-text-color': textColor,
+            '--card-divider-color': textColor === '#1F1F1F'
+                ? 'rgba(31, 31, 31, 0.22)'
+                : 'rgba(251, 250, 250, 0.18)',
+            '--card-initiative-bg': textColor === '#1F1F1F'
+                ? 'rgba(31, 31, 31, 0.14)'
+                : 'rgba(251, 250, 250, 0.16)',
+        }
+        : undefined;
 
     // Проверяем, редактируется ли заметка
     const isEditingNote = editingNoteId === id;
@@ -81,13 +130,7 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
         }
     }, [note]);
 
-    let colorClass, hitsClass, isDead, deadClass, isNPC;
-
-    if (isPlayer && color) {
-        if (color === 'red') colorClass = styles.red;
-        else if (color === 'blue') colorClass = styles.blue;
-        else if (color === 'green') colorClass = styles.green;
-    }
+    let hitsClass, isDead, deadClass, isNPC;
 
     if (Number(currentHits) <= maxHits / 2) hitsClass = styles.low;
     if (Number(currentHits) <= 0) isDead = true;
@@ -99,11 +142,11 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
             ref={ref}
             className={`
                 ${styles.card} 
-                ${colorClass || ''} 
                 ${hitsClass || ''} 
                 ${deadClass || ''} 
                ${isBattle && isCurrentTurn ? styles.currentTurn : ''}
             `}
+            style={cardStyle}
         >
             <div>
                 <div className={styles.cardHeader}>
@@ -180,7 +223,8 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
 
             <div>
                 {mode === 'list' && currentHits > 0 && (
-                    <div className={styles.addUserToBattleBtn}>
+                    <div className={styles.battleBtns}>
+                        <Btn onClick={() => onCopy?.(id)} classBtn='copy'/>
                         <Btn onClick={() => addUserToBattle?.(id)} classBtn='addUserToBattle'/>
                     </div>
                 )}
@@ -191,13 +235,14 @@ const CardItem = forwardRef<HTMLDivElement, CardProps>(({
                     </div>
                 )}
                 {isDead && (
-                    <div className={styles.resurrectionBtn}>
+                    <div className={styles.battleBtns}>
+                        <Btn onClick={() => onCopy?.(id)} classBtn='copy'/>
                         <Btn onClick={() => resurrectCard?.(id)} classBtn='resurrection'/>
                     </div>
                 )}
             </div>
         </div>
     );
-});
+}));
 
 export default CardItem;

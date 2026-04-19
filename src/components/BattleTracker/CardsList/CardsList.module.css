@@ -28,7 +28,6 @@
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.4);
     z-index: 9;
 }
 
@@ -42,7 +41,7 @@
 .actions {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
     background-color: #1a1a1a;
     padding: 12px;
     border-top-right-radius: 8px;
@@ -103,5 +102,13 @@
 
     .open {
         transform: none;
+    }
+
+    .closeWrapper {
+        display: none;
+    }
+
+    .actions {
+        justify-content: end;
     }
 }

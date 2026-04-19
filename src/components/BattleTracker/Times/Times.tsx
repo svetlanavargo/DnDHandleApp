@@ -1,8 +1,8 @@
+import { memo, useMemo } from 'react';
 import type { BattleCard } from '../../../hooks/useBattle.ts';
 import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Times.module.css';
-import React from "react";
 
 interface TimesProps {
     isBattle: boolean,
@@ -19,7 +19,7 @@ interface TimesProps {
 }
 
 function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, onOpenSettings, listOpen }: TimesProps) {
-    const currentTime = (timer: number) => {
+    const formattedTime = useMemo(() => {
         const totalSeconds = Math.floor(timer);
 
         const min = Math.floor(totalSeconds / 60);
@@ -29,7 +29,7 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
         const formattedSec = String(sec).padStart(2, '0');
 
         return `${formattedMin}:${formattedSec}`;
-    }
+    }, [timer]);
 
     return (
         <div className={styles.times}>
@@ -61,7 +61,7 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                             <div className={styles.baseTimers}>
                                 <h3 className={styles.subtitle}>Общие таймеры:</h3>
                                 <p><b>Всего ходов:</b> {turnCounter}</p>
-                                <p><b>Таймер:</b> {currentTime(timer)}</p>
+                                <p><b>Таймер:</b> {formattedTime}</p>
                                 <p><b>Раунд:</b> {round}</p>
                             </div>
                             <div className={styles.conditionsWrapper}>
@@ -96,4 +96,4 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
     )
 }
 
-export default Times
+export default memo(Times)

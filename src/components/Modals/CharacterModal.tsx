@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import type { Character } from "../../types/Character";
-import type { RaceKey, Characteristics } from "../../types/dnd";
+import type { RaceKey, Characteristics, ClassKey } from "../../types/dnd";
 
 import Btn from "../UI/Btn/Btn";
 import Input from "../UI/Input/Input";
@@ -22,15 +22,18 @@ import { useCharacterForm } from "../../hooks/useCharacterForm";
 
 import styles from "./Modals.module.css";
 
+const THIEVES_TOOLS_KEY = 'thievesTools';
+
 interface Props {
     character: Character | null;
     onClose: () => void;
     onSave: (character: Character) => void;
+    disabled?: boolean;
 }
 
 type NumericField = "hits" | "speed" | "ac" | "initiative";
 
-function CharacterModal({ character, onClose, onSave }: Props) {
+function CharacterModal({ character, onClose, onSave, disabled }: Props) {
     const {
         formValues,
         handleChange,
@@ -49,6 +52,7 @@ function CharacterModal({ character, onClose, onSave }: Props) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        if (disabled) return;
 
         const charToSave = buildCharacter(character);
 
@@ -77,7 +81,7 @@ function CharacterModal({ character, onClose, onSave }: Props) {
         <form className={styles.form} onSubmit={handleSubmit} onClick={e => e.stopPropagation()}>
             <div className={styles.flex}>
                 <h2>{character ? "Редактирование" : "Создание"}</h2>
-                <Btn onClick={onClose} classBtn='close'/>
+                <Btn onClick={onClose} classBtn='close' disabled={disabled}/>
             </div>
 
             <Input
@@ -116,7 +120,7 @@ function CharacterModal({ character, onClose, onSave }: Props) {
                 )}
                 onChange={v =>
                     v &&
-                    handleChange("class", v as any) &&
+                    handleChange("class", v as ClassKey) &&
                     handleChange("subclass", undefined)
                 }
             />
@@ -194,21 +198,32 @@ function CharacterModal({ character, onClose, onSave }: Props) {
 
                     <CheckboxDropdown
                         label="Выбери навыки"
-                        options={formValues.skills.map(skill => {
-                            const skillData = skillsListSorted.find(s => s.key === skill);
+                        options={[
+                            ...formValues.skills.map(skill => {
+                                const skillData = skillsListSorted.find(s => s.key === skill);
 
-                            const isSelected = formValues.expertise.includes(skill);
-                            const isDisabled =
-                                formValues.expertise.length >= expertiseLimit && !isSelected;
+                                const isSelected = formValues.expertise.includes(skill);
+                                const isDisabled =
+                                    formValues.expertise.length >= expertiseLimit && !isSelected;
 
-                            return {
-                                value: skill,
-                                label: skillData
-                                    ? `${skillData.name} (${skillData.ability})`
-                                    : skill,
-                                disabled: isDisabled,
-                            };
-                        })}
+                                return {
+                                    value: skill,
+                                    label: skillData
+                                        ? `${skillData.name} (${skillData.ability})`
+                                        : skill,
+                                    disabled: isDisabled,
+                                };
+                            }),
+                            ...(formValues.tools.includes(THIEVES_TOOLS_KEY)
+                                ? [{
+                                    value: THIEVES_TOOLS_KEY,
+                                    label: 'Воровские инструменты',
+                                    disabled:
+                                        formValues.expertise.length >= expertiseLimit &&
+                                        !formValues.expertise.includes(THIEVES_TOOLS_KEY),
+                                }]
+                                : [])
+                        ]}
                         selected={formValues.expertise}
                         onChange={handleExpertiseChange}
                     />
@@ -243,11 +258,15 @@ function CharacterModal({ character, onClose, onSave }: Props) {
                 onChange={v => handleChange("tools", v)}
             />
 
+            {disabled && (
+                <p className={styles.formHint}>Восстанавливаем сессию. Сохранение персонажа скоро станет доступно.</p>
+            )}
+
             <div className={styles.modalButtons}>
-                <Btn type="submit" classBtn='btnColor'>
+                <Btn type="submit" classBtn='btnColor' disabled={disabled}>
                     {character ? "Сохранить" : "Создать"}
                 </Btn>
-                <Btn onClick={onClose}>Отмена</Btn>
+                <Btn onClick={onClose} disabled={disabled}>Отмена</Btn>
             </div>
         </form>
     );

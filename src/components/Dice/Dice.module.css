@@ -1,0 +1,12 @@
+.diceContainer {
+    height: calc(100% - 60px);
+    width: 100%;
+    margin: 0;
+}
+
+.dice {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    height: 100%;
+}

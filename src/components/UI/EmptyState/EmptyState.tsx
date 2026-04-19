@@ -15,6 +15,8 @@ type Props = {
 
     buttonText?: string;
     onButtonClick?: () => void;
+    buttonDisabled?: boolean;
+    statusText?: string;
 
     className?: string;
 
@@ -33,6 +35,8 @@ function EmptyState({
                         linkTo,
                         buttonText,
                         onButtonClick,
+                        buttonDisabled,
+                        statusText,
                         classIcon,
                         className
                     }: Props) {
@@ -64,7 +68,15 @@ function EmptyState({
 
             {/* BUTTON */}
             {buttonText && (
-                <Btn onClick={onButtonClick} classBtn="addHits"/>
+                <Btn
+                    onClick={onButtonClick}
+                    classBtn="addHits"
+                    disabled={buttonDisabled}
+                />
+            )}
+
+            {statusText && (
+                <p className={styles.statusText}>{statusText}</p>
             )}
         </div>
     );

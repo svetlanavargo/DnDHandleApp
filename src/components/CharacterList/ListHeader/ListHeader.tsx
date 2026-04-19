@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { classesData } from '../../../constants/classesData.ts';
 import { SubclassesData } from '../../../constants/subclassesData.ts';
 import { racesData } from '../../../constants/racesData.ts';
@@ -61,4 +62,4 @@ function ListHeader({
     );
 }
 
-export default ListHeader;
+export default memo(ListHeader);

@@ -14,3 +14,7 @@
     scrollbar-color: #2eb9a1 transparent;
     color: #FBFAFA;
 }
+
+.contentEditable:focus-visible {
+    outline: none;
+}

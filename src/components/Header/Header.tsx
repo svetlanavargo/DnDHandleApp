@@ -1,63 +1,110 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/auth/useAuth.ts';
+
 import Logo from '../UI/Logo/Logo.tsx';
+
 import Home from '../../../public/img/home.svg';
-import DiceImg from "../../../public/img/dnd.svg"
+import DiceImg from '../../../public/img/dnd.svg';
 import ListImg from '../../../public/img/User.svg';
-import Pouch from "../../../public/img/pouch.svg";
-import Spells from "../../../public/img/spells.svg";
+import Pouch from '../../../public/img/pouch.svg';
+import Spells from '../../../public/img/spells.svg';
 import Battle from '../../../public/img/battleUser.svg';
+import Login from '../../../public/img/login.svg';
+import Logout from '../../../public/img/logout.svg';
+
 import styles from './Header.module.css';
 
 interface HeaderProps {
-    setIsDiceOpen: () => void
+    setIsDiceOpen: () => void;
 }
 
-function Header({setIsDiceOpen}: HeaderProps) {
-    return(
+export default function Header({ setIsDiceOpen }: HeaderProps) {
+    const { user, logout } = useAuth();
+
+    const menuItems = [
+        {
+            label: 'Главная',
+            icon: Home,
+            to: '/'
+        },
+        {
+            label: 'Дайсы',
+            icon: DiceImg,
+            onClick: setIsDiceOpen
+        },
+        {
+            label: 'Персонажи',
+            icon: ListImg,
+            to: '/character_list'
+        },
+        {
+            label: 'Инвентарь',
+            icon: Pouch,
+            to: '/inventory'
+        },
+        {
+            label: 'Заклинания',
+            icon: Spells,
+            to: '/spells_list'
+        },
+        {
+            label: 'ДМ Трекер',
+            icon: Battle,
+            to: '/battle_tracker'
+        }
+    ];
+
+    function renderItem(item: {
+        label: string;
+        icon: string;
+        to?: string;
+        onClick?: () => void;
+    }) {
+        const content = (
+            <div className={styles.wrapperLink}>
+                <img className={styles.icon} src={item.icon} alt="" />
+                <p className={styles.menuText}>{item.label}</p>
+            </div>
+        );
+
+        if (item.to) {
+            return (
+                <Link key={item.label} to={item.to}>
+                    {content}
+                </Link>
+            );
+        }
+
+        return (
+            <div key={item.label} onClick={item.onClick}>
+                {content}
+            </div>
+        );
+    }
+
+    return (
         <div className={styles.header}>
             <div className={styles.logoWrapper}>
                 <Logo />
             </div>
+
             <div className={styles.linkContainer}>
-                <Link to="/">
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={Home} alt=""/>
-                        <p className={styles.menuText}>Главная</p>
+                {menuItems.map(renderItem)}
+
+                {user ? (
+                    <div onClick={logout} className={styles.wrapperLink}>
+                        <img className={styles.icon} src={Logout} alt="" />
+                        <p className={styles.menuText}>Выйти</p>
                     </div>
-                </Link>
-                <div onClick={setIsDiceOpen}>
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={DiceImg} alt=""/>
-                        <p className={styles.menuText}>Дайсы</p>
-                    </div>
-                </div>
-                <Link to="/character_list">
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={ListImg} alt=""/>
-                        <p className={styles.menuText}>Персонажи</p>
-                    </div>
-                </Link>
-                <Link to="/inventory">
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={Pouch} alt=""/>
-                        <p className={styles.menuText}>Инвентарь</p>
-                    </div>
-                </Link>
-                <Link to="/spells_list">
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={Spells} alt=""/>
-                        <p className={styles.menuText}>Заклинания</p>
-                    </div>
-                </Link>
-                <Link to="/battle_tracker">
-                    <div className={styles.wrapperLink}>
-                        <img className={styles.icon} src={Battle} alt=""/>
-                        <p className={styles.menuText}>ДМ Трекер</p>
-                    </div>
-                </Link>
+                ) : (
+                    <Link to="/login">
+                        <div className={styles.wrapperLink}>
+                            <img className={styles.icon} src={Login} alt="" />
+                            <p className={styles.menuText}>Войти</p>
+                        </div>
+                    </Link>
+                )}
             </div>
         </div>
-    )
+    );
 }
-
-export default Header

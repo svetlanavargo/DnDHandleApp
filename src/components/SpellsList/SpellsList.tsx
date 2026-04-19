@@ -1,5 +1,6 @@
 import { useContext, useMemo, useState } from 'react';
 import {classesData} from '../../constants/classesData.ts';
+import { useAuth } from '../../context/auth/useAuth.ts';
 import Tabs from '../UI/Tabs/Tabs.tsx';
 import SpellsMenu from './SpellsMenu/SpellsMenu.tsx';
 import SpellsListView from './SpellsListView/SpellsListView.tsx';
@@ -8,6 +9,7 @@ import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
 import SpellsDeleteCard from '../Modals/SpellsDeleteCard.tsx';
 import SpellsSettings from '../Modals/SpellsSettings.tsx';
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
+import Warning from '../UI/Warning/Warning.tsx';
 import { CharacterContext } from '../../context/CharacterContext.ts';
 import rawSpellsJson from '../../data/Spells/spells.json';
 
@@ -17,6 +19,7 @@ import styles from './SpellsList.module.css';
 type ModalType = "add" | "delete" | "settings" | null;
 
 function SpellsList() {
+    const { user } = useAuth();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
     const [activeTab, setActiveTab] = useState<SpellLevel>('0');
     const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
@@ -80,6 +83,7 @@ function SpellsList() {
 
     return (
         <div className={styles.spellsContainer}>
+            {!user && <Warning />}
             <div className={styles.spellsWrap}>
                 <SpellsMenu
                     onAdd={() => openModal("add")}

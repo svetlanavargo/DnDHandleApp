@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Currency } from '../../../types/dnd.ts';
 import CurrencyItem from '../CurrencyItem/CurrencyItem.tsx';
 import styles from './CurrencyList.module.css';
@@ -35,4 +36,4 @@ function CurrencyList({ currency, increment, decrement, onCalc }: Props) {
     );
 }
 
-export default CurrencyList;
+export default memo(CurrencyList);

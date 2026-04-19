@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Character } from "../types/Character";
 import type {
     ClassKey,
@@ -11,6 +11,8 @@ import type {
 
 import { classesData } from "../constants/classesData";
 import { spellSlotProgression } from "../constants/spellSlotProgression";
+
+const THIEVES_TOOLS_KEY = 'thievesTools';
 
 type FormValues = {
     name: string;
@@ -61,37 +63,45 @@ const defaultForm: FormValues = {
     fill: "fighter"
 };
 
-export function useCharacterForm(character: Character | null) {
-    const [formValues, setFormValues] = useState<FormValues>(defaultForm);
+function getInitialFormValues(character: Character | null): FormValues {
+    if (!character) {
+        return defaultForm;
+    }
 
-    // ================= INIT =================
-    useEffect(() => {
-        if (!character) {
-            setFormValues(defaultForm);
-            return;
+    return {
+        name: character.name,
+        race: character.race,
+        subrace: character.subrace,
+        class: character.class,
+        subclass: character.subclass,
+        speed: String(character.speed),
+        ac: String(character.ac),
+        hits: String(character.hits),
+        level: String(character.level),
+        initiative: String(character.initiative),
+        characteristics: { ...character.characteristics },
+        skills: [...character.skills],
+        expertise: [...character.expertise],
+        languages: [...character.languages],
+        weapons: [...character.weapons],
+        armors: [...character.armors],
+        tools: [...character.tools],
+        fill: character.fill
+    };
+}
+
+export function useCharacterForm(character: Character | null) {
+    const [formValues, setFormValues] = useState<FormValues>(() => getInitialFormValues(character));
+
+    function getAvailableExpertiseValues(values: FormValues) {
+        const available = new Set(values.skills);
+
+        if (values.tools.includes(THIEVES_TOOLS_KEY)) {
+            available.add(THIEVES_TOOLS_KEY);
         }
 
-        setFormValues({
-            name: character.name,
-            race: character.race,
-            subrace: character.subrace,
-            class: character.class,
-            subclass: character.subclass,
-            speed: String(character.speed),
-            ac: String(character.ac),
-            hits: String(character.hits),
-            level: String(character.level),
-            initiative: String(character.initiative),
-            characteristics: { ...character.characteristics },
-            skills: [...character.skills],
-            expertise: [...character.expertise],
-            languages: [...character.languages],
-            weapons: [...character.weapons],
-            armors: [...character.armors],
-            tools: [...character.tools],
-            fill: character.fill
-        });
-    }, [character]);
+        return available;
+    }
 
     // ================= HELPERS =================
     function getExpertiseLimit(level: number) {
@@ -196,11 +206,12 @@ export function useCharacterForm(character: Character | null) {
             const updated = { ...prev, [field]: value };
 
             const level = Number(updated.level);
+            const availableExpertise = getAvailableExpertiseValues(updated);
 
             return {
                 ...updated,
                 expertise: updated.expertise
-                    .filter(e => updated.skills.includes(e))
+                    .filter(e => availableExpertise.has(e))
                     .slice(0, getExpertiseLimit(level))
             };
         });
@@ -222,11 +233,12 @@ export function useCharacterForm(character: Character | null) {
     function handleExpertiseChange(values: string[]) {
         setFormValues(prev => {
             const limit = getExpertiseLimit(Number(prev.level));
+            const availableExpertise = getAvailableExpertiseValues(prev);
 
             return {
                 ...prev,
                 expertise: values
-                    .filter(v => prev.skills.includes(v))
+                    .filter(v => availableExpertise.has(v))
                     .slice(0, limit)
             };
         });

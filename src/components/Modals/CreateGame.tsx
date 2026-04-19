@@ -6,9 +6,10 @@ import styles from './Modals.module.css';
 interface CreateGameProps {
     onCreate: (name: string) => void;
     onClose: () => void;
+    disabled?: boolean;
 }
 
-function CreateGame({ onCreate, onClose }: CreateGameProps) {
+function CreateGame({ onCreate, onClose, disabled }: CreateGameProps) {
     const [name, setName] = useState('');
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -17,6 +18,8 @@ function CreateGame({ onCreate, onClose }: CreateGameProps) {
     }, []);
 
     const handleSubmit = () => {
+        if (disabled) return;
+
         const trimmed = name.trim();
 
         if (!trimmed) return;
@@ -37,15 +40,20 @@ function CreateGame({ onCreate, onClose }: CreateGameProps) {
                 placeholder="Например: Кампания в подземелье"
             />
 
+            {disabled && (
+                <p className={styles.formHint}>Восстанавливаем сессию. Создание игры скоро станет доступно.</p>
+            )}
+
             <div className={styles.modalButtons}>
                 <Btn
                     onClick={handleSubmit}
                     classBtn='btnColor'
+                    disabled={disabled}
                 >
                     Создать
                 </Btn>
 
-                <Btn onClick={onClose}>
+                <Btn onClick={onClose} disabled={disabled}>
                     Закрыть
                 </Btn>
             </div>

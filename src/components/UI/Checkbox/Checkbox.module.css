@@ -16,7 +16,7 @@
     width: 16px;
     height: 16px;
     border: 1px solid #2eb9a1;
-    border-radius: 50%;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,7 +28,7 @@
     width: 13px;
     height: 13px;
     background-color: #2eb9a1;
-    border-radius: 50px;
+    border-radius: 2px;
 }
 
 .disabled {

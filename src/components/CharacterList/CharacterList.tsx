@@ -1,10 +1,12 @@
 import { useList } from '../../hooks/useList';
+import { useAuth } from '../../context/auth/useAuth';
 
 import Tabs from '../UI/Tabs/Tabs';
+import Warning from '../UI/Warning/Warning';
 import List from './List/List';
 import Modal from '../Modals/Modal';
 import ChangeHitsModal from '../Modals/ChangeHitsModal';
-import DeleteCharacter from '../Modals/Delete';
+import Delete from '../Modals/Delete';
 import CharacterModal from '../Modals/CharacterModal';
 import EmptyState from '../UI/EmptyState/EmptyState';
 
@@ -12,6 +14,7 @@ import styles from './CharacterList.module.css';
 
 export default function CharacterList() {
     const list = useList();
+    const { loading, user } = useAuth();
 
     const {
         characters,
@@ -27,12 +30,15 @@ export default function CharacterList() {
 
     return (
         <div className={styles.characterListContainer}>
+            {!user && <Warning />}
             {!activeCharacter ? (
                 <EmptyState
                     image={<div className={styles.img} />}
                     title="Привет игрок!"
                     text="Для создания листа персонажа нажми"
                     buttonText="Создать"
+                    buttonDisabled={loading}
+                    statusText={loading ? 'Восстанавливаем сессию. Создание персонажей временно недоступно.' : undefined}
                     onButtonClick={() =>
                         modals.setCreatingCharacter(true)
                     }
@@ -46,6 +52,8 @@ export default function CharacterList() {
                         }))}
                         activeId={activeCharacterId ?? ''}
                         setActive={setActiveCharacterId}
+                        addDisabled={loading}
+                        addStatusText={loading ? 'Восстанавливаем сессию. Добавление персонажей скоро станет доступно.' : undefined}
                         onAdd={actions.handleAddCharacter}
                     />
 
@@ -89,7 +97,9 @@ export default function CharacterList() {
             {modals.creatingCharacter && (
                 <Modal isOpen size="small">
                     <CharacterModal
+                        key="new-character"
                         character={null}
+                        disabled={loading}
                         onClose={() =>
                             modals.setCreatingCharacter(false)
                         }
@@ -101,7 +111,9 @@ export default function CharacterList() {
             {modals.editingCharacter && (
                 <Modal isOpen size="small">
                     <CharacterModal
+                        key={modals.editingCharacter.id}
                         character={modals.editingCharacter}
+                        disabled={loading}
                         onClose={modals.closeEditModal}
                         onSave={actions.saveCharacter}
                     />
@@ -110,7 +122,7 @@ export default function CharacterList() {
 
             {notes.deleteNoteIndex !== null && (
                 <Modal isOpen size="small">
-                    <DeleteCharacter
+                    <Delete
                         name="заметку"
                         onClose={() =>
                             notes.setDeleteNoteIndex(null)
@@ -122,7 +134,7 @@ export default function CharacterList() {
 
             {modals.deletingCharacter && (
                 <Modal isOpen size="small">
-                    <DeleteCharacter
+                    <Delete
                         name={modals.deletingCharacter.name}
                         onClose={modals.closeDeleteModal}
                         remove={() =>

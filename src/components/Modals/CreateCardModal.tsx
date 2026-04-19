@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { HexColorPicker } from 'react-colorful';
 import type { Card } from '../../types/CardInBattleTracker.ts';
 import Btn from '../UI/Btn/Btn.tsx';
 import TextArea from '../UI/Input/TextArea.tsx';
 import Input from '../UI/Input/Input.tsx';
 import styles from './Modals.module.css';
-import Select from "../UI/Select/Select.tsx";
 import Checkbox from "../UI/Checkbox/Checkbox.tsx";
 
 interface CardModalProps {
@@ -21,7 +21,7 @@ type FormValues = {
     note: string;
     isPlayer: boolean;
     initiativeBonus: string;
-    color?: 'red' | 'blue' | 'green';
+    color?: string;
 };
 
 const defaultForm: FormValues = {
@@ -32,34 +32,34 @@ const defaultForm: FormValues = {
     note: '',
     isPlayer: false,
     initiativeBonus: '0',
-    color: undefined
+    color: '#2eb9a1'
 };
 
+function getInitialFormValues(initialValues?: Omit<Card, 'id'>): FormValues {
+    if (!initialValues) {
+        return defaultForm;
+    }
+
+    return {
+        name: initialValues.name,
+        maxHits: initialValues.maxHits.toString(),
+        currentHits: initialValues.currentHits.toString(),
+        ac: initialValues.ac.toString(),
+        note: initialValues.note ?? '',
+        isPlayer: initialValues.isPlayer,
+        initiativeBonus: initialValues.initiativeBonus.toString(),
+        color: initialValues.color ?? '#2eb9a1'
+    };
+}
+
 function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
-    const [formValues, setFormValues] = useState<FormValues>(defaultForm);
+    const [formValues, setFormValues] = useState<FormValues>(() => getInitialFormValues(initialValues));
     const firstInputRef = useRef<HTMLInputElement>(null);
 
-    // синхронизация формы при открытии модалки
     useEffect(() => {
-        if (initialValues) {
-            setFormValues({
-                name: initialValues.name,
-                maxHits: initialValues.maxHits.toString(),
-                currentHits: initialValues.currentHits.toString(),
-                ac: initialValues.ac.toString(),
-                note: initialValues.note ?? '',
-                isPlayer: initialValues.isPlayer,
-                initiativeBonus: initialValues.initiativeBonus.toString(),
-                color: initialValues.color
-            });
-        } else {
-            setFormValues(defaultForm);
-        }
-
-        // автофокус
         const id = setTimeout(() => firstInputRef.current?.focus(), 0);
         return () => clearTimeout(id);
-    }, [initialValues]);
+    }, []);
 
     const handleChange = <K extends keyof FormValues>(field: K, value: FormValues[K]) => {
         setFormValues(prev => {
@@ -68,6 +68,10 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
             // если снимаем флажок игрока, сбрасываем цвет
             if (field === 'isPlayer' && value === false) {
                 updated.color = undefined;
+            }
+
+            if (field === 'isPlayer' && value === true && !updated.color) {
+                updated.color = '#2eb9a1';
             }
 
             return updated;
@@ -194,17 +198,28 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
                 )}
 
                 {formValues.isPlayer && (
-                    <Select
-                        label="Цвет игрока"
-                        value={formValues.color}
-                        placeholder="Выбрать цвет"
-                        options={{
-                            red: "🔴",
-                            blue: "🔵",
-                            green: "🟢"
-                        }}
-                        onChange={(value) => handleChange('color', value as 'red' | 'blue' | 'green')}
-                    />
+                    <div className={styles.colorPickerBlock}>
+                        <p className={styles.formHint}>Цвет карточки игрока</p>
+                        <div className={styles.colorPickerPreviewRow}>
+                            <div
+                                className={styles.colorPreview}
+                                style={{ backgroundColor: formValues.color || '#2eb9a1' }}
+                            />
+                            <Input
+                                type="text"
+                                value={formValues.color || '#2eb9a1'}
+                                onChange={(e) => handleChange('color', e.target.value)}
+                            >
+                                HEX цвет:
+                            </Input>
+                        </div>
+                        <div className={styles.colorPickerWrapper}>
+                            <HexColorPicker
+                                color={formValues.color || '#2eb9a1'}
+                                onChange={(value) => handleChange('color', value)}
+                            />
+                        </div>
+                    </div>
                 )}
 
                 <TextArea value={formValues.note}

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from './Spells.module.css';
 
 interface SpellsInfo {
@@ -31,4 +32,4 @@ function SpellsInfo({ability, spellSaveDC, spellAttack}: SpellsInfo) {
     )
 }
 
-export default SpellsInfo;
+export default memo(SpellsInfo);

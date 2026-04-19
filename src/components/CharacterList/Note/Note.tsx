@@ -1,7 +1,7 @@
+import { memo, useCallback, useMemo } from 'react';
 import type { Character } from '../../../types/Character.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Note.module.css';
-import React from "react";
 
 interface NoteProps {
     character: Character;
@@ -14,7 +14,7 @@ interface NoteProps {
     setActiveNote: (index: number) => void;
 }
 
-export default function Note({
+function Note({
                                  character,
                                  updateCharacter,
                                  isOpen,
@@ -25,27 +25,34 @@ export default function Note({
                                  setActiveNote
                              }: NoteProps) {
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const notes = useMemo(() => character.note || [], [character.note]);
+
+    const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newNotes = [...(character.note || [])];
         newNotes[activeIndex] = e.target.value;
         updateCharacter({ ...character, note: newNotes });
-    };
+    }, [character, activeIndex, updateCharacter]);
 
-    const getTabName = (note: string) => {
-        const firstWord = note.trim().split(/\s+/)[0];
-        return firstWord || 'Новая';
-    };
+    const getTabName = useCallback((note: string) => {
+        const firstLine = note.trim().split(/\r?\n/)[0];
+        return firstLine || 'Новая';
+    }, []);
+
+    const activeNote = useMemo(
+        () => notes[activeIndex] || '',
+        [notes, activeIndex]
+    );
 
     return (
         <div className={styles.noteContainer}>
             <div className={styles.toggleBtn} onClick={toggleOpen}>
-                <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>▼</span>
+                <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}></span>
             </div>
 
             <div className={`${styles.textareaWrapper} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.tabsWrapper}>
                     <div className={styles.tabsScroll}>
-                        {(character.note || []).map((note, i) => (
+                        {notes.map((note, i) => (
                             <div
                                 key={i}
                                 className={`${styles.tab} ${i === activeIndex ? styles.activeTab : ''}`}
@@ -66,7 +73,7 @@ export default function Note({
                     </div>
                     <textarea
                         className={styles.contentEditable}
-                        value={(character.note && character.note[activeIndex]) || ''}
+                        value={activeNote}
                         onChange={handleChange}
                         placeholder="Заметка..."
                     />
@@ -75,3 +82,5 @@ export default function Note({
         </div>
     );
 }
+
+export default memo(Note);

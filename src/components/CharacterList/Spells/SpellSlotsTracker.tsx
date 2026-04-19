@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import type { Character } from "../../../types/Character.ts";
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Spells.module.css';
@@ -78,4 +78,4 @@ function SpellSlotsTracker({ character, updateCharacter }: Props) {
     )
 }
 
-export default SpellSlotsTracker;
+export default memo(SpellSlotsTracker);

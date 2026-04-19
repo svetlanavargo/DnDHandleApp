@@ -7,5 +7,5 @@ export interface Card {
     note?: string,
     isPlayer: boolean,
     initiativeBonus: number,
-    color?: 'red' | 'blue' | 'green' | undefined
+    color?: string | undefined
 }

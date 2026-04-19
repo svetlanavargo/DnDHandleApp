@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { getProficiencyBonus } from "../../../utils/getProficiencyBonus.ts";
 import { getSkillModifier } from "../../../utils/getSkillModifier.ts";
 import type { Characteristics } from "../../../types/dnd.ts";
@@ -10,6 +11,7 @@ interface InfoFieldProps {
     ac: number;
     characteristics: Characteristics;
     proficientSkills: string[];
+    expertise: string[];
 }
 
 function InfoField({
@@ -18,18 +20,18 @@ function InfoField({
                        level,
                        ac,
                        characteristics,
-                       proficientSkills
+                       proficientSkills,
+                       expertise
                    }: InfoFieldProps) {
-    const proficiencyBonus = getProficiencyBonus(level);
-
-    const perception = getSkillModifier(
+    const proficiencyBonus = useMemo(() => getProficiencyBonus(level), [level]);
+    const perception = useMemo(() => getSkillModifier(
         "Perception",
         characteristics,
         level,
         proficientSkills
-    );
-
-    const PassPerception = 10 + perception
+    ), [characteristics, level, proficientSkills]);
+    const hasPerceptionExpertise = expertise.includes('Perception');
+    const PassPerception = 10 + perception + (hasPerceptionExpertise ? proficiencyBonus : 0)
 
     return (
         <div className={styles.infoFieldContainer}>
@@ -71,4 +73,4 @@ function InfoField({
     );
 }
 
-export default InfoField;
+export default memo(InfoField);

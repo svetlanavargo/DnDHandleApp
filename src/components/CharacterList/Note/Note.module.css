@@ -19,12 +19,17 @@
 }
 
 .arrow {
+    margin: 3px 0;
     display: inline-block;
     transition: transform 0.3s ease;
+    border: solid #2eb9a1;
+    border-width: 0 2px 2px 0;
+    padding: 3px;
+    transform: rotate(45deg);
 }
 
 .arrow.open {
-    transform: rotate(180deg);
+    transform: rotate(-135deg);
 }
 
 .textareaWrapper {
@@ -129,4 +134,9 @@
     scrollbar-width: thin;
     scrollbar-color: #2eb9a1 transparent;
     margin-top: -2px;
+    outline: none;
+}
+
+.contentEditable:focus-visible {
+    outline: none;
 }

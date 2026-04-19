@@ -1,10 +1,83 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useReducer, useState} from "react";
 import type { Condition } from '../types/dnd.ts';
 import type {Card} from "../types/CardInBattleTracker.ts";
 
 export interface BattleCard extends Card {
     initiative: number;
     conditions?: Condition[];
+}
+
+type TurnState = {
+    turnCounter: number;
+    currentTurnIndex: number;
+    round: number;
+    timer: number;
+};
+
+type BattleState = {
+    battleCards: BattleCard[];
+    isBattle: boolean;
+    turnState: TurnState;
+    expiredConditions: string[];
+};
+
+const initialTurnState: TurnState = {
+    turnCounter: 0,
+    currentTurnIndex: 0,
+    round: 0,
+    timer: 0
+};
+
+const initialBattleState: BattleState = {
+    battleCards: [],
+    isBattle: false,
+    turnState: initialTurnState,
+    expiredConditions: []
+};
+
+type BattleAction =
+    | { type: 'reset' }
+    | { type: 'setBattleCards'; value: React.SetStateAction<BattleCard[]> }
+    | { type: 'setIsBattle'; value: React.SetStateAction<boolean> }
+    | { type: 'setTurnState'; value: React.SetStateAction<TurnState> }
+    | { type: 'setExpiredConditions'; value: React.SetStateAction<string[]> };
+
+function resolveStateAction<T>(
+    current: T,
+    value: React.SetStateAction<T>
+): T {
+    return typeof value === 'function'
+        ? (value as (prevState: T) => T)(current)
+        : value;
+}
+
+function battleReducer(state: BattleState, action: BattleAction): BattleState {
+    switch (action.type) {
+        case 'reset':
+            return initialBattleState;
+        case 'setBattleCards':
+            return {
+                ...state,
+                battleCards: resolveStateAction(state.battleCards, action.value)
+            };
+        case 'setIsBattle':
+            return {
+                ...state,
+                isBattle: resolveStateAction(state.isBattle, action.value)
+            };
+        case 'setTurnState':
+            return {
+                ...state,
+                turnState: resolveStateAction(state.turnState, action.value)
+            };
+        case 'setExpiredConditions':
+            return {
+                ...state,
+                expiredConditions: resolveStateAction(state.expiredConditions, action.value)
+            };
+        default:
+            return state;
+    }
 }
 
 export const useBattle = (
@@ -20,32 +93,35 @@ export const useBattle = (
         onConfirm: (value: number) => void;
     }) => void
 ) => {
-    const [battleCards, setBattleCards] = useState<BattleCard[]>([]);
-    const [isBattle, setIsBattle] = useState(false);
-
-    const [turnState, setTurnState] = useState({
-        turnCounter: 0,
-        currentTurnIndex: 0,
-        round: 0,
-        timer: 0
-    });
-
+    const [battleState, dispatch] = useReducer(battleReducer, initialBattleState);
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
     const [noteDraft, setNoteDraft] = useState('');
+    const {
+        battleCards,
+        isBattle,
+        turnState,
+        expiredConditions
+    } = battleState;
 
-    const [expiredConditions, setExpiredConditions] = useState<string[]>([]);
+    const setBattleCards = useCallback((value: React.SetStateAction<BattleCard[]>) => {
+        dispatch({ type: 'setBattleCards', value });
+    }, []);
+
+    const setIsBattle = useCallback((value: React.SetStateAction<boolean>) => {
+        dispatch({ type: 'setIsBattle', value });
+    }, []);
+
+    const setTurnState = useCallback((value: React.SetStateAction<TurnState>) => {
+        dispatch({ type: 'setTurnState', value });
+    }, []);
+
+    const setExpiredConditions = useCallback((value: React.SetStateAction<string[]>) => {
+        dispatch({ type: 'setExpiredConditions', value });
+    }, []);
 
     // 🔥 СБРОС ПРИ СМЕНЕ ИГРЫ
     useEffect(() => {
-        setBattleCards([]);
-        setIsBattle(false);
-        setTurnState({
-            turnCounter: 0,
-            currentTurnIndex: 0,
-            round: 0,
-            timer: 0
-        });
-        setExpiredConditions([]);
+        dispatch({ type: 'reset' });
     }, [gameId]);
 
     const startEditNote = (id: string, note: string) => {
@@ -62,7 +138,7 @@ export const useBattle = (
         setEditingNoteId(null);
     };
 
-    const syncBattleHitsToCards = (battleList: BattleCard[]) => {
+    const syncBattleHitsToCards = useCallback((battleList: BattleCard[]) => {
         setCards(prevCards =>
             prevCards.map(card => {
                 const battleCard = battleList.find(b => b.id === card.id);
@@ -75,7 +151,7 @@ export const useBattle = (
                 };
             })
         );
-    };
+    }, [setCards]);
 
     const rollInitiative = (card: Card): Promise<number> => {
         return new Promise((resolve) => {
@@ -273,7 +349,7 @@ export const useBattle = (
         }, 300);
 
         return () => clearTimeout(timer);
-    }, [battleCards]);
+    }, [battleCards, syncBattleHitsToCards, setBattleCards]);
 
     const addHits = (id: string) => {
         const card = battleCards.find(c => c.id === id);

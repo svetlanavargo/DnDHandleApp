@@ -20,3 +20,10 @@
     margin: 12px 0;
     text-align: center;
 }
+
+.statusText {
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: #b8b8b8;
+}

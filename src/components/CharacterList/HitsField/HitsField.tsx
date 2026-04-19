@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import {classesData} from '../../../constants/classesData.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './HitsField.module.css';
@@ -88,4 +88,4 @@ function HitsField({
     );
 }
 
-export default HitsField;
+export default memo(HitsField);

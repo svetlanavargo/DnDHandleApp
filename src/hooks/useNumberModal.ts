@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 type ConfirmCallback = (value: number) => void;
 
 export const useNumberModal = () => {
@@ -12,7 +12,7 @@ export const useNumberModal = () => {
 
     const [modalKey, setModalKey] = useState(0);
 
-    const openModal = ({
+    const openModal = useCallback(({
                            title,
                            name,
                            defaultValue = 0,
@@ -35,11 +35,11 @@ export const useNumberModal = () => {
         setOnConfirm(() => onConfirm);
         setModalKey(prev => prev + 1);
         setIsOpen(true);
-    };
+    }, []);
 
-    const closeModal = () => setIsOpen(false);
+    const closeModal = useCallback(() => setIsOpen(false), []);
 
-    return {
+    return useMemo(() => ({
         isOpen,
         title,
         name,
@@ -50,5 +50,5 @@ export const useNumberModal = () => {
         modalKey,
         openModal,
         closeModal,
-    };
+    }), [isOpen, title, name, defaultValue, min, max, onConfirm, modalKey, openModal, closeModal]);
 };

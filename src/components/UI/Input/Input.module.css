@@ -8,13 +8,15 @@
     width: auto;
 }
 
-.label .input:focus-visible {
+.label .input:focus-visible,
+.label textarea:focus-visible {
     box-shadow: none;
     outline: none;
     border: 1px solid #2eb9a1;
 }
 
-.label .input {
+.label .input,
+.label textarea {
     height: 44px;
     padding: 6px 12px;
     border: 1px solid #3D3D3D;
@@ -26,21 +28,19 @@
     color: #FBFAFA;
 }
 
-textarea {
-    width: 100%;
-    box-sizing: border-box;
-    color: #FBFAFA;
+.label textarea {
+    min-height: 92px;
+    height: auto;
+    resize: vertical;
 }
 
-textarea:focus-visible {
+.label textarea:focus-visible,
+.input:focus {
     outline: none;
     box-shadow: none;
 }
 
-.input:focus {
-    outline: none;
-}
-
+.label textarea,
 .input {
     -webkit-tap-highlight-color: transparent;
 }

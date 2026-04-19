@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './CurrencyItem.module.css';
 
@@ -23,4 +24,4 @@ function CurrencyItem({ value, type, increment, decrement, onCalc }: Props) {
     )
 }
 
-export default CurrencyItem
+export default memo(CurrencyItem)

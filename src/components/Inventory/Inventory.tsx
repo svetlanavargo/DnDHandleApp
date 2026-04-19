@@ -1,5 +1,6 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import { CharacterContext } from '../../context/CharacterContext';
+import { useAuth } from '../../context/auth/useAuth.ts';
 import type { Currency } from '../../types/dnd.ts';
 import type { Character as CharacterType } from '../../types/Character.ts'
 import InventoryList from './InventoryList/InventoryList.tsx';
@@ -8,9 +9,11 @@ import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
+import Warning from '../UI/Warning/Warning.tsx';
 import styles from './Inventory.module.css';
 
 function Inventory() {
+    const { user } = useAuth();
     const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
 
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
@@ -34,34 +37,34 @@ function Inventory() {
         });
     }, [activeCharacter]);
 
-    const updateInventory = (updateFn: (inv: CharacterType['inventory']) => CharacterType['inventory']) => {
+    const updateInventory = useCallback((updateFn: (inv: CharacterType['inventory']) => CharacterType['inventory']) => {
         if (!activeCharacter) return;
         const updatedInventory = updateFn(activeCharacter.inventory);
         updateCharacter({ ...activeCharacter, inventory: updatedInventory });
-    };
+    }, [activeCharacter, updateCharacter]);
 
-    const handleTextChange = (newText: string) => {
+    const handleTextChange = useCallback((newText: string) => {
         setText(newText);
         updateInventory(inv => ({ ...inv, note: newText }));
-    };
+    }, [updateInventory]);
 
-    const increment = (key: keyof Currency) => {
+    const increment = useCallback((key: keyof Currency) => {
         updateInventory(inv => {
             const updated = { ...inv.currency, [key]: inv.currency[key] + 1 };
             setCurrency(updated);
             return { ...inv, currency: updated };
         });
-    };
+    }, [updateInventory]);
 
-    const decrement = (key: keyof Currency) => {
+    const decrement = useCallback((key: keyof Currency) => {
         updateInventory(inv => {
             const updated = { ...inv.currency, [key]: Math.max(0, inv.currency[key] - 1) };
             setCurrency(updated);
             return { ...inv, currency: updated };
         });
-    };
+    }, [updateInventory]);
 
-    const onCalc = (key: keyof Currency) => {
+    const onCalc = useCallback((key: keyof Currency) => {
         numberModal.openModal({
             title: `Изменение ${key}, введи +-`,
             max: 100000,
@@ -73,7 +76,7 @@ function Inventory() {
                 });
             }
         });
-    };
+    }, [numberModal, updateInventory]);
 
     if (!activeCharacter) {
         return <EmptyState
@@ -86,6 +89,7 @@ function Inventory() {
 
     return (
         <div className={styles.inventoryContainer}>
+            {!user && <Warning />}
             <div className={styles.inventory}>
                 <InventoryList
                     text={text}

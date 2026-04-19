@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import type { Card } from '../../../types/CardInBattleTracker.ts';
 import CardItem from '../Card/CardItem.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
@@ -13,6 +13,7 @@ interface MainProps {
     battleCards: BattleCard[];
     onEdit: (id: string) => void;
     onDelete: (id: string) => void;
+    onCopy: (id: string) => void;
     isBattle: boolean;
     addUserToBattle: (id: string) => void;
     resurrectCard: (id: string) => void;
@@ -28,6 +29,7 @@ function CardsList({
                        battleCards,
                        onEdit,
                        onDelete,
+                       onCopy,
                        isBattle,
                        addUserToBattle,
                        resurrectCard,
@@ -40,20 +42,30 @@ function CardsList({
 
     const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-    const activeIds = battleCards.map(card => card.id);
-    const availableCards = cards.filter(card => !activeIds.includes(card.id));
-    const aliveCards = availableCards.filter(card => card.currentHits > 0);
-    const deadCards = availableCards.filter(card => card.currentHits <= 0);
-
-    const hasInjuredAliveCards = aliveCards.some(
-        card => card.currentHits < card.maxHits
+    const activeIds = useMemo(() => new Set(battleCards.map(card => card.id)), [battleCards]);
+    const availableCards = useMemo(
+        () => cards.filter(card => !activeIds.has(card.id)),
+        [cards, activeIds]
+    );
+    const aliveCards = useMemo(
+        () => availableCards.filter(card => card.currentHits > 0),
+        [availableCards]
+    );
+    const deadCards = useMemo(
+        () => availableCards.filter(card => card.currentHits <= 0),
+        [availableCards]
     );
 
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStartX(e.touches[0].clientX);
-    };
+    const hasInjuredAliveCards = useMemo(
+        () => aliveCards.some(card => card.currentHits < card.maxHits),
+        [aliveCards]
+    );
 
-    const handleTouchEnd = (e: React.TouchEvent) => {
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+        setTouchStartX(e.touches[0].clientX);
+    }, []);
+
+    const handleTouchEnd = useCallback((e: React.TouchEvent) => {
         if (touchStartX === null) return;
 
         const diff = e.changedTouches[0].clientX - touchStartX;
@@ -64,9 +76,9 @@ function CardsList({
         }
 
         setTouchStartX(null);
-    };
+    }, [touchStartX, onClose]);
 
-    const renderCards = (cardsToRender: Card[]) => (
+    const renderCards = useCallback((cardsToRender: Card[]) => (
         <div className={styles.cardsWrapper}>
             {cardsToRender.map(card => (
                 <CardItem
@@ -75,13 +87,14 @@ function CardsList({
                     mode="list"
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    onCopy={onCopy}
                     isBattle={isBattle}
                     addUserToBattle={addUserToBattle}
                     resurrectCard={resurrectCard}
                 />
             ))}
         </div>
-    );
+    ), [onEdit, onDelete, onCopy, isBattle, addUserToBattle, resurrectCard]);
 
     return (
         <>
@@ -96,10 +109,15 @@ function CardsList({
                 onTouchEnd={handleTouchEnd}
             >
                 <div className={styles.actions}>
-                    {hasInjuredAliveCards && (
-                        <Btn onClick={onLongRest} classBtn="reset" />
-                    )}
-                    <Btn onClick={onAddCard} classBtn="addCard" />
+                    <div className={styles.closeWrapper}>
+                        <Btn onClick={onClose} classBtn="close" />
+                    </div>
+                    <div className={styles.flex}>
+                        {hasInjuredAliveCards && (
+                            <Btn onClick={onLongRest} classBtn="reset" />
+                        )}
+                        <Btn onClick={onAddCard} classBtn="addCard" />
+                    </div>
                 </div>
 
                 {cards.length > 0 && (
@@ -124,4 +142,4 @@ function CardsList({
     );
 }
 
-export default CardsList;
+export default memo(CardsList);

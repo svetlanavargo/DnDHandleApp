@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { TextLanguages } from '../../../constants/TextLanguages.ts';
 import { TextArmors } from '../../../constants/TextArmors.ts';
 import { TextWeapons } from '../../../constants/TextWeapons.ts';
@@ -8,10 +9,15 @@ interface LanguageProps {
     lang: string[],
     armors: string[],
     weapons: string[],
-    tools: string[]
+    tools: string[],
+    expertise: string[]
 }
 
-function DomainField({ lang, armors, tools, weapons }: LanguageProps) {
+const THIEVES_TOOLS_KEY = 'thievesTools';
+
+function DomainField({ lang, armors, tools, weapons, expertise }: LanguageProps) {
+    const hasThievesToolsExpertise = expertise.includes(THIEVES_TOOLS_KEY);
+
     return (
         <div className={styles.domainFieldContainer}>
             <div className={styles.domainFieldWrapper}>
@@ -44,8 +50,14 @@ function DomainField({ lang, armors, tools, weapons }: LanguageProps) {
                     <div className={styles.lang}>
                         <p className={styles.header}>Инструменты</p>
                         {tools.map(el => (
-                            <div key={el} className={styles.text}>
-                                {TextTools[el]}
+                            <div
+                                key={el}
+                                className={`${styles.text} ${el === THIEVES_TOOLS_KEY && hasThievesToolsExpertise ? styles.textWithExpertise : ''}`}
+                            >
+                                <span>{TextTools[el]}</span>
+                                {el === THIEVES_TOOLS_KEY && hasThievesToolsExpertise && (
+                                    <span className={styles.expertiseImg} />
+                                )}
                             </div>
                         ))}
                     </div>
@@ -55,4 +67,4 @@ function DomainField({ lang, armors, tools, weapons }: LanguageProps) {
     );
 }
 
-export default DomainField;
+export default memo(DomainField);

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import type { Card } from '../../../types/CardInBattleTracker.ts';
 import type { Condition } from '../../../types/dnd.ts';
 import CardItem from '../Card/CardItem.tsx';
@@ -81,4 +81,4 @@ function BattleField(
     )
 }
 
-export default BattleField
+export default memo(BattleField)

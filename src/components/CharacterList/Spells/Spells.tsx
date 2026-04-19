@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import type { Character } from '../../../types/Character.ts';
 import type { ClassKey } from '../../../types/dnd.ts';
 import { getSpellcastingInfo } from '../../../utils/getSpellcastingInfo.ts';
@@ -14,12 +15,12 @@ function Spells({ character, updateCharacter }: SpellsProps) {
     const classKey: ClassKey = character.class;
     const level: number = character.level;
 
-    const info = getSpellcastingInfo(
+    const info = useMemo(() => getSpellcastingInfo(
         classKey,
         level,
         character.characteristics,
         character.subclass
-    );
+    ), [classKey, level, character.characteristics, character.subclass]);
 
     if (!info) return null;
 
@@ -39,4 +40,4 @@ function Spells({ character, updateCharacter }: SpellsProps) {
     );
 }
 
-export default Spells;
+export default memo(Spells);

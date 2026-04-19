@@ -1,0 +1,147 @@
+.formToggleContainer {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    gap: 20px;
+}
+
+.togglePanel {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)),
+        #1F1F1F;
+}
+
+.toggleOption {
+    display: grid;
+    gap: 8px;
+    text-align: left;
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid #3D3D3D;
+    background: #242424;
+    color: #FBFAFA;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.toggleOption:hover {
+    border-color: #5A5A5A;
+}
+
+.toggleOptionActive {
+    border-color: #2eb9a1;
+    background:
+        linear-gradient(180deg, rgba(46, 185, 161, 0.18), rgba(46, 185, 161, 0.05)),
+        #242424;
+}
+
+.toggleBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-width: 76px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: #3D3D3D;
+    color: #D9D9D9;
+}
+
+.toggleOptionActive .toggleBadge {
+    background: #2eb9a1;
+    color: #1F1F1F;
+}
+
+.toggleTitle {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.toggleDescription {
+    color: #B8B8B8;
+    line-height: 1.4;
+}
+
+.formCard {
+    border-radius: 20px;
+    padding: 24px;
+    background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)),
+            #1F1F1F;
+}
+
+.formHeader {
+    margin-bottom: 20px;
+}
+
+.formTitle {
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: #FBFAFA;
+}
+
+.formDescription {
+    margin: 0;
+    color: #B8B8B8;
+}
+
+.successMessage {
+    margin: 0 0 20px;
+    color: #2eb9a1;
+}
+
+.submitError {
+    margin: 0 0 20px;
+    color: #FF8A8A;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.fieldsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.errorText {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #FF8A8A;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.submitRow {
+    display: flex;
+    justify-content: flex-start;
+}
+
+@media (min-width: 768px) {
+    .togglePanel,
+    .fieldsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

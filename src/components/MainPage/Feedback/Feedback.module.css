@@ -1,0 +1,12 @@
+.feedbackContainer {
+    background-color: #1F1F1F;
+}
+
+.feedbackWrapper {
+    padding: 50px 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

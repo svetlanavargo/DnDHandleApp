@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import type { Characteristics, Ability } from '../../../types/dnd.ts';
 import { getProficiencyBonus } from '../../../utils/getProficiencyBonus.ts';
 import { getAbilityModifier } from '../../../utils/getAbilityModifier.ts';
@@ -11,10 +12,11 @@ interface CharacteristicsFieldProps {
 }
 
 function CharacteristicsField({ characteristics, level, charClass }: CharacteristicsFieldProps) {
-    const savingThrows =
-        classesData[charClass as keyof typeof classesData]?.savingThrows ?? [];
-
-    const proficiencyBonus = getProficiencyBonus(level);
+    const savingThrows = useMemo(
+        () => classesData[charClass as keyof typeof classesData]?.savingThrows ?? [],
+        [charClass]
+    );
+    const proficiencyBonus = useMemo(() => getProficiencyBonus(level), [level]);
 
     return (
         <div className={styles.characteristicsFieldContainer}>
@@ -45,4 +47,4 @@ function CharacteristicsField({ characteristics, level, charClass }: Characteris
     );
 }
 
-export default CharacteristicsField;
+export default memo(CharacteristicsField);

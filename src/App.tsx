@@ -1,32 +1,42 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SEO_LANDING } from './constants/SEO_LANDING.ts';
+import { AppProvider } from './context/AppProvider.tsx';
+import { useAuth } from './context/auth/useAuth.ts';
+
 import NotFound from './components/NotFound/NotFound.tsx';
-import CharacterProvider from './context/CharacterProvider.tsx';
-import { GameProvider } from './context/GameProvider.tsx';
+
+import AuthPage from './components/AuthPage/AuthPage.tsx';
+
 import Header from './components/Header/Header.tsx';
-import DiceModal from './components/DiceModal/DiceModal.tsx';
 import MainPage from './components/MainPage/MainPage.tsx';
-import Dice from './components/DiceModal/Dice/Dice.tsx';
 import CharacterList from './components/CharacterList/CharacterList.tsx';
 import BattleTracker from './components/BattleTracker/BattleTracker.tsx';
 import SpellsList from './components/SpellsList/SpellsList.tsx';
 import Inventory from './components/Inventory/Inventory.tsx';
-import YandexMetrika from "./utils/YandexMetrika.tsx";
+
+import PortalModal from './components/Modals/PortalModal/PortalModal.tsx';
+import Dice from './components/Dice/Dice.tsx';
+import SessionLoading from './components/SessionLoading/SessionLoading.tsx';
+
+import YandexMetrika from './utils/YandexMetrika.tsx';
+
 import './App.css';
 
 function App() {
     const [isDiceOpen, setIsDiceOpen] = useState(false);
-    console.log('=== localStorage dump ===');
+    const { loading } = useAuth();
 
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (!key) continue;
-
-        const value = localStorage.getItem(key);
-
-        console.log(key, value);
+    if (loading) {
+        return (
+            <>
+                <Helmet>
+                    <title>{SEO_LANDING.title}</title>
+                </Helmet>
+                <SessionLoading />
+            </>
+        );
     }
 
     return (
@@ -50,53 +60,57 @@ function App() {
                 <meta name="twitter:description" content={SEO_LANDING.description} />
                 <meta name="twitter:image" content={SEO_LANDING.image} />
             </Helmet>
-            <BrowserRouter>
-                <GameProvider>
-                    <Header setIsDiceOpen={() => setIsDiceOpen(true)} />
-
-                    <Routes>
-                        <Route path="/battle_tracker" element={<BattleTracker />} />
-                        <Route path="/dice" element={<Dice />} />
-                        <Route path="/" element={<MainPage />} />
-
-                        <Route
-                            path="/character_list/*"
-                            element={
-                                <CharacterProvider>
-                                    <CharacterList />
-                                </CharacterProvider>
-                            }
-                        />
-
-                        <Route
-                            path="/spells_list/*"
-                            element={
-                                <CharacterProvider>
-                                    <SpellsList />
-                                </CharacterProvider>
-                            }
-                        />
-
-                        <Route
-                            path="/inventory/*"
-                            element={
-                                <CharacterProvider>
-                                    <Inventory />
-                                </CharacterProvider>
-                            }
-                        />
-
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </GameProvider>
-
-                <DiceModal
-                    isOpen={isDiceOpen}
-                    onClose={() => setIsDiceOpen(false)}
+            <AppProvider>
+                <Header
+                    setIsDiceOpen={() => setIsDiceOpen(true)}
                 />
 
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<MainPage />}
+                    />
+                    <Route
+                        path="/battle_tracker"
+                        element={<BattleTracker />}
+                    />
+
+                    <Route
+                        path="/character_list/*"
+                        element={<CharacterList />}
+                    />
+
+                    <Route
+                        path="/spells_list/*"
+                        element={<SpellsList />}
+                    />
+
+                    <Route
+                        path="/inventory/*"
+                        element={<Inventory />}
+                    />
+
+                    <Route
+                        path="/register"
+                        element={<AuthPage pageType="register" />}
+                    />
+
+                    <Route
+                        path="/login"
+                        element={<AuthPage pageType="login" />}
+                    />
+
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+
+                <PortalModal
+                    isOpen={isDiceOpen}
+                    onClose={() => setIsDiceOpen(false)}
+                >
+                    <Dice/>
+                </PortalModal>
                 <YandexMetrika id={108149485}/>
-            </BrowserRouter>
+            </AppProvider>
         </>
     );
 }

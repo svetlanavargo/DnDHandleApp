@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './Modals.module.css';
 import type { Character } from '../../types/Character.ts';
 import Btn from '../UI/Btn/Btn.tsx';
@@ -40,14 +40,6 @@ function SpellsSettings({
         character?.fill || "sorcerer"
     );
 
-    // синхронизация если character поменялся
-    useEffect(() => {
-        if (character?.fill) {
-            setActiveDesign(character.fill);
-        }
-    }, [character?.fill]);
-
-    // список [key, img]
     const designList = useMemo(() => {
         return Object.entries(design);
     }, []);

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from './InventoryList.module.css';
 
 interface InventoryListProps {
@@ -17,4 +18,4 @@ function InventoryList({ text, setText }: InventoryListProps) {
     );
 }
 
-export default InventoryList;
+export default memo(InventoryList);

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Character } from '../../../types/Character.ts';
 import type { ClassKey, RaceKey } from '../../../types/dnd';
 import InfoField from '../InfoField/InfoField.tsx';
@@ -28,7 +29,7 @@ interface ListProps {
     setActiveNote: (index: number) => void;
 }
 
-export default function List({
+function List({
                                  activeCharacter,
                                  removeCharacter,
                                  openEditModal,
@@ -79,6 +80,7 @@ export default function List({
                     ac={activeCharacter.ac}
                     characteristics={activeCharacter.characteristics}
                     proficientSkills={activeCharacter.skills}
+                    expertise={activeCharacter.expertise}
                 />
 
                 <HitsField
@@ -110,6 +112,7 @@ export default function List({
                     armors={activeCharacter.armors}
                     weapons={activeCharacter.weapons}
                     tools={activeCharacter.tools}
+                    expertise={activeCharacter.expertise}
                 />
 
                 <Spells
@@ -124,3 +127,5 @@ export default function List({
         </div>
     );
 }
+
+export default memo(List);

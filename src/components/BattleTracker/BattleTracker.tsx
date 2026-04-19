@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useBattle } from '../../hooks/useBattle.ts';
 import { useGame } from '../../hooks/useGame.ts';
 import { useNumberModal } from '../../hooks/useNumberModal.ts';
+import { useAuth } from '../../context/auth/useAuth.ts';
 import type { CreateCondition } from '../../types/dnd.ts';
 import type { Card } from '../../types/CardInBattleTracker.ts';
 
+import Warning from "../UI/Warning/Warning.tsx";
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
 
 import Tabs from '../UI/Tabs/Tabs.tsx';
@@ -23,7 +25,33 @@ import NoticesModal from '../Modals/NoticesModal.tsx';
 
 import styles from './BattleTracker.module.css';
 
+function getNextCopiedCardName(sourceName: string, existingNames: string[]) {
+    const trimmedSourceName = sourceName.trim();
+    const escapedName = trimmedSourceName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const namePattern = new RegExp(`^${escapedName}(?: (\\d+))?$`);
+
+    const usedNumbers = existingNames.reduce<number[]>((result, currentName) => {
+        const match = currentName.trim().match(namePattern);
+
+        if (!match) {
+            return result;
+        }
+
+        result.push(match[1] ? Number(match[1]) : 1);
+        return result;
+    }, []);
+
+    let nextNumber = 2;
+
+    while (usedNumbers.includes(nextNumber)) {
+        nextNumber += 1;
+    }
+
+    return `${trimmedSourceName} ${nextNumber}`;
+}
+
 function BattleTracker() {
+    const { loading, user } = useAuth();
     const {
         currentGame,
         setCards,
@@ -56,10 +84,6 @@ function BattleTracker() {
     const [conditionModalOpen, setConditionModalOpen] = useState(false);
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        battle.actions.stopBattle();
-    }, [currentGame?.id]);
 
     const openModal = () => setIsModalOpen(true);
 
@@ -144,6 +168,25 @@ function BattleTracker() {
     const handleDelete = (id: string) =>
         setCards(prev => prev.filter(c => c.id !== id));
 
+    const handleCopy = (id: string) => {
+        const sourceCard = cards.find(card => card.id === id);
+
+        if (!sourceCard) {
+            return;
+        }
+
+        const copiedCard: Card = {
+            ...sourceCard,
+            id: crypto.randomUUID(),
+            name: getNextCopiedCardName(
+                sourceCard.name,
+                cards.map(card => card.name)
+            ),
+        };
+
+        setCards(prev => [...prev, copiedCard]);
+    };
+
     const handleEdit = (id: string) => {
         setEditingCardId(id);
         setIsModalOpen(true);
@@ -158,12 +201,15 @@ function BattleTracker() {
 
     return (
         <div className={styles.battleTrackerContainer}>
+            {!user && <Warning />}
             {games.length === 0 ? (
                 <EmptyState
                     image={<div className={styles.img} />}
                     title="Уважаемый мастер!"
                     text="Благодарим Вас за вашу работу! Для создания новой игры нажмите"
                     buttonText="Создать игру"
+                    buttonDisabled={loading}
+                    statusText={loading ? 'Восстанавливаем сессию. Создание игр временно недоступно.' : undefined}
                     onButtonClick={() => setIsCreateGameOpen(true)}
                 />
             ) : (
@@ -175,6 +221,8 @@ function BattleTracker() {
                         }))}
                         activeId={currentGame?.id || ''}
                         setActive={setCurrentGame}
+                        addDisabled={loading}
+                        addStatusText={loading ? 'Восстанавливаем сессию. Добавление игр скоро станет доступно.' : undefined}
                         onAdd={() => setIsCreateGameOpen(true)}
                     />
 
@@ -215,6 +263,7 @@ function BattleTracker() {
                             battleCards={battle.state.battleCards}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
+                            onCopy={handleCopy}
                             isBattle={battle.state.isBattle}
                             addUserToBattle={handleAddUserToBattle}
                             resurrectCard={battle.actions.resurrectCard}
@@ -244,6 +293,7 @@ function BattleTracker() {
             {isCreateGameOpen && (
                 <Modal isOpen size="small">
                     <CreateGame
+                        disabled={loading}
                         onCreate={createGame}
                         onClose={() => setIsCreateGameOpen(false)}
                     />
@@ -253,6 +303,7 @@ function BattleTracker() {
             {isModalOpen && (
                 <Modal isOpen size="small">
                     <CreateCardModal
+                        key={editingCardId ?? 'new-card'}
                         initialValues={editingCard}
                         onSubmit={handleSubmit}
                         onClose={closeModal}

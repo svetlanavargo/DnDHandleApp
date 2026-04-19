@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { CharacterContext } from '../context/CharacterContext';
 import { useNumberModal } from './useNumberModal.ts';
 
@@ -34,41 +34,19 @@ export function useList() {
     const activeCharacter =
         characters.find(c => c.id === activeCharacterId) ?? null;
 
-    const closeDeleteModal = () => setDeletingCharacter(null);
-    const closeEditModal = () => setEditingCharacter(null);
+    const closeDeleteModal = useCallback(() => setDeletingCharacter(null), []);
+    const closeEditModal = useCallback(() => setEditingCharacter(null), []);
 
-    const handleAddCharacter = () => {
+    const handleAddCharacter = useCallback(() => {
         if (characters.length >= 6) return;
         setCreatingCharacter(true);
-    };
+    }, [characters.length]);
 
-    const saveCharacter = (updated: Character) => {
-        let spellSlots = updated.spellSlots;
-
-        const exists = characters.find(c => c.id === updated.id);
-
-        if (
-            !exists ||
-            exists.class !== updated.class ||
-            exists.subclass !== updated.subclass ||
-            exists.level !== updated.level
-        ) {
-            spellSlots = initSpellSlots(
-                updated.class as ClassKey,
-                updated.subclass,
-                updated.level
-            );
-        }
-
-        updateCharacter({ ...updated, spellSlots });
-        closeEditModal();
-    };
-
-    function initSpellSlots(
+    const initSpellSlots = useCallback((
         className: ClassKey,
         subclassName: string | undefined,
         level: number
-    ): SpellSlotsState {
+    ) => {
         const classData = classes[className];
         if (!classData) return {};
 
@@ -92,9 +70,35 @@ export function useList() {
         });
 
         return state;
-    }
+    }, []) as (
+        className: ClassKey,
+        subclassName: string | undefined,
+        level: number
+    ) => SpellSlotsState;
 
-    const addHits = () => {
+    const saveCharacter = useCallback((updated: Character) => {
+        let spellSlots = updated.spellSlots;
+
+        const exists = characters.find(c => c.id === updated.id);
+
+        if (
+            !exists ||
+            exists.class !== updated.class ||
+            exists.subclass !== updated.subclass ||
+            exists.level !== updated.level
+        ) {
+            spellSlots = initSpellSlots(
+                updated.class as ClassKey,
+                updated.subclass,
+                updated.level
+            );
+        }
+
+        updateCharacter({ ...updated, spellSlots });
+        closeEditModal();
+    }, [characters, updateCharacter, closeEditModal, initSpellSlots]);
+
+    const addHits = useCallback(() => {
         if (!activeCharacter) return;
 
         numberModal.openModal({
@@ -117,9 +121,9 @@ export function useList() {
                 updateCharacter(updated);
             }
         });
-    };
+    }, [activeCharacter, numberModal, updateCharacter]);
 
-    const subtractHits = () => {
+    const subtractHits = useCallback(() => {
         if (!activeCharacter) return;
 
         numberModal.openModal({
@@ -142,9 +146,9 @@ export function useList() {
                 updateCharacter(updated);
             }
         });
-    };
+    }, [activeCharacter, numberModal, updateCharacter]);
 
-    const subtractDice = () => {
+    const subtractDice = useCallback(() => {
         if (!activeCharacter) return;
 
         const hitDiceValue =
@@ -166,9 +170,9 @@ export function useList() {
                 activeCharacter.currentHits + totalHeal
             )
         });
-    };
+    }, [activeCharacter, updateCharacter]);
 
-    const longRest = () => {
+    const longRest = useCallback(() => {
         if (!activeCharacter) return;
 
         updateCharacter({
@@ -195,9 +199,9 @@ export function useList() {
                 )
             )
         });
-    };
+    }, [activeCharacter, updateCharacter]);
 
-    const addNote = () => {
+    const addNote = useCallback(() => {
         if (!activeCharacter) return;
 
         const updatedNotes = [...(activeCharacter.note || []), ''];
@@ -208,13 +212,13 @@ export function useList() {
         });
 
         setActiveNoteIndex(updatedNotes.length - 1);
-    };
+    }, [activeCharacter, updateCharacter]);
 
-    const requestDeleteNote = (index: number) => {
+    const requestDeleteNote = useCallback((index: number) => {
         setDeleteNoteIndex(index);
-    };
+    }, []);
 
-    const confirmDeleteNote = () => {
+    const confirmDeleteNote = useCallback(() => {
         if (deleteNoteIndex === null || !activeCharacter) return;
 
         const updatedNotes = [...(activeCharacter.note || [])];
@@ -226,12 +230,68 @@ export function useList() {
         });
 
         setDeleteNoteIndex(null);
-    };
+    }, [deleteNoteIndex, activeCharacter, updateCharacter]);
 
-    const handleRemoveCharacter = (id: string) => {
+    const handleRemoveCharacter = useCallback((id: string) => {
         removeCharacter(id);
         closeDeleteModal();
-    };
+    }, [removeCharacter, closeDeleteModal]);
+
+    const actions = useMemo(() => ({
+        handleAddCharacter,
+        saveCharacter,
+        addHits,
+        subtractHits,
+        subtractDice,
+        longRest,
+        addNote,
+        requestDeleteNote,
+        handleRemoveCharacter
+    }), [
+        handleAddCharacter,
+        saveCharacter,
+        addHits,
+        subtractHits,
+        subtractDice,
+        longRest,
+        addNote,
+        requestDeleteNote,
+        handleRemoveCharacter
+    ]);
+
+    const notes = useMemo(() => ({
+        isNoteOpen,
+        setIsNoteOpen,
+        activeNoteIndex,
+        setActiveNoteIndex,
+        deleteNoteIndex,
+        setDeleteNoteIndex,
+        confirmDeleteNote
+    }), [
+        isNoteOpen,
+        activeNoteIndex,
+        deleteNoteIndex,
+        confirmDeleteNote
+    ]);
+
+    const modals = useMemo(() => ({
+        numberModal,
+        editingCharacter,
+        deletingCharacter,
+        creatingCharacter,
+        setEditingCharacter,
+        setDeletingCharacter,
+        setCreatingCharacter,
+        closeEditModal,
+        closeDeleteModal
+    }), [
+        numberModal,
+        editingCharacter,
+        deletingCharacter,
+        creatingCharacter,
+        closeEditModal,
+        closeDeleteModal
+    ]);
 
     return {
         characters,
@@ -239,39 +299,8 @@ export function useList() {
         activeCharacter,
         activeCharacterId,
         setActiveCharacterId,
-
-        actions: {
-            handleAddCharacter,
-            saveCharacter,
-            addHits,
-            subtractHits,
-            subtractDice,
-            longRest,
-            addNote,
-            requestDeleteNote,
-            handleRemoveCharacter
-        },
-
-        notes: {
-            isNoteOpen,
-            setIsNoteOpen,
-            activeNoteIndex,
-            setActiveNoteIndex,
-            deleteNoteIndex,
-            setDeleteNoteIndex,
-            confirmDeleteNote
-        },
-
-        modals: {
-            numberModal,
-            editingCharacter,
-            deletingCharacter,
-            creatingCharacter,
-            setEditingCharacter,
-            setDeletingCharacter,
-            setCreatingCharacter,
-            closeEditModal,
-            closeDeleteModal
-        }
+        actions,
+        notes,
+        modals
     };
 }

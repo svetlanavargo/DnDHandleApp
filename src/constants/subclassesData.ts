@@ -130,7 +130,8 @@ export const SubclassesData: Record<string, Record<string, string>> = {
         celestial: "Небожитель",
         fathomless: "Бездонный",
         genie: "Гений",
-        undead: "Нежить"
+        undead: "Нежить",
+        lightEater: "Пожиратель света"
     },
 
     wizard: {

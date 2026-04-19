@@ -38,3 +38,11 @@
     padding: 3px 20px;
     background-color: #1F1F1F;
 }
+
+.statusText {
+    margin: 0;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #b8b8b8;
+    background-color: #1F1F1F;
+}

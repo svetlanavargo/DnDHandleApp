@@ -33,6 +33,7 @@
 .wrapperLink {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 @media (min-width: 767px) {
