@@ -19,6 +19,7 @@ interface SpellsSettingsProps {
     character?: Character;
     handleModalToggle: () => void;
     updateCharacter: (updated: Character) => void;
+    initialLevel?: SpellLevel;
 }
 
 type SpellLevelFilter = SpellLevel | "all";
@@ -86,7 +87,8 @@ function getMaxSpellLevel(
 function SpellsAddCard({
                            character,
                            handleModalToggle,
-                           updateCharacter
+                           updateCharacter,
+                           initialLevel
                        }: SpellsSettingsProps) {
 
     const [randomSpellName, setRandomSpellName] = useState("");
@@ -100,10 +102,10 @@ function SpellsAddCard({
         return {
             class: character.class ?? "",
             subclass: character.subclass ?? "",
-            level: "all",
+            level: initialLevel ?? "all",
             search: ""
         };
-    }, [character]);
+    }, [character, initialLevel]);
 
     const [filters, setFilters] = useState<Filters>(initialFilters);
 

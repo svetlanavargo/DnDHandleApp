@@ -34,55 +34,59 @@ export default function CharacterList() {
 
     return (
         <div className={styles.characterListContainer}>
-            {!user && <Warning />}
-            {!activeCharacter ? (
-                <EmptyState
-                    image={<div className={styles.img} />}
-                    title="Привет игрок!"
-                    text="Для создания листа персонажа нажми"
-                    buttonText="Создать"
-                    buttonDisabled={loading}
-                    statusText={loading ? 'Восстанавливаем сессию. Создание персонажей временно недоступно.' : undefined}
-                    onButtonClick={() =>
-                        modals.setCreatingCharacter(true)
-                    }
-                />
-            ) : (
-                <div className={styles.characterList}>
-                    <Tabs
-                        items={characters.map(c => ({
-                            id: c.id,
-                            label: c.name
-                        }))}
-                        activeId={activeCharacterId ?? ''}
-                        setActive={setActiveCharacterId}
-                        addDisabled={loading}
-                        addStatusText={loading ? 'Восстанавливаем сессию. Добавление персонажей скоро станет доступно.' : undefined}
-                        onAdd={actions.handleAddCharacter}
+            <div className={styles.pageShell}>
+                {!user && <Warning />}
+                {!activeCharacter ? (
+                    <EmptyState
+                        image={<div className={styles.img} />}
+                        title="Привет игрок!"
+                        text="Для создания листа персонажа нажми"
+                        buttonText="Создать"
+                        buttonDisabled={loading}
+                        statusText={loading ? 'Восстанавливаем сессию. Создание персонажей временно недоступно.' : undefined}
+                        onButtonClick={() =>
+                            modals.setCreatingCharacter(true)
+                        }
                     />
+                ) : (
+                    <div className={styles.characterList}>
+                        <div className={styles.tabsShell}>
+                            <Tabs
+                                items={characters.map(c => ({
+                                    id: c.id,
+                                    label: c.name
+                                }))}
+                                activeId={activeCharacterId ?? ''}
+                                setActive={setActiveCharacterId}
+                                addDisabled={loading}
+                                addStatusText={loading ? 'Восстанавливаем сессию. Добавление персонажей скоро станет доступно.' : undefined}
+                                onAdd={actions.handleAddCharacter}
+                            />
+                        </div>
 
-                    <List
-                        activeCharacter={activeCharacter}
-                        openEditModal={() =>
-                            modals.setEditingCharacter(activeCharacter)
-                        }
-                        addHits={actions.addHits}
-                        subtractHits={actions.subtractHits}
-                        subtractDice={actions.subtractDice}
-                        longRest={actions.longRest}
-                        isNoteOpen={notes.isNoteOpen}
-                        toggleNoteOpen={() =>
-                            notes.setIsNoteOpen(p => !p)
-                        }
-                        updateCharacter={actions.saveCharacter}
-                        deleteNote={actions.requestDeleteNote}
-                        reorderNotes={actions.reorderNotes}
-                        notes={notes.normalizedNotes}
-                        setActiveNote={notes.setActiveNoteId}
-                        activeNoteId={notes.activeNoteId}
-                    />
-                </div>
-            )}
+                        <List
+                            activeCharacter={activeCharacter}
+                            openEditModal={() =>
+                                modals.setEditingCharacter(activeCharacter)
+                            }
+                            addHits={actions.addHits}
+                            subtractHits={actions.subtractHits}
+                            subtractDice={actions.subtractDice}
+                            longRest={actions.longRest}
+                            isNoteOpen={notes.isNoteOpen}
+                            toggleNoteOpen={() =>
+                                notes.setIsNoteOpen(p => !p)
+                            }
+                            updateCharacter={actions.saveCharacter}
+                            deleteNote={actions.requestDeleteNote}
+                            reorderNotes={actions.reorderNotes}
+                            notes={notes.normalizedNotes}
+                            setActiveNote={notes.setActiveNoteId}
+                            activeNoteId={notes.activeNoteId}
+                        />
+                    </div>
+                )}
+            </div>
 
             <Modal isOpen={modals.numberModal.isOpen} size="small">
                 <ChangeHitsModal

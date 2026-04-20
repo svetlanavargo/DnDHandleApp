@@ -1,62 +1,295 @@
 .offer {
-    height: 250px;
-    background-image: url("/img/MainPage/offerMob.png");
-    background-repeat: no-repeat;
-    background-color: #1a1a1a;
-    background-size: 650px;
-    background-position: left top;
-    display: flex;
-    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    padding: 28px 16px 36px;
+    background: transparent;
+}
+
+.offerInner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
     align-items: center;
-    padding: 20px;
+    position: relative;
 }
 
-@media (min-width: 768px) {
-    .offer {
-        background-size: contain;
-        justify-content: center;
-    }
+.offerText {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 72px 56px;
 }
 
-@media (min-width: 1260px) {
-    .offer {
-        height: 500px;
-        background-image: url("/img/MainPage/offer.png");
-        background-size: 1500px;
-        background-position: left center;
-    }
+.eyebrow {
+    margin: 0 0 14px;
+    color: #2eb9a1;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
 }
 
 .offerHeader {
-    font-size: 26px;
-    margin-left: auto;
-    max-width: 50%;
-    margin-bottom: 30px;
-}
-
-@media (min-width: 768px) {
-    .offerHeader {
-        font-size: 36px;
-        max-width: 62%;
-        margin-bottom: 20px;
-    }
+    margin: 0 0 16px;
+    color: #fbfafa;
+    font-size: clamp(34px, 11vw, 72px);
+    line-height: 0.94;
+    text-wrap: balance;
 }
 
 .offerDesc {
-    font-size: 14px;
+    margin: 0 auto;
+    max-width: 38ch;
+    color: #d2d2d2;
+    font-size: 16px;
+    line-height: 1.65;
 }
 
-@media (min-width: 768px) {
-    .offerDesc {
-        margin-left: auto;
-        max-width: 62%;
+.diceColumn {
+    position: relative;
+    min-height: 180px;
+    pointer-events: none;
+}
+
+.diceColumn::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46, 185, 161, 0.14) 0%, rgba(46, 185, 161, 0.08) 34%, rgba(46, 185, 161, 0) 72%);
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+.leftColumn,
+.rightColumn {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 112px;
+}
+
+.leftColumn {
+    left: 0;
+}
+
+.rightColumn {
+    right: 0;
+}
+
+.dice {
+    position: absolute;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.35));
+    animation: float 6s ease-in-out infinite;
+    will-change: transform;
+    user-select: none;
+    pointer-events: none;
+    --dice-transform: translateY(0);
+}
+
+.diceD20 {
+    top: 14px;
+    right: 4px;
+    width: 58px;
+    --dice-transform: rotate(-10deg);
+    animation-delay: 0s;
+}
+
+.diceD12 {
+    top: 86px;
+    left: 4px;
+    width: 48px;
+    --dice-transform: rotate(-9deg);
+    animation-delay: 0.8s;
+}
+
+.diceD10 {
+    bottom: 20px;
+    left: 36px;
+    width: 44px;
+    --dice-transform: rotate(8deg);
+    animation-delay: 1.2s;
+}
+
+.diceD8 {
+    top: 24px;
+    left: 6px;
+    width: 44px;
+    --dice-transform: rotate(12deg);
+    animation-delay: 1.8s;
+}
+
+.diceD6 {
+    top: 104px;
+    right: 8px;
+    width: 42px;
+    --dice-transform: rotate(-8deg);
+    animation-delay: 2.2s;
+}
+
+.diceD4 {
+    bottom: 10px;
+    left: 6px;
+    width: 38px;
+    --dice-transform: rotate(10deg);
+    animation-delay: 2.8s;
+}
+
+.diceD100 {
+    bottom: 10px;
+    right: 4px;
+    width: 58px;
+    --dice-transform: rotate(-12deg);
+    animation-delay: 3.2s;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: var(--dice-transform) translateY(0) scale(1);
+    }
+    50% {
+        transform: var(--dice-transform) translateY(-10px) scale(1.02);
     }
 }
 
-@media (min-width: 1439px) {
-    .offerHeader {
-        font-size: 42px;
-        max-width: 62%;
-        margin-bottom: 20px;
+@media (min-width: 768px) {
+    .offer {
+        padding: 36px 24px 44px;
+    }
+
+    .offerText {
+        padding: 28px 72px;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        width: 140px;
+    }
+
+    .diceD20 {
+        top: 10px;
+        right: 14px;
+        width: 96px;
+    }
+
+    .diceD12 {
+        top: 102px;
+        left: 8px;
+        width: 72px;
+    }
+
+    .diceD10 {
+        bottom: 14px;
+        left: 56px;
+        width: 64px;
+    }
+
+    .diceD8 {
+        top: 18px;
+        left: 8px;
+        width: 66px;
+    }
+
+    .diceD6 {
+        top: 108px;
+        right: 10px;
+        width: 58px;
+    }
+
+    .diceD4 {
+        bottom: -4px;
+        left: -2px;
+        width: 40px;
+    }
+
+    .diceD100 {
+        bottom: 0;
+        right: 8px;
+        width: 86px;
+    }
+}
+
+@media (min-width: 960px) {
+    .offerInner {
+        grid-template-columns: minmax(150px, 0.52fr) minmax(0, 1fr) minmax(150px, 0.52fr);
+        gap: 10px;
+    }
+
+    .offerText {
+        padding: 24px 8px;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        width: auto;
+        min-height: 300px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .offer {
+        min-height: 520px;
+        padding: 44px 32px 52px;
+    }
+
+    .offerInner {
+        grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1fr) minmax(260px, 0.75fr);
+        gap: 18px;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        min-height: 420px;
+    }
+
+    .diceD20 {
+        top: 16px;
+        right: 34px;
+        width: 168px;
+    }
+
+    .diceD12 {
+        top: 126px;
+        left: 8px;
+        width: 116px;
+    }
+
+    .diceD10 {
+        bottom: 28px;
+        left: 112px;
+        width: 94px;
+    }
+
+    .diceD8 {
+        top: 18px;
+        left: 18px;
+        width: 98px;
+    }
+
+    .diceD6 {
+        top: 142px;
+        right: 18px;
+        width: 84px;
+    }
+
+    .diceD4 {
+        bottom: 20px;
+        left: 110px;
+        width: 78px;
+    }
+
+    .diceD100 {
+        bottom: 8px;
+        right: 14px;
+        width: 136px;
     }
 }

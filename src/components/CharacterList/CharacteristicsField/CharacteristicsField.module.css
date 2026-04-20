@@ -1,7 +1,11 @@
 .characteristicsFieldContainer {
-    background-color: #1F1F1F;
-    padding: 12px;
-    border-radius: 4px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+        #1F1F1F;
+    padding: 14px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
@@ -61,10 +65,10 @@
     align-items: center;
     width: 50%;
     margin-top: -7px;
-    background-color: #1F1F1F;
+    background-color: #242424;
     z-index: 1;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 700;
     position: relative;
     padding: 3px 0;
 }
@@ -72,7 +76,7 @@
 .savingThrows:after {
     content: "";
     outline: 1px solid #2eb9a1;
-    background-color: #1F1F1F;
+    background-color: #242424;
     width: 8px;
     height: 8px;
     border-radius: 50%;

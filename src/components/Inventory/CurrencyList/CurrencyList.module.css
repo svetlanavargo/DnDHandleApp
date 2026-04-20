@@ -1,6 +1,5 @@
 .currencyListContainer {
-    background-color: #3D3D3D;
-    padding: 20px 0;
+    padding: 40px 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,5 +7,12 @@
 }
 
 .currencyList {
-
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #242424;
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.16);
 }

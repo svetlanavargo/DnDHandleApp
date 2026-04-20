@@ -4,4 +4,7 @@
   height: 100dvh;
   padding-bottom: env(safe-area-inset-bottom);
   overflow: auto;
+  background:
+          radial-gradient(circle at top left, rgba(46, 185, 161, 0.18), transparent 25%),
+          linear-gradient(180deg, #1F1F1F 0%, #1a1a1a 100%);
 }

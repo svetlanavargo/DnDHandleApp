@@ -4,7 +4,7 @@
 }
 
 .label {
-    color: #FBFAFA;
+    color: #2eb9a1;
     font-size: 10px;
     text-transform: uppercase;
     font-weight: bold;
@@ -12,13 +12,13 @@
 
 .selected {
     padding: 8px 12px;
-    border: 1px solid #3D3D3D;
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 4px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #242424;
+    background-color: transparent;
     height: 26px;
 }
 
@@ -41,7 +41,7 @@
     width: 100%;
     border: 1px solid #3D3D3D;
     border-radius: 4px;
-    background-color: #242424;
+    background: radial-gradient(circle at top left, rgba(46, 185, 161, 0.1), transparent 18%), linear-gradient(180deg, #1a1a1a 0%, #1a1a1a 100%);
     margin-top: 4px;
     z-index: 100;
     max-height: 200px;

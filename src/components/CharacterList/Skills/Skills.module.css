@@ -1,11 +1,13 @@
 .skillsContainer {
-    background-color: #1F1F1F;
-    padding: 12px;
-    border-radius: 4px;
+    background: #1F1F1F;
+    padding: 14px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
     margin-bottom: 12px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 
 .skillWrapper {
@@ -13,8 +15,8 @@
     align-items: center;
     justify-content: space-between;
     background-color: #242424;
-    border-radius: 4px;
-    padding: 4px;
+    border-radius: 8px;
+    padding: 5px 6px;
 }
 
 .leftSide {

@@ -16,6 +16,7 @@
     display: flex;
     align-items: end;
     position: relative;
+    background: radial-gradient(circle at top left, rgba(46, 185, 161, 0.1), transparent 18%), linear-gradient(180deg, #1a1a1a 0%, #1a1a1a 100%);
 }
 
 .close {
@@ -31,5 +32,4 @@
     padding: 0 20px;
     font-size: 20px;
     cursor: pointer;
-    background-color: #1a1a1a;
 }

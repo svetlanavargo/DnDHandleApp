@@ -1,7 +1,7 @@
 .cardsList {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -21px;
 
     width: 91%;
     height: 100%;
@@ -15,8 +15,9 @@
     transition: transform 0.3s ease;
     will-change: transform;
 
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
+    border-radius: 12px 12px 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
 
     z-index: 10;
 }
@@ -36,6 +37,7 @@
     cursor: pointer;
     background-color: #1a1a1a;
     flex-shrink: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .actions {
@@ -44,8 +46,8 @@
     justify-content: space-between;
     background-color: #1a1a1a;
     padding: 12px;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
 }
 
 .cardsWrapper {
@@ -68,7 +70,7 @@
     background-repeat: no-repeat;
     background-size: 25px;
     background-position: center;
-    border-top-right-radius: 8px;
+    border-top-right-radius: 12px;
 }
 .dead {
     width: 100%;
@@ -77,7 +79,7 @@
     background-repeat: no-repeat;
     background-size: 25px;
     background-position: center;
-    border-top-left-radius: 8px;
+    border-top-left-radius: 12px;
 }
 
 .activeTab {
@@ -87,17 +89,16 @@
 @media (min-width: 1023px) {
     .cardsList {
         width: 350px;
-        background-color: #1F1F1F;
         display: flex;
         flex-direction: column;
         height: 100%;
         position: relative;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        left: auto;
+        left: 0;
         right: 0;
         transform: none;
         transition: none;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 
     .open {

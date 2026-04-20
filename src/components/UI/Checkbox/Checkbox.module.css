@@ -5,7 +5,7 @@
     cursor: pointer;
     user-select: none;
     font-size: 14px;
-    color: #fff;
+    color: #FBFAFA;
 }
 
 .checkboxLabel input {
@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    background-color: #242424;
+    background: transparent
 }
 
 .checkmark {

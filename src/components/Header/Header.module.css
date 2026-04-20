@@ -2,9 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #1a1a1a;
+    background-color: transparent;
     height: 60px;
-    padding: 0 20px;
+    padding: 0 12px;
     position: relative;
     z-index: 999999;
     gap: 12px;
@@ -43,6 +43,9 @@
 }
 
 @media (min-width: 1023px) {
+    .header {
+        padding: 0 20px;
+    }
     .linkContainer {
         width: 100%;
     }

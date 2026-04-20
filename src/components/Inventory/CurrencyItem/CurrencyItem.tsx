@@ -15,9 +15,9 @@ function CurrencyItem({ value, type, increment, decrement, onCalc }: Props) {
         <div className={styles.currencyItemContainer}>
             <div className={styles[type]}/>
             <div className={styles.btnWrapper}>
-                <Btn onClick={decrement} classBtn='minus'/>
+                <Btn onClick={decrement} classBtn='subtractHits'/>
                 <div className={styles.value}>{value}</div>
-                <Btn onClick={increment} classBtn='plus'/>
+                <Btn onClick={increment} classBtn='addHits'/>
             </div>
             <Btn onClick={onCalc} classBtn='edit'/>
         </div>

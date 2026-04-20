@@ -3,6 +3,7 @@
     width: 100%;
     margin: 0;
     overflow: auto;
+    box-sizing: border-box;
 }
 
 .inventory {
@@ -16,5 +17,4 @@
     width: 100px;
     height: 100px;
     background-image: url("/img/dnd.svg");
-    margin-bottom: 20px;
 }

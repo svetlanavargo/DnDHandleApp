@@ -10,7 +10,7 @@
     align-items: center;
     width: 100%;
     cursor: pointer;
-    background-color: #242424;
+    background-color: transparent;
     border: 1px solid #3D3D3D;
     border-radius: 4px;
     font-size: 14px;
@@ -28,7 +28,7 @@
     left: 0;
     max-height: 200px;
     overflow-y: auto;
-    background: #242424;
+    background: radial-gradient(circle at top left, rgba(46, 185, 161, 0.1), transparent 18%), linear-gradient(180deg, #1a1a1a 0%, #1a1a1a 100%);
     border: 1px solid #3D3D3D;
     border-radius: 4px;
     box-sizing: border-box;
@@ -49,4 +49,5 @@
     margin-bottom: 4px;
     gap: 12px;
     padding: 0 12px;
+    color: #2eb9a1;
 }

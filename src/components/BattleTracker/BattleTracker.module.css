@@ -1,9 +1,19 @@
 .battleTrackerContainer {
     height: calc(100% - 60px);
     overflow: hidden;
-    background-color: #242424;
     flex-direction: column;
     width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.pageShell {
+    width: min(1320px, 100%);
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .content {
@@ -11,6 +21,17 @@
     flex-direction: column;
     height: 100%;
     min-height: 0;
+    flex: 1;
+}
+
+.tabsShell {
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 12px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(22, 22, 22, 0.96);
 }
 
 .container {
@@ -19,6 +40,14 @@
     position: relative;
     flex: 1;
     min-height: 0;
+    /*border-top: 1px solid rgba(255, 255, 255, 0.08);*/
+    /*border-left: 1px solid rgba(255, 255, 255, 0.08);*/
+    /*border-right: 1px solid rgba(255, 255, 255, 0.08);*/
+    /*border-radius: 16px 16px 0 0;*/
+    /*background:*/
+    /*    linear-gradient(180deg, #242424, rgba(255, 255, 255, 0.015)),*/
+    /*    rgba(22, 22, 22, 0.96);*/
+    /*box-shadow: 0 24px 54px rgba(0, 0, 0, 0.2);*/
 }
 
 .container > div:nth-child(2) {
@@ -27,18 +56,38 @@
 }
 
 @media (min-width: 1023px) {
+    .battleTrackerContainer {
+        padding: 0;
+    }
+
+    .pageShell {
+        width: 100%;
+        max-width: none;
+    }
+
+    .warningRow {
+        margin: 20px 20px 12px;
+    }
+
     .content {
         width: 100%;
         height: 100%;
     }
 
+    .tabsShell {
+        margin: 0 20px;
+    }
 
     .container {
         flex-direction: row;
         justify-content: space-between;
         height: calc(100% - 43.5px);
-        padding: 12px 20px 0 20px;
+        padding: 12px 20px 0;
         gap: 12px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
     }
 
     .container > div:nth-child(2) {
@@ -50,5 +99,4 @@
     width: 100px;
     height: 100px;
     background-image: url("/img/dnd.svg");
-    margin-bottom: 20px;
 }

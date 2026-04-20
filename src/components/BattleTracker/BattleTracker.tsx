@@ -201,80 +201,87 @@ function BattleTracker() {
 
     return (
         <div className={styles.battleTrackerContainer}>
-            {!user && <Warning />}
-            {games.length === 0 ? (
-                <EmptyState
-                    image={<div className={styles.img} />}
-                    title="Уважаемый мастер!"
-                    text="Благодарим Вас за вашу работу! Для создания новой игры нажмите"
-                    buttonText="Создать игру"
-                    buttonDisabled={loading}
-                    statusText={loading ? 'Восстанавливаем сессию. Создание игр временно недоступно.' : undefined}
-                    onButtonClick={() => setIsCreateGameOpen(true)}
-                />
-            ) : (
-                <div className={styles.content}>
-                    <Tabs
-                        items={games.map(game => ({
-                            id: game.id,
-                            label: game.name
-                        }))}
-                        activeId={currentGame?.id || ''}
-                        setActive={setCurrentGame}
-                        addDisabled={loading}
-                        addStatusText={loading ? 'Восстанавливаем сессию. Добавление игр скоро станет доступно.' : undefined}
-                        onAdd={() => setIsCreateGameOpen(true)}
+            <div className={styles.pageShell}>
+                {!user && (
+                    <Warning />
+                )}
+
+                {games.length === 0 ? (
+                    <EmptyState
+                        image={<div className={styles.img} />}
+                        title="Уважаемый мастер!"
+                        text="Благодарим Вас за вашу работу! Для создания новой игры нажмите"
+                        buttonText="Создать игру"
+                        buttonDisabled={loading}
+                        statusText={loading ? 'Восстанавливаем сессию. Создание игр временно недоступно.' : undefined}
+                        onButtonClick={() => setIsCreateGameOpen(true)}
                     />
+                ) : (
+                    <div className={styles.content}>
+                        <div className={styles.tabsShell}>
+                            <Tabs
+                                items={games.map(game => ({
+                                    id: game.id,
+                                    label: game.name
+                                }))}
+                                activeId={currentGame?.id || ''}
+                                setActive={setCurrentGame}
+                                addDisabled={loading}
+                                addStatusText={loading ? 'Восстанавливаем сессию. Добавление игр скоро станет доступно.' : undefined}
+                                onAdd={() => setIsCreateGameOpen(true)}
+                            />
+                        </div>
 
-                    <div className={styles.container}>
-                        <Times
-                            isBattle={battle.state.isBattle}
-                            turnCounter={battle.state.turnState.turnCounter}
-                            timer={battle.state.turnState.timer}
-                            round={battle.state.turnState.round}
-                            stopBattle={battle.actions.stopBattle}
-                            battleCards={battle.state.battleCards}
-                            expiredConditions={battle.state.expiredConditions}
-                            startFight={battle.actions.startFight}
-                            nextMove={battle.actions.nextMove}
-                            onOpenSettings={openSettingsModal}
-                            listOpen={setIsOpen}
-                        />
+                        <div className={styles.container}>
+                            <Times
+                                isBattle={battle.state.isBattle}
+                                turnCounter={battle.state.turnState.turnCounter}
+                                timer={battle.state.turnState.timer}
+                                round={battle.state.turnState.round}
+                                stopBattle={battle.actions.stopBattle}
+                                battleCards={battle.state.battleCards}
+                                expiredConditions={battle.state.expiredConditions}
+                                startFight={battle.actions.startFight}
+                                nextMove={battle.actions.nextMove}
+                                onOpenSettings={openSettingsModal}
+                                listOpen={setIsOpen}
+                            />
 
-                        <BattleField
-                            isBattle={battle.state.isBattle}
-                            countCards={cards.length}
-                            cards={battle.state.battleCards}
-                            getOutOfBattle={battle.actions.getOutOfBattle}
-                            currentTurnIndex={battle.state.turnState.currentTurnIndex}
-                            nextMove={battle.actions.nextMove}
-                            addHits={battle.actions.addHits}
-                            subtractHits={battle.actions.subtractHits}
-                            addCondition={openConditionModal}
-                            editingNoteId={battle.notes.editingNoteId}
-                            noteDraft={battle.notes.noteDraft}
-                            startEditNote={battle.notes.startEditNote}
-                            changeNoteDraft={battle.notes.setNoteDraft}
-                            saveNote={battle.notes.saveNote}
-                        />
+                            <BattleField
+                                isBattle={battle.state.isBattle}
+                                countCards={cards.length}
+                                cards={battle.state.battleCards}
+                                getOutOfBattle={battle.actions.getOutOfBattle}
+                                currentTurnIndex={battle.state.turnState.currentTurnIndex}
+                                nextMove={battle.actions.nextMove}
+                                addHits={battle.actions.addHits}
+                                subtractHits={battle.actions.subtractHits}
+                                addCondition={openConditionModal}
+                                editingNoteId={battle.notes.editingNoteId}
+                                noteDraft={battle.notes.noteDraft}
+                                startEditNote={battle.notes.startEditNote}
+                                changeNoteDraft={battle.notes.setNoteDraft}
+                                saveNote={battle.notes.saveNote}
+                            />
 
-                        <CardsList
-                            cards={cards}
-                            battleCards={battle.state.battleCards}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                            onCopy={handleCopy}
-                            isBattle={battle.state.isBattle}
-                            addUserToBattle={handleAddUserToBattle}
-                            resurrectCard={battle.actions.resurrectCard}
-                            onAddCard={openModal}
-                            onLongRest={battle.actions.longRest}
-                            isOpen={isOpen}
-                            onClose={() => setIsOpen(false)}
-                        />
+                            <CardsList
+                                cards={cards}
+                                battleCards={battle.state.battleCards}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                                onCopy={handleCopy}
+                                isBattle={battle.state.isBattle}
+                                addUserToBattle={handleAddUserToBattle}
+                                resurrectCard={battle.actions.resurrectCard}
+                                onAddCard={openModal}
+                                onLongRest={battle.actions.longRest}
+                                isOpen={isOpen}
+                                onClose={() => setIsOpen(false)}
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
 
             {/* MODALS */}
 

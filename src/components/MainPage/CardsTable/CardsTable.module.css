@@ -24,6 +24,7 @@
 .card1 {
     background-color: #1a1a1a;
     color: #FBFAFA;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card2 {
@@ -37,6 +38,7 @@
 .card3 {
     background-color: #1F1F1F;
     color: #FBFAFA;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card4 {
@@ -47,6 +49,7 @@
 .card5 {
     background-color: #1a1a1a;
     color: #FBFAFA;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card6 {
@@ -59,6 +62,7 @@
     color: #FBFAFA;
     display: flex;
     align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card8 {
@@ -187,5 +191,3 @@
         background-position: right center;
     }
 }
-
-

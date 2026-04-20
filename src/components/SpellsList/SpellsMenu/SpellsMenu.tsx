@@ -10,9 +10,11 @@ interface SpellsMenuProps {
 function SpellsMenu({onAdd, onDelete, onSettings}: SpellsMenuProps) {
     return(
         <div className={styles.spellsMenuContainer}>
-            <Btn onClick={onAdd} classBtn='addHits'/>
-            <Btn onClick={onDelete} classBtn='subtractHits'/>
             <Btn onClick={onSettings} classBtn='settings'/>
+            <div className={styles.flex}>
+                <Btn onClick={onAdd} classBtn='addHits'/>
+                <Btn onClick={onDelete} classBtn='subtractHits'/>
+            </div>
         </div>
     )
 }

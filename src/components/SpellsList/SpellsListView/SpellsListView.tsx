@@ -3,17 +3,25 @@ import SpellCard from '../SpellCard/SpellCard.tsx';
 import EmptyState from '../../UI/EmptyState/EmptyState.tsx';
 import styles from "./SpellsListView.module.css";
 
-import type { Spell } from "../../../types/dnd";
+import type { Spell, SpellLevel } from "../../../types/dnd";
 
 interface SpellsListViewProps {
     fill: string;
     spells: Spell[];
+    groupedSpells?: Record<string, Spell[]>;
+    onEmptyStackClick?: (level: SpellLevel) => void;
 }
 
-function SpellsListView({ spells, fill }: SpellsListViewProps) {
-    const [activeCard, setActiveCard] = useState<string | null>(null);
+function getSpellLevelLabel(level: string): string {
+    if (level === '0') return 'Заговоры';
+    return level;
+}
 
-    if (!spells || spells.length === 0) {
+function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: SpellsListViewProps) {
+    const [activeCard, setActiveCard] = useState<string | null>(null);
+    const hasDesktopStacks = Boolean(groupedSpells);
+
+    if ((!spells || spells.length === 0) && !hasDesktopStacks) {
         return (
             <div className={styles.spellsListViewContainer}>
                 <EmptyState
@@ -26,38 +34,105 @@ function SpellsListView({ spells, fill }: SpellsListViewProps) {
 
     return (
         <div className={styles.spellsListViewContainer}>
-            {spells.map((spell, i) => {
-                const overlap = 120;
-                const offset = i * overlap;
+            <div className={styles.mobileStack}>
+                {spells.length === 0 ? (
+                    <EmptyState
+                        image={<div className={styles.cards} />}
+                        text="В списке заклинаний пусто :("
+                    />
+                ) : (
+                    spells.map((spell, i) => {
+                        const overlap = 120;
+                        const offset = i * overlap;
 
-                const isActive = activeCard === spell.url;
+                        const isActive = activeCard === spell.url;
 
-                return (
-                    <div
-                        key={spell.url}
-                        className={`${styles.cardWrapper} ${
-                            isActive ? styles.active : ""
-                        }`}
-                        onClick={() =>
-                            setActiveCard((prev) =>
-                                prev === spell.url ? null : spell.url
-                            )
-                        }
-                        style={{
-                            transform: `
-                                translateX(-50%)
-                                translateY(${offset}px)
-                                ${isActive ? "translateY(-20px)" : ""}
-                                scale(${isActive ? 1.04 : 1})
-                            `,
-                            zIndex: isActive ? 10 : i,
-                            cursor: "pointer"
-                        }}
-                    >
-                        <SpellCard spell={spell} fill={fill} />
-                    </div>
-                );
-            })}
+                        return (
+                            <div
+                                key={spell.url}
+                                className={`${styles.cardWrapper} ${
+                                    isActive ? styles.active : ""
+                                }`}
+                                onClick={() =>
+                                    setActiveCard((prev) =>
+                                        prev === spell.url ? null : spell.url
+                                    )
+                                }
+                                style={{
+                                    transform: `
+                                        translateX(-50%)
+                                        translateY(${offset}px)
+                                        ${isActive ? "translateY(-20px)" : ""}
+                                        scale(${isActive ? 1.04 : 1})
+                                    `,
+                                    zIndex: isActive ? 10 : i,
+                                    cursor: "pointer"
+                                }}
+                            >
+                                <SpellCard spell={spell} fill={fill} />
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+
+            {groupedSpells && (
+                <div className={styles.desktopStacks}>
+                    {Object.entries(groupedSpells).map(([level, levelSpells]) => (
+                        <div key={level} className={styles.levelStack}>
+                            <button
+                                type="button"
+                                className={styles.levelBadge}
+                                onClick={() => onEmptyStackClick?.(level as SpellLevel)}
+                            >
+                                {getSpellLevelLabel(level)}
+                            </button>
+
+                            <div className={styles.stackField}>
+                                {levelSpells.length === 0 ? (
+                                    <button
+                                        type="button"
+                                        className={styles.emptyStack}
+                                        onClick={() => onEmptyStackClick?.(level as SpellLevel)}
+                                    >
+                                        +
+                                    </button>
+                                ) : (
+                                    levelSpells.map((spell, index) => {
+                                        const isActive = activeCard === spell.url;
+
+                                        return (
+                                            <div
+                                                key={spell.url}
+                                                className={`${styles.desktopCardWrapper} ${
+                                                    isActive ? styles.desktopActive : ''
+                                                }`}
+                                                onClick={() =>
+                                                    setActiveCard((prev) =>
+                                                        prev === spell.url ? null : spell.url
+                                                    )
+                                                }
+                                                style={{
+                                                    transform: `
+                                                        translateX(-50%)
+                                                        translateY(${index * 24}px)
+                                                        ${isActive ? 'translateY(-12px)' : ''}
+                                                        scale(${isActive ? 0.82 : 0.76})
+                                                    `,
+                                                    zIndex: isActive ? 20 : index + 1,
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <SpellCard spell={spell} fill={fill} size="small" />
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

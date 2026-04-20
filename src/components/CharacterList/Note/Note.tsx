@@ -57,6 +57,9 @@ function Note({
     const [draggedNoteId, setDraggedNoteId] = useState<string | null>(null);
     const [dropTargetNoteId, setDropTargetNoteId] = useState<string | null>(null);
     const editorRef = useRef<NoteEditorHandle | null>(null);
+    const longPressTimerRef = useRef<number | null>(null);
+    const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+    const suppressClickRef = useRef(false);
     const activeNote = useMemo(
         () => notes.find(note => note.id === activeNoteId) ?? notes[0] ?? null,
         [notes, activeNoteId]
@@ -116,19 +119,89 @@ function Note({
         return firstLine || 'Новая';
     }, []);
 
+    const clearLongPressTimer = useCallback(() => {
+        if (longPressTimerRef.current !== null) {
+            window.clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+    }, []);
+
+    const resolveNoteIdFromPoint = useCallback((x: number, y: number) => {
+        const element = document.elementFromPoint(x, y);
+
+        if (!(element instanceof HTMLElement)) {
+            return null;
+        }
+
+        const tabElement = element.closest<HTMLElement>('[data-note-id]');
+        return tabElement?.dataset.noteId ?? null;
+    }, []);
+
+    const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        const touch = e.touches[0];
+
+        if (!draggedNoteId) {
+            if (touchStartRef.current) {
+                const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+                const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+                if (deltaX > 8 || deltaY > 8) {
+                    clearLongPressTimer();
+                }
+            }
+
+            return;
+        }
+
+        if (!draggedNoteId) {
+            return;
+        }
+        const nextTargetId = resolveNoteIdFromPoint(touch.clientX, touch.clientY);
+
+        if (nextTargetId && nextTargetId !== draggedNoteId) {
+            setDropTargetNoteId(nextTargetId);
+        }
+    }, [clearLongPressTimer, draggedNoteId, resolveNoteIdFromPoint]);
+
+    const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        clearLongPressTimer();
+
+        if (!draggedNoteId) {
+            touchStartRef.current = null;
+            return;
+        }
+
+        const touch = e.changedTouches[0];
+        const droppedOnId =
+            resolveNoteIdFromPoint(touch.clientX, touch.clientY) ?? dropTargetNoteId;
+
+        if (droppedOnId && droppedOnId !== draggedNoteId) {
+            reorderNotes(draggedNoteId, droppedOnId);
+        }
+
+        suppressClickRef.current = true;
+        setDraggedNoteId(null);
+        setDropTargetNoteId(null);
+        touchStartRef.current = null;
+    }, [clearLongPressTimer, draggedNoteId, dropTargetNoteId, reorderNotes, resolveNoteIdFromPoint]);
+
     return (
         <div className={styles.noteContainer}>
-            <div className={styles.toggleBtn} onClick={toggleOpen}>
+            <div
+                className={`${styles.toggleBtn} ${isOpen ? styles.toggleBtnOpen : ''}`}
+                onClick={toggleOpen}
+            >
                 <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}></span>
             </div>
 
             <div className={`${styles.textareaWrapper} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.tabsWrapper}>
-                    <div className={styles.tabsScroll}>
+                    <div className={`${styles.tabsScroll} ${draggedNoteId ? styles.tabsScrollDragging : ''}`}>
                         {notes.map((note) => (
                             <div
                                 key={note.id}
                                 draggable
+                                data-note-id={note.id}
                                 className={`
                                     ${styles.tab}
                                     ${note.id === activeNote?.id ? styles.activeTab : ''}
@@ -136,6 +209,10 @@ function Note({
                                     ${note.id === dropTargetNoteId ? styles.dropTargetTab : ''}
                                 `}
                                 onClick={() => {
+                                    if (suppressClickRef.current) {
+                                        suppressClickRef.current = false;
+                                        return;
+                                    }
                                     saveCurrentDraft();
                                     setActiveNote(note.id);
                                 }}
@@ -154,6 +231,27 @@ function Note({
                                     setDropTargetNoteId(null);
                                 }}
                                 onDragEnd={() => {
+                                    setDraggedNoteId(null);
+                                    setDropTargetNoteId(null);
+                                }}
+                                onTouchStart={(e) => {
+                                    const touch = e.touches[0];
+                                    touchStartRef.current = {
+                                        x: touch.clientX,
+                                        y: touch.clientY
+                                    };
+                                    clearLongPressTimer();
+                                    longPressTimerRef.current = window.setTimeout(() => {
+                                        setDraggedNoteId(note.id);
+                                        setDropTargetNoteId(note.id);
+                                        suppressClickRef.current = true;
+                                    }, 220);
+                                }}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
+                                onTouchCancel={() => {
+                                    clearLongPressTimer();
+                                    touchStartRef.current = null;
                                     setDraggedNoteId(null);
                                     setDropTargetNoteId(null);
                                 }}

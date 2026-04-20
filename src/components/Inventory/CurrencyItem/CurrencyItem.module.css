@@ -14,15 +14,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #242424;
+    background-color: #1F1F1F;
     border-radius: 8px;
 }
 
 .btnWrapper {
     display: flex;
     align-items: center;
-
+    gap: 12px;
     border-radius: 50px;
+    margin-right: 12px;
 }
 
 .platinum, .gold, .silver, .bronze {

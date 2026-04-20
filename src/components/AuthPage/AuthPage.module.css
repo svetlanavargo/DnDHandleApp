@@ -1,38 +1,229 @@
 .authContainer {
-    width: 100%;
-    height: calc(100% - 60px);
+    min-height: calc(100% - 60px);
+    padding: 24px 16px 32px;
+    background:
+        radial-gradient(circle at top left, rgba(46, 185, 161, 0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(138, 0, 0, 0.12), transparent 24%),
+        linear-gradient(180deg, #181818 0%, #121212 100%);
 }
 
 .authWrapper {
-    padding: 50px 20px;
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 24px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(20, 20, 20, 0.88);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.24);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -50px;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(46, 185, 161, 0.28) 0%, rgba(46, 185, 161, 0) 72%);
+    pointer-events: none;
+}
+
+.subtitle {
+    margin: 0 0 12px;
+    color: #2eb9a1;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.title {
+    margin: 0 0 16px;
+    max-width: 12ch;
+    color: #fbfafa;
+    font-size: clamp(34px, 10vw, 62px);
+    line-height: 0.95;
+    text-wrap: balance;
+}
+
+.description {
+    margin: 0;
+    max-width: 580px;
+    color: #c6c6c6;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.pointsList {
+    display: grid;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.pointCard {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pointMark {
+    width: 10px;
+    height: 10px;
+    margin-top: 6px;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: #2eb9a1;
+    box-shadow: 0 0 0 5px rgba(46, 185, 161, 0.12);
+}
+
+.pointText {
+    color: #e4e4e4;
+    line-height: 1.5;
+}
+
+.formCard {
+    position: relative;
+    overflow: hidden;
+    padding: 24px 20px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(24, 24, 24, 0.94);
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.22);
+}
+
+.formCard::after {
+    content: '';
+    position: absolute;
+    inset: auto -70px -90px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.14) 0%, rgba(255, 184, 0, 0) 72%);
+    pointer-events: none;
+}
+
+.formHeader {
+    margin-bottom: 24px;
+}
+
+.brandRow {
+    display: flex;
     align-items: center;
+    gap: 14px;
 }
 
 .img {
-    width: 100px;
-    height: 100px;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 18px;
     background-image: url("/img/dnd.svg");
-    margin-bottom: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 42px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brandName {
+    margin: 0 0 4px;
+    color: #9b9b9b;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.formTitle {
+    margin: 0;
+    color: #fbfafa;
+    font-size: 32px;
+    line-height: 1.05;
 }
 
 .authForm {
-    width: 320px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
+}
+
+.authForm :global(label) {
+    gap: 8px;
+}
+
+.switch {
+    margin-top: -2px;
+}
+
+.switchText {
+    margin: 0;
+    color: #b8b8b8;
+    line-height: 1.5;
 }
 
 .link {
     color: #2eb9a1;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
+    font-weight: 700;
+}
+
+.link:hover {
+    text-decoration: underline;
 }
 
 .errorText {
     margin: 0;
-    color: #d14b4b;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(209, 75, 75, 0.26);
+    background: rgba(138, 0, 0, 0.16);
+    color: #ffb5b5;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+    .authContainer {
+        padding: 32px 24px 40px;
+    }
+
+    .hero,
+    .formCard {
+        padding: 28px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .authWrapper {
+        grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+        align-items: stretch;
+    }
+
+    .hero {
+        min-height: 620px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .formCard {
+        align-self: center;
+    }
 }

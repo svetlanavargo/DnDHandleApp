@@ -1,10 +1,12 @@
 .battleField {
     flex: 1;
     min-height: 0;
-    padding: 12px 20px;
+    padding: 12px 0;
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    border-radius: 12px;
+    background: transparent;
 }
 
 .fightBtnWrapper {
@@ -19,4 +21,11 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
     justify-content: start;
+}
+
+@media (min-width: 1023px) {
+    .battleField {
+        border-radius: 0;
+        padding: 0;
+    }
 }

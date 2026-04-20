@@ -11,6 +11,12 @@
     box-sizing: border-box;
 }
 
+.mobileStack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .cardWrapper {
     position: absolute;
     top: 0;
@@ -44,4 +50,124 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+}
+
+.desktopStacks {
+    display: none;
+}
+
+@media (min-width: 1440px) {
+    .spellsListViewContainer {
+        height: 100%;
+        min-height: 560px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 8px 56px 20px;
+        margin-top: 0;
+    }
+
+    .mobileStack {
+        display: none;
+    }
+
+    .desktopStacks {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(176px, 1fr));
+        gap: 80px;
+        align-items: start;
+        min-width: 1920px;
+        height: 100%;
+        padding: 0 12px;
+        box-sizing: border-box;
+    }
+
+    .levelStack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 0;
+        height: 100%;
+    }
+
+    .levelBadge {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 168px;
+        min-height: 32px;
+        padding: 0 12px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(31, 31, 31, 0.92);
+        color: #f5f5f5;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        appearance: none;
+        padding: 0 12px;
+        font-family: inherit;
+    }
+
+    .levelBadge:hover {
+        border-color: rgba(46, 185, 161, 0.4);
+        background: rgba(46, 185, 161, 0.08);
+        color: #ffffff;
+    }
+
+    .stackField {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 520px;
+        min-width: 176px;
+    }
+
+    .desktopCardWrapper {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transition: transform 0.2s ease;
+        will-change: transform;
+        transform-origin: top center;
+        box-shadow:
+                0 10px 20px rgba(0, 0, 0, 0.18),
+                0 2px 8px rgba(0, 0, 0, 0.14);
+    }
+
+    .desktopCardWrapper a {
+        pointer-events: none;
+    }
+
+    .desktopActive a {
+        pointer-events: auto;
+    }
+
+    .emptyStack {
+        width: 168px;
+        height: 236px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        border-radius: 14px;
+        border: 1px dashed rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.03);
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 40px;
+        line-height: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        appearance: none;
+        padding: 0;
+        font: inherit;
+    }
+
+    .emptyStack:hover {
+        border-color: rgba(46, 185, 161, 0.4);
+        background: rgba(46, 185, 161, 0.08);
+        color: rgba(255, 255, 255, 0.92);
+    }
 }

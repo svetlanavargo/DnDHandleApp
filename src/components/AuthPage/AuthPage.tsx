@@ -10,6 +10,45 @@ interface AuthPageProps {
     pageType: 'register' | 'login';
 }
 
+const AUTH_PAGE_TEXT = {
+    login: {
+        subtitle: 'С возвращением',
+        title: 'Войди и продолжи кампанию с того же места',
+        description:
+            'Сохраняй персонажей, инвентарь, заклинания и состояние боя между устройствами и сессиями.',
+        heading: 'Вход',
+        submitIdle: 'Войти',
+        submitLoading: 'Вхожу...',
+        switchLead: 'Нет аккаунта?',
+        switchAction: 'Зарегистрироваться',
+        points: [
+            'Синхронизация данных между устройствами',
+            'Безопасное хранение персонажей и игр',
+            'Быстрый доступ к трекеру боя и листам',
+        ],
+    },
+    register: {
+        subtitle: 'Новый аккаунт',
+        title: 'Создай профиль и сохраняй всё, что происходит в партии',
+        description:
+            'Регистрация нужна, чтобы данные не исчезали после перезагрузки и были доступны в любом браузере.',
+        heading: 'Регистрация',
+        submitIdle: 'Зарегистрироваться',
+        submitLoading: 'Регистрирую...',
+        switchLead: 'Уже есть аккаунт?',
+        switchAction: 'Войти',
+        points: [
+            'История персонажей и заметок сохраняется',
+            'Игры и карты боя не теряются после обновления страницы',
+            'Один аккаунт для всех инструментов приложения',
+        ],
+    },
+    emailLabel: 'Email',
+    passwordLabel: 'Пароль',
+    emailPlaceholder: 'name@email.com',
+    passwordPlaceholder: 'Минимум 1 пароль, максимум одна драма',
+} as const;
+
 function getAuthErrorMessage(error: unknown, pageType: AuthPageProps['pageType']) {
     const rawMessage = error instanceof Error
         ? error.message
@@ -92,6 +131,7 @@ export default function AuthPage({ pageType }: AuthPageProps) {
 
     const navigate = useNavigate();
     const { login, register } = useAuth();
+    const pageText = AUTH_PAGE_TEXT[pageType];
 
     useEffect(() => {
         setError(null);
@@ -121,62 +161,78 @@ export default function AuthPage({ pageType }: AuthPageProps) {
     return (
         <div className={styles.authContainer}>
             <div className={styles.authWrapper}>
-                <div className={styles.img}></div>
-                <h2>
-                    {pageType === 'login' ? 'Вход' : 'Регистрация'}
-                </h2>
+                <section className={styles.hero}>
+                    <p className={styles.subtitle}>{pageText.subtitle}</p>
+                    <h1 className={styles.title}>{pageText.title}</h1>
+                    <p className={styles.description}>{pageText.description}</p>
 
-                <form onSubmit={handleSubmit} className={styles.authForm}>
-                    <Input
-                        type="email"
-                        placeholder="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        autoComplete="on"
-                    />
-
-                    <Input
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        autoComplete="on"
-                    />
-                    <div className={styles.switch}>
-                        {pageType === 'login' ? (
-                            <p>
-                                Нет аккаунта?{' '}
-                                <span className={styles.link} onClick={() => navigate('/register')}>
-                                    Зарегистрироваться
-                                </span>
-                            </p>
-                        ) : (
-                            <p>
-                                Уже есть аккаунт?{' '}
-                                <span className={styles.link} onClick={() => navigate('/login')}>
-                                    Войти
-                                </span>
-                            </p>
-                        )}
+                    <div className={styles.pointsList}>
+                        {pageText.points.map((point) => (
+                            <div key={point} className={styles.pointCard}>
+                                <span className={styles.pointMark} aria-hidden="true" />
+                                <span className={styles.pointText}>{point}</span>
+                            </div>
+                        ))}
                     </div>
-                    <Btn
-                        type="submit"
-                        disabled={loading}
-                        classBtn="btnColor"
-                    >
-                        {loading
-                            ? pageType === 'login'
-                                ? 'Вхожу...'
-                                : 'Регистрирую...'
-                            : pageType === 'login'
-                                ? 'Войти'
-                                : 'Зарегистрироваться'}
-                    </Btn>
+                </section>
 
-                    {error && (
-                        <p className={styles.errorText}>{error}</p>
-                    )}
-                </form>
+                <section className={styles.formCard}>
+                    <div className={styles.formHeader}>
+                        <div className={styles.brandRow}>
+                            <div className={styles.img}></div>
+                            <div>
+                                <p className={styles.brandName}>DnD App</p>
+                                <h2 className={styles.formTitle}>{pageText.heading}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className={styles.authForm}>
+                        <Input
+                            type="email"
+                            placeholder={AUTH_PAGE_TEXT.emailPlaceholder}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="on"
+                        >
+                            {AUTH_PAGE_TEXT.emailLabel}
+                        </Input>
+
+                        <Input
+                            type="password"
+                            placeholder={AUTH_PAGE_TEXT.passwordPlaceholder}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="on"
+                        >
+                            {AUTH_PAGE_TEXT.passwordLabel}
+                        </Input>
+
+                        <div className={styles.switch}>
+                            <p className={styles.switchText}>
+                                {pageText.switchLead}{' '}
+                                <span
+                                    className={styles.link}
+                                    onClick={() => navigate(pageType === 'login' ? '/register' : '/login')}
+                                >
+                                    {pageText.switchAction}
+                                </span>
+                            </p>
+                        </div>
+
+                        <Btn
+                            type="submit"
+                            disabled={loading}
+                            classBtn="btnColor"
+                        >
+                            {loading ? pageText.submitLoading : pageText.submitIdle}
+                        </Btn>
+
+                        {error && (
+                            <p className={styles.errorText}>{error}</p>
+                        )}
+                    </form>
+                </section>
             </div>
         </div>
     );

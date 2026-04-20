@@ -8,6 +8,7 @@ import { useAuth } from './context/auth/useAuth.ts';
 import NotFound from './components/NotFound/NotFound.tsx';
 
 import AuthPage from './components/AuthPage/AuthPage.tsx';
+import PatchNotes from './components/PatchNotes/PatchNotes.tsx';
 
 import Header from './components/Header/Header.tsx';
 import MainPage from './components/MainPage/MainPage.tsx';
@@ -98,6 +99,11 @@ function App() {
                     <Route
                         path="/login"
                         element={<AuthPage pageType="login" />}
+                    />
+
+                    <Route
+                        path="/patch_notes"
+                        element={<PatchNotes />}
                     />
 
                     <Route path="*" element={<NotFound />} />

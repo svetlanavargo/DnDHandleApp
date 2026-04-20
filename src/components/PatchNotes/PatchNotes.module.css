@@ -1,0 +1,366 @@
+.patchNotesContainer {
+    min-height: 100dvh;
+    padding: 96px 16px 56px;
+}
+
+.hero {
+    width: min(1080px, 100%);
+    margin: 0 auto 36px;
+    display: grid;
+    gap: 20px;
+}
+
+.heroMain {
+    position: relative;
+    overflow: hidden;
+    padding: 24px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(20, 20, 20, 0.85);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.24);
+}
+
+.heroMain::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(46, 185, 161, 0.32) 0%, rgba(46, 185, 161, 0) 72%);
+    pointer-events: none;
+}
+
+.subtitle {
+    margin: 0 0 12px;
+    color: #2eb9a1;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.title {
+    margin: 0 0 16px;
+    color: #FBFAFA;
+    font-size: clamp(32px, 7vw, 64px);
+    line-height: 0.95;
+    max-width: 760px;
+}
+
+.description {
+    margin: 0;
+    max-width: 720px;
+    color: #B8B8B8;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.overviewCard {
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+        rgba(24, 24, 24, 0.92);
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.22);
+}
+
+.overviewCard::after {
+    content: '';
+    position: absolute;
+    inset: auto -70px -90px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 184, 0, 0.16) 0%, rgba(255, 184, 0, 0) 72%);
+    pointer-events: none;
+}
+
+.overviewHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.overviewEyebrow {
+    color: #B8B8B8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.overviewDate {
+    color: #FBFAFA;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.statCard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px);
+}
+
+.featureStat {
+    background: linear-gradient(180deg, rgba(46, 185, 161, 0.12), rgba(255, 255, 255, 0.03));
+}
+
+.bugStat {
+    background: linear-gradient(180deg, rgba(138, 0, 0, 0.12), rgba(255, 255, 255, 0.03));
+}
+
+.statLabel {
+    color: #B8B8B8;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.statValue {
+    color: #FBFAFA;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+@media (min-width: 390px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.notesSection {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.feedbackSection {
+    width: min(1080px, 100%);
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feedbackIntro {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.feedbackSubtitle {
+    margin: 0 0 10px;
+    color: #2eb9a1;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.feedbackTitle {
+    margin: 0 0 12px;
+    color: #FBFAFA;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.02;
+    max-width: 760px;
+}
+
+.feedbackDescription {
+    margin: 0;
+    max-width: 720px;
+    color: #B8B8B8;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.feedbackSection :global(.formToggleContainer) {
+    position: relative;
+    z-index: 1;
+    max-width: none;
+    margin: 0 auto;
+}
+
+.emptyState {
+    padding: 28px 20px;
+    border-radius: 24px;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.emptyText {
+    margin: 0;
+    color: #C9C9C9;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.noteCard {
+    position: relative;
+    overflow: hidden;
+    padding: 20px 20px 20px 22px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+        rgba(27, 27, 27, 0.96);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.18);
+}
+
+.timelineAccent {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    border-radius: 999px;
+}
+
+.bugCard .timelineAccent {
+    background: linear-gradient(180deg, #ff8a8a 0%, #8A0000 100%);
+}
+
+.featureCard .timelineAccent {
+    background: linear-gradient(180deg, #8af0de 0%, #2eb9a1 100%);
+}
+
+.noteMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.typeBadge,
+.dateBadge,
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.bugBadge {
+    background: rgba(138, 0, 0, 0.22);
+    color: #FFB2B2;
+}
+
+.featureBadge {
+    background: rgba(46, 185, 161, 0.22);
+    color: #92f1e1;
+}
+
+.dateBadge {
+    background: rgba(255, 255, 255, 0.06);
+    color: #D7D7D7;
+}
+
+.statusBadge {
+    margin-left: auto;
+}
+
+.solvedBadge {
+    background: rgba(46, 185, 161, 0.16);
+    color: #8af0de;
+}
+
+.activeBadge {
+    background: rgba(255, 199, 82, 0.16);
+    color: #ffd27a;
+}
+
+.noteTitle {
+    margin: 0 0 12px;
+    color: #FBFAFA;
+    font-size: 24px;
+    line-height: 1.15;
+}
+
+.noteDescription {
+    margin: 0;
+    color: #C9C9C9;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+@media (min-width: 768px) {
+    .patchNotesContainer {
+        padding: 120px 32px 72px;
+    }
+
+    .hero {
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        align-items: stretch;
+    }
+
+    .heroMain,
+    .overviewCard {
+        padding: 28px;
+    }
+
+    .overviewCard {
+        border-radius: 28px;
+    }
+
+    .overviewHeader {
+        margin-bottom: 18px;
+    }
+
+    .overviewDate {
+        font-size: 18px;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .statCard {
+        gap: 8px;
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .statValue {
+        font-size: 32px;
+    }
+
+    .notesSection {
+        gap: 20px;
+    }
+
+    .noteCard {
+        padding: 24px 24px 24px 30px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .statsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

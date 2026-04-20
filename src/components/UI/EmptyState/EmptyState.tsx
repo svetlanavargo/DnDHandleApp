@@ -42,42 +42,60 @@ function EmptyState({
                     }: Props) {
     return (
         <div className={`${styles.container} ${className ?? ''}`}>
+            <div className={styles.card}>
+                {(image || classIcon) && (
+                    <div className={styles.visualShell}>
+                        {image && <div className={styles.image}>{image}</div>}
 
-            {/* IMAGE / ICON */}
-            {image && <div className={styles.image}>{image}</div>}
+                        {classIcon && (
+                            <ClassIcon
+                                spec={classIcon.spec}
+                                size={classIcon.size ?? 'big'}
+                            />
+                        )}
+                    </div>
+                )}
 
-            {classIcon && (
-                <ClassIcon
-                    spec={classIcon.spec}
-                    size={classIcon.size ?? 'big'}
-                />
-            )}
+                <div className={styles.content}>
+                    {title && <h2 className={styles.title}>{title}</h2>}
 
-            {/* TITLE */}
-            {title && <h2 className={styles.title}>{title}</h2>}
+                    {text && (
+                        <p className={styles.text}>
+                            {text}
+                            {linkTo && linkText && (
+                                <>
+                                    {' '}
+                                    <Link to={linkTo} className={styles.link}>
+                                        {linkText}
+                                    </Link>
+                                </>
+                            )}
+                        </p>
+                    )}
 
-            {/* TEXT */}
-            {text && <p className={styles.text}>{text}</p>}
+                    {!text && linkTo && linkText && (
+                        <Link to={linkTo} className={styles.link}>
+                            {linkText}
+                        </Link>
+                    )}
 
-            {/* LINK */}
-            {linkTo && linkText && (
-                <Link to={linkTo} className={styles.link}>
-                    {linkText}
-                </Link>
-            )}
+                    {buttonText && (
+                        <div className={styles.actions}>
+                            <Btn
+                                onClick={onButtonClick}
+                                classBtn="btnColor"
+                                disabled={buttonDisabled}
+                            >
+                                {buttonText}
+                            </Btn>
+                        </div>
+                    )}
 
-            {/* BUTTON */}
-            {buttonText && (
-                <Btn
-                    onClick={onButtonClick}
-                    classBtn="addHits"
-                    disabled={buttonDisabled}
-                />
-            )}
-
-            {statusText && (
-                <p className={styles.statusText}>{statusText}</p>
-            )}
+                    {statusText && (
+                        <p className={styles.statusText}>{statusText}</p>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
