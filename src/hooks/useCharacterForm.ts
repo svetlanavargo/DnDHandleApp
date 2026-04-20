@@ -11,6 +11,7 @@ import type {
 
 import { classesData } from "../constants/classesData";
 import { spellSlotProgression } from "../constants/spellSlotProgression";
+import { normalizeCharacterNotes } from "../utils/characterNotes";
 
 const THIEVES_TOOLS_KEY = 'thievesTools';
 
@@ -293,7 +294,7 @@ export function useCharacterForm(character: Character | null) {
                 currency: { platinum: 0, gold: 0, silver: 0, bronze: 0 }
             },
             fill: formValues.class,
-            note: existing?.note ?? []
+            note: normalizeCharacterNotes(existing?.note)
         };
     }
 

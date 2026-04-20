@@ -5,6 +5,11 @@ import { useNumberModal } from './useNumberModal.ts';
 import { spellSlotProgression } from '../constants/spellSlotProgression';
 import { classesData } from '../constants/classesData';
 import { getModifier } from '../utils/getModifier';
+import {
+    createCharacterNote,
+    normalizeCharacterNotes,
+    reorderCharacterNotes
+} from '../utils/characterNotes';
 
 import type { Character } from '../types/Character';
 import type { ClassKey, Classes, ProgressionType, SpellSlotsState } from '../types/dnd';
@@ -28,11 +33,15 @@ export function useList() {
     const [creatingCharacter, setCreatingCharacter] = useState(false);
 
     const [isNoteOpen, setIsNoteOpen] = useState(false);
-    const [activeNoteIndex, setActiveNoteIndex] = useState(0);
-    const [deleteNoteIndex, setDeleteNoteIndex] = useState<number | null>(null);
+    const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
+    const [deleteNoteId, setDeleteNoteId] = useState<string | null>(null);
 
     const activeCharacter =
         characters.find(c => c.id === activeCharacterId) ?? null;
+    const normalizedNotes = normalizeCharacterNotes(activeCharacter?.note);
+    const resolvedActiveNoteId = activeNoteId && normalizedNotes.some(note => note.id === activeNoteId)
+        ? activeNoteId
+        : normalizedNotes[0]?.id ?? null;
 
     const closeDeleteModal = useCallback(() => setDeletingCharacter(null), []);
     const closeEditModal = useCallback(() => setEditingCharacter(null), []);
@@ -204,33 +213,61 @@ export function useList() {
     const addNote = useCallback(() => {
         if (!activeCharacter) return;
 
-        const updatedNotes = [...(activeCharacter.note || []), ''];
+        const nextNote = createCharacterNote('');
+        const updatedNotes = [...normalizeCharacterNotes(activeCharacter.note), nextNote];
 
         updateCharacter({
             ...activeCharacter,
             note: updatedNotes
         });
 
-        setActiveNoteIndex(updatedNotes.length - 1);
+        setActiveNoteId(nextNote.id);
     }, [activeCharacter, updateCharacter]);
 
-    const requestDeleteNote = useCallback((index: number) => {
-        setDeleteNoteIndex(index);
+    const requestDeleteNote = useCallback((id: string) => {
+        setDeleteNoteId(id);
     }, []);
 
-    const confirmDeleteNote = useCallback(() => {
-        if (deleteNoteIndex === null || !activeCharacter) return;
+    const reorderNotes = useCallback((fromId: string, toId: string) => {
+        if (!activeCharacter) return;
 
-        const updatedNotes = [...(activeCharacter.note || [])];
-        updatedNotes.splice(deleteNoteIndex, 1);
+        const updatedNotes = reorderCharacterNotes(
+            normalizeCharacterNotes(activeCharacter.note),
+            fromId,
+            toId
+        );
+
+        updateCharacter({
+            ...activeCharacter,
+            note: updatedNotes
+        });
+        setActiveNoteId(fromId);
+    }, [activeCharacter, updateCharacter]);
+
+    const confirmDeleteNote = useCallback(() => {
+        if (deleteNoteId === null || !activeCharacter) return;
+
+        const updatedNotes = normalizeCharacterNotes(activeCharacter.note)
+            .filter(note => note.id !== deleteNoteId);
 
         updateCharacter({
             ...activeCharacter,
             note: updatedNotes
         });
 
-        setDeleteNoteIndex(null);
-    }, [deleteNoteIndex, activeCharacter, updateCharacter]);
+        setActiveNoteId(currentId => {
+            if (updatedNotes.length === 0) {
+                return null;
+            }
+
+            if (currentId && updatedNotes.some(note => note.id === currentId)) {
+                return currentId;
+            }
+
+            return updatedNotes[0].id;
+        });
+        setDeleteNoteId(null);
+    }, [deleteNoteId, activeCharacter, updateCharacter]);
 
     const handleRemoveCharacter = useCallback((id: string) => {
         removeCharacter(id);
@@ -246,6 +283,7 @@ export function useList() {
         longRest,
         addNote,
         requestDeleteNote,
+        reorderNotes,
         handleRemoveCharacter
     }), [
         handleAddCharacter,
@@ -256,21 +294,24 @@ export function useList() {
         longRest,
         addNote,
         requestDeleteNote,
+        reorderNotes,
         handleRemoveCharacter
     ]);
 
     const notes = useMemo(() => ({
         isNoteOpen,
         setIsNoteOpen,
-        activeNoteIndex,
-        setActiveNoteIndex,
-        deleteNoteIndex,
-        setDeleteNoteIndex,
+        activeNoteId: resolvedActiveNoteId,
+        setActiveNoteId,
+        deleteNoteId,
+        setDeleteNoteId,
+        normalizedNotes,
         confirmDeleteNote
     }), [
         isNoteOpen,
-        activeNoteIndex,
-        deleteNoteIndex,
+        resolvedActiveNoteId,
+        deleteNoteId,
+        normalizedNotes,
         confirmDeleteNote
     ]);
 

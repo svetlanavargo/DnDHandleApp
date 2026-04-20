@@ -206,7 +206,7 @@ export const classesData: Record<ClassKey, Class> = {
         url: "https://dnd.su/class/99-rogue/",
         name: "Плут",
         nameEn: "rogue",
-        hitDice: "1d8",
+        hitDice: "8",
         savingThrows: ["DEX", "INT"],
         caster: null,
         subclasses: {

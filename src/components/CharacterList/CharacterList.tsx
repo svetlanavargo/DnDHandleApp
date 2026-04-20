@@ -28,6 +28,10 @@ export default function CharacterList() {
         modals
     } = list;
 
+    const deletingNoteTitle = notes.deleteNoteId
+        ? notes.normalizedNotes.find(note => note.id === notes.deleteNoteId)?.text.trim().split(/\r?\n/)[0] || 'Новая'
+        : 'заметку';
+
     return (
         <div className={styles.characterListContainer}>
             {!user && <Warning />}
@@ -59,9 +63,6 @@ export default function CharacterList() {
 
                     <List
                         activeCharacter={activeCharacter}
-                        removeCharacter={() =>
-                            modals.setDeletingCharacter(activeCharacter)
-                        }
                         openEditModal={() =>
                             modals.setEditingCharacter(activeCharacter)
                         }
@@ -74,10 +75,11 @@ export default function CharacterList() {
                             notes.setIsNoteOpen(p => !p)
                         }
                         updateCharacter={actions.saveCharacter}
-                        addNote={actions.addNote}
                         deleteNote={actions.requestDeleteNote}
-                        setActiveNote={notes.setActiveNoteIndex}
-                        activeIndex={notes.activeNoteIndex}
+                        reorderNotes={actions.reorderNotes}
+                        notes={notes.normalizedNotes}
+                        setActiveNote={notes.setActiveNoteId}
+                        activeNoteId={notes.activeNoteId}
                     />
                 </div>
             )}
@@ -115,17 +117,21 @@ export default function CharacterList() {
                         character={modals.editingCharacter}
                         disabled={loading}
                         onClose={modals.closeEditModal}
+                        onDelete={() => {
+                            modals.setDeletingCharacter(modals.editingCharacter);
+                            modals.closeEditModal();
+                        }}
                         onSave={actions.saveCharacter}
                     />
                 </Modal>
             )}
 
-            {notes.deleteNoteIndex !== null && (
+            {notes.deleteNoteId !== null && (
                 <Modal isOpen size="small">
                     <Delete
-                        name="заметку"
+                        name={deletingNoteTitle}
                         onClose={() =>
-                            notes.setDeleteNoteIndex(null)
+                            notes.setDeleteNoteId(null)
                         }
                         remove={notes.confirmDeleteNote}
                     />

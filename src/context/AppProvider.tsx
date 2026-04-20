@@ -22,6 +22,7 @@ import { getApiErrorMessage } from '../api/apiTypes';
 import type { Character } from '../types/Character';
 import type { Game, TurnTimeMode } from '../types/Game';
 import type { Card } from '../types/CardInBattleTracker';
+import { normalizeCharacterNotes } from '../utils/characterNotes';
 
 type AppProviderProps = {
     children: React.ReactNode;
@@ -51,6 +52,13 @@ function syncableGame(game: Game): ApiGame {
     return {
         ...game,
         turnTimeMode: toApiTurnMode(game.turnTimeMode),
+    };
+}
+
+function normalizeCharacter(character: Character): Character {
+    return {
+        ...character,
+        note: normalizeCharacterNotes(character.note),
     };
 }
 
@@ -93,7 +101,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
                     ? gamesResponse.data.map(normalizeGame)
                     : [];
                 const nextCharacters = charactersResponse.ok
-                    ? charactersResponse.data
+                    ? charactersResponse.data.map(normalizeCharacter)
                     : [];
 
                 setGames(nextGames);
@@ -164,7 +172,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
                 throw new Error(getApiErrorMessage(response.error));
             }
 
-            return response.data;
+            return normalizeCharacter(response.data);
         },
         [isAuthLoading, isGuest]
     );

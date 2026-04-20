@@ -1,47 +1,120 @@
-import { memo, useCallback, useMemo } from 'react';
-import type { Character } from '../../../types/Character.ts';
+import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import type { Character, CharacterNote } from '../../../types/Character.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
+import { createCharacterNote } from '../../../utils/characterNotes.ts';
 import styles from './Note.module.css';
 
 interface NoteProps {
     character: Character;
+    notes: CharacterNote[];
     updateCharacter: (updated: Character) => void;
     isOpen: boolean;
     toggleOpen: () => void;
-    addNote: () => void;
-    deleteNote: (index: number) => void;
-    activeIndex: number;
-    setActiveNote: (index: number) => void;
+    deleteNote: (id: string) => void;
+    reorderNotes: (fromId: string, toId: string) => void;
+    activeNoteId: string | null;
+    setActiveNote: (id: string | null) => void;
 }
+
+interface NoteEditorProps {
+    initialValue: string;
+    onBlur: (value: string) => void;
+}
+
+interface NoteEditorHandle {
+    getValue: () => string;
+}
+
+const NoteEditor = memo(forwardRef<NoteEditorHandle, NoteEditorProps>(function NoteEditor({ initialValue, onBlur }: NoteEditorProps, ref) {
+    const [draft, setDraft] = useState(initialValue);
+
+    useImperativeHandle(ref, () => ({
+        getValue: () => draft
+    }), [draft]);
+
+    return (
+        <textarea
+            className={styles.contentEditable}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={() => onBlur(draft)}
+            placeholder="Заметка..."
+        />
+    );
+}));
 
 function Note({
                                  character,
+                                 notes,
                                  updateCharacter,
                                  isOpen,
                                  toggleOpen,
-                                 addNote,
                                  deleteNote,
-                                 activeIndex,
+                                 reorderNotes,
+                                 activeNoteId,
                                  setActiveNote
                              }: NoteProps) {
+    const [draggedNoteId, setDraggedNoteId] = useState<string | null>(null);
+    const [dropTargetNoteId, setDropTargetNoteId] = useState<string | null>(null);
+    const editorRef = useRef<NoteEditorHandle | null>(null);
+    const activeNote = useMemo(
+        () => notes.find(note => note.id === activeNoteId) ?? notes[0] ?? null,
+        [notes, activeNoteId]
+    );
 
-    const notes = useMemo(() => character.note || [], [character.note]);
+    const commitActiveNote = useCallback((value: string) => {
+        if (!activeNote) {
+            return;
+        }
 
-    const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const newNotes = [...(character.note || [])];
-        newNotes[activeIndex] = e.target.value;
+        const newNotes = notes.map(note =>
+            note.id === activeNote.id ? { ...note, text: value } : note
+        );
+
+        if (value === activeNote.text) {
+            return;
+        }
+
         updateCharacter({ ...character, note: newNotes });
-    }, [character, activeIndex, updateCharacter]);
+    }, [activeNote, character, notes, updateCharacter]);
 
-    const getTabName = useCallback((note: string) => {
-        const firstLine = note.trim().split(/\r?\n/)[0];
+    const handleBlur = useCallback((value: string) => {
+        commitActiveNote(value);
+    }, [commitActiveNote]);
+
+    const saveCurrentDraft = useCallback(() => {
+        const currentDraft = editorRef.current?.getValue();
+
+        if (typeof currentDraft !== 'string') {
+            return;
+        }
+
+        commitActiveNote(currentDraft);
+    }, [commitActiveNote]);
+
+    const handleAddNote = useCallback(() => {
+        const currentDraft = editorRef.current?.getValue();
+
+        const syncedNotes = activeNote && typeof currentDraft === 'string'
+            ? notes.map(note =>
+                note.id === activeNote.id ? { ...note, text: currentDraft } : note
+            )
+            : notes;
+
+        const nextNote = createCharacterNote('');
+
+        updateCharacter({
+            ...character,
+            note: [...syncedNotes, nextNote]
+        });
+
+        setActiveNote(nextNote.id);
+    }, [activeNote, character, notes, setActiveNote, updateCharacter]);
+
+    const getTabName = useCallback((noteText: string) => {
+        const firstLine = noteText.trim().split(/\r?\n/)[0];
         return firstLine || 'Новая';
     }, []);
-
-    const activeNote = useMemo(
-        () => notes[activeIndex] || '',
-        [notes, activeIndex]
-    );
 
     return (
         <div className={styles.noteContainer}>
@@ -52,31 +125,62 @@ function Note({
             <div className={`${styles.textareaWrapper} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.tabsWrapper}>
                     <div className={styles.tabsScroll}>
-                        {notes.map((note, i) => (
+                        {notes.map((note) => (
                             <div
-                                key={i}
-                                className={`${styles.tab} ${i === activeIndex ? styles.activeTab : ''}`}
-                                onClick={() => setActiveNote(i)}
+                                key={note.id}
+                                draggable
+                                className={`
+                                    ${styles.tab}
+                                    ${note.id === activeNote?.id ? styles.activeTab : ''}
+                                    ${note.id === draggedNoteId ? styles.draggingTab : ''}
+                                    ${note.id === dropTargetNoteId ? styles.dropTargetTab : ''}
+                                `}
+                                onClick={() => {
+                                    saveCurrentDraft();
+                                    setActiveNote(note.id);
+                                }}
+                                onDragStart={() => setDraggedNoteId(note.id)}
+                                onDragOver={(e) => {
+                                    e.preventDefault();
+                                    if (note.id !== draggedNoteId) {
+                                        setDropTargetNoteId(note.id);
+                                    }
+                                }}
+                                onDrop={() => {
+                                    if (draggedNoteId) {
+                                        reorderNotes(draggedNoteId, note.id);
+                                    }
+                                    setDraggedNoteId(null);
+                                    setDropTargetNoteId(null);
+                                }}
+                                onDragEnd={() => {
+                                    setDraggedNoteId(null);
+                                    setDropTargetNoteId(null);
+                                }}
                             >
-                                <span>{getTabName(note)}</span>
+                                <span>{getTabName(note.text)}</span>
                             </div>
                         ))}
                     </div>
                     <div className={styles.btnWrapper}>
-                        <Btn onClick={addNote} classBtn='addCharacter' />
+                        <Btn onClick={handleAddNote} classBtn='addCharacter' />
                     </div>
                 </div>
 
                 <div className={styles.noteWrapper}>
                     <div className={styles.deleteWrap}>
-                        <Btn onClick={() => deleteNote(activeIndex)} classBtn='delete' />
+                        {activeNote && (
+                            <Btn onClick={() => deleteNote(activeNote.id)} classBtn='delete' />
+                        )}
                     </div>
-                    <textarea
-                        className={styles.contentEditable}
-                        value={activeNote}
-                        onChange={handleChange}
-                        placeholder="Заметка..."
-                    />
+                    {activeNote && (
+                        <NoteEditor
+                            ref={editorRef}
+                            key={`${character.id}-${activeNote.id}-${activeNote.text}`}
+                            initialValue={activeNote.text}
+                            onBlur={handleBlur}
+                        />
+                    )}
                 </div>
             </div>
         </div>

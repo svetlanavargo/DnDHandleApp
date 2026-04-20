@@ -93,6 +93,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     border: 2px solid #1F1F1F;
+    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
 }
 
 .tab span {
@@ -106,6 +107,16 @@
     background-color: #242424;
     border: 2px solid #1F1F1F;
     border-bottom: 2px solid #242424;
+}
+
+.draggingTab {
+    opacity: 0.45;
+    transform: scale(0.97);
+}
+
+.dropTargetTab {
+    background-color: #2a2a2a;
+    border-color: #2eb9a1;
 }
 
 .btnWrapper {

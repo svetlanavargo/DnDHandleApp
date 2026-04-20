@@ -37,7 +37,6 @@ function HitsField({
         });
     };
 
-    // Берём значение hitDice как строку из JSON
     const diceHits = classesData[charClass]?.hitDice ?? '8';
     const diceNumber = Number(diceHits.replace(/\D/g, '')) || 8;
 

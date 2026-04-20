@@ -45,8 +45,14 @@ function Inventory() {
 
     const handleTextChange = useCallback((newText: string) => {
         setText(newText);
-        updateInventory(inv => ({ ...inv, note: newText }));
-    }, [updateInventory]);
+    }, []);
+
+    const handleTextBlur = useCallback(() => {
+        if (!activeCharacter) return;
+        if (text === activeCharacter.inventory.note) return;
+
+        updateInventory(inv => ({ ...inv, note: text }));
+    }, [activeCharacter, text, updateInventory]);
 
     const increment = useCallback((key: keyof Currency) => {
         updateInventory(inv => {
@@ -94,6 +100,7 @@ function Inventory() {
                 <InventoryList
                     text={text}
                     setText={handleTextChange}
+                    onBlur={handleTextBlur}
                 />
                 <CurrencyList
                     currency={currency}

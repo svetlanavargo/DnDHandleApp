@@ -28,12 +28,13 @@ interface Props {
     character: Character | null;
     onClose: () => void;
     onSave: (character: Character) => void;
+    onDelete?: () => void;
     disabled?: boolean;
 }
 
 type NumericField = "hits" | "speed" | "ac" | "initiative";
 
-function CharacterModal({ character, onClose, onSave, disabled }: Props) {
+function CharacterModal({ character, onClose, onSave, onDelete, disabled }: Props) {
     const {
         formValues,
         handleChange,
@@ -263,6 +264,11 @@ function CharacterModal({ character, onClose, onSave, disabled }: Props) {
             )}
 
             <div className={styles.modalButtons}>
+                {character && onDelete && (
+                    <Btn onClick={onDelete} classBtn='btnRed' disabled={disabled}>
+                        Удалить
+                    </Btn>
+                )}
                 <Btn type="submit" classBtn='btnColor' disabled={disabled}>
                     {character ? "Сохранить" : "Создать"}
                 </Btn>

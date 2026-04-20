@@ -1,5 +1,13 @@
 import type { ClassKey, RaceKey, Characteristics, SpellSlotsState, Currency, SpellsList } from './dnd.ts';
 
+export interface CharacterNote {
+    id: string;
+    text: string;
+}
+
+export type LegacyCharacterNote = string;
+export type NotesInput = Array<CharacterNote | LegacyCharacterNote>;
+
 export interface Character {
     id: string;
     race: RaceKey;
@@ -22,7 +30,7 @@ export interface Character {
     weapons: string[];
     armors: string[];
     tools: string[]
-    note: string[];
+    note: CharacterNote[];
     spellSlots?: SpellSlotsState;
     spells?: SpellsList;
     inventory: {

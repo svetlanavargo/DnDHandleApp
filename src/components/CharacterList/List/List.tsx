@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { Character } from '../../../types/Character.ts';
+import type { Character, CharacterNote } from '../../../types/Character.ts';
 import type { ClassKey, RaceKey } from '../../../types/dnd';
 import InfoField from '../InfoField/InfoField.tsx';
 import Note from '../Note/Note.tsx';
@@ -9,12 +9,10 @@ import CharacteristicsField from '../CharacteristicsField/CharacteristicsField.t
 import Skills from '../Skills/Skills.tsx';
 import DomainField from '../DomainField/DomainField.tsx';
 import Spells from '../Spells/Spells.tsx';
-import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './List.module.css';
 
 interface ListProps {
     activeCharacter: Character;
-    removeCharacter: () => void;
     openEditModal: () => void;
     longRest: () => void;
     addHits: () => void;
@@ -23,15 +21,15 @@ interface ListProps {
     isNoteOpen: boolean;
     toggleNoteOpen: () => void;
     updateCharacter: (updated: Character) => void;
-    addNote: () => void;
-    deleteNote: (index: number) => void;
-    activeIndex: number;
-    setActiveNote: (index: number) => void;
+    deleteNote: (id: string) => void;
+    reorderNotes: (fromId: string, toId: string) => void;
+    notes: CharacterNote[];
+    activeNoteId: string | null;
+    setActiveNote: (id: string | null) => void;
 }
 
 function List({
                                  activeCharacter,
-                                 removeCharacter,
                                  openEditModal,
                                  longRest,
                                  addHits,
@@ -40,9 +38,10 @@ function List({
                                  isNoteOpen,
                                  toggleNoteOpen,
                                  updateCharacter,
-                                 addNote,
                                  deleteNote,
-                                 activeIndex,
+                                 reorderNotes,
+                                 notes,
+                                 activeNoteId,
                                  setActiveNote
                              }: ListProps) {
     const raceKey = activeCharacter.race as RaceKey;
@@ -67,9 +66,10 @@ function List({
                     updateCharacter={updateCharacter}
                     isOpen={isNoteOpen}
                     toggleOpen={toggleNoteOpen}
-                    addNote={addNote}
                     deleteNote={deleteNote}
-                    activeIndex={activeIndex}
+                    reorderNotes={reorderNotes}
+                    notes={notes}
+                    activeNoteId={activeNoteId}
                     setActiveNote={setActiveNote}
                 />
 
@@ -119,10 +119,6 @@ function List({
                     character={activeCharacter}
                     updateCharacter={updateCharacter}
                 />
-
-                <div className={styles.delete}>
-                    <Btn onClick={removeCharacter} classBtn="delete" />
-                </div>
             </div>
         </div>
     );
