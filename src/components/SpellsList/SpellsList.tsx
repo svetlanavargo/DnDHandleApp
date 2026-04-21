@@ -170,7 +170,7 @@ function SpellsList() {
     return (
         <div className={styles.spellsContainer}>
             <div className={styles.pageShell}>
-                {!user && <Warning />}
+                {!user && <div className={styles.warning}><Warning /></div>}
                 <div className={styles.spellsWrap}>
                     <SpellsMenu
                         onAdd={() => openModal("add")}

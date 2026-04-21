@@ -26,6 +26,7 @@
     border-bottom-color: transparent;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    background: #242424;
 }
 
 .arrow {
@@ -82,7 +83,7 @@
     align-items: center;
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: -1px;
+    margin-bottom: -2px;
 }
 
 .tabsScroll {
@@ -94,10 +95,18 @@
     width: auto;
     min-height: 38px;
     align-items: end;
+    cursor: grab;
+    user-select: none;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-inline: contain;
 }
 
 .tabsScrollDragging {
     overflow: hidden;
+}
+
+.tabsScrollMouseDragging {
+    cursor: grabbing;
 }
 
 .tabsScroll::-webkit-scrollbar {
@@ -118,9 +127,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: #CFCFCF;
-    background-color: rgba(255, 255, 255, 0.03);
-    transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+    background-color: #242424;
+    transition: transform 0.18s ease, background-color 0.3s ease, border-color 0.18s ease, opacity 0.18s ease;
     position: relative;
+    border: 1px solid transparent;
+    border-bottom: none;
 }
 
 .tab span {
@@ -131,20 +142,11 @@
 }
 
 .activeTab {
-    background-color: #242424;
-    border-bottom-color: transparent;
+    background-color: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: none;
     color: #FBFAFA;
     z-index: 1;
-}
-
-.activeTab::after {
-    content: '';
-    position: absolute;
-    left: -1px;
-    right: -1px;
-    bottom: -1px;
-    height: 2px;
-    background-color: #242424;
 }
 
 .draggingTab {
@@ -178,7 +180,7 @@
     height: 100%;
     box-sizing: border-box;
     border: none;
-    background-color: #242424;
+    background-color: rgba(255, 255, 255, 0.025);
     color: #FBFAFA;
     resize: none;
     font-size: 16px;

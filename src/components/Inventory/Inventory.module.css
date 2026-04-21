@@ -18,3 +18,13 @@
     height: 100px;
     background-image: url("/img/dnd.svg");
 }
+
+.warning {
+    margin: 0 12px;
+}
+
+@media (min-width: 1023px) {
+    .warning {
+        margin: 0;
+    }
+}

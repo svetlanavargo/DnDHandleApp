@@ -113,7 +113,7 @@ function CreateCardModal({ onClose, onSubmit, initialValues }: CardModalProps) {
                     type="text"
                     value={formValues.name}
                     onChange={e => {
-                        const val = e.target.value.slice(0, 100);
+                        const val = e.target.value.slice(0, 50);
                         handleChange('name', val);
                     }}
                 >

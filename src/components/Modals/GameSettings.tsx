@@ -28,7 +28,7 @@ function GameSettings({
             <Input
                 type='text'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.slice(0, 50))}
                 onBlur={() => {
                     if (name.trim() && name !== game.name) {
                         onRename(game.id, name.trim());

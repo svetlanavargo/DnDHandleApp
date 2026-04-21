@@ -4,6 +4,7 @@
 
 .contentEditable {
     height: 100%;
+    width: -webkit-fill-available;
     padding: 20px;
     border: none;
     background-color: transparent;

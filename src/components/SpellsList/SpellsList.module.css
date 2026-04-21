@@ -1,7 +1,6 @@
 .spellsContainer {
     height: calc(100% - 60px);
     margin: 0;
-    padding: 0 12px;
 }
 
 .pageShell {
@@ -22,14 +21,7 @@
 }
 
 .tabsShell {
-    overflow: hidden;
-    flex-shrink: 0;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 12px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-        rgba(22, 22, 22, 0.96);
+    display: none;
 }
 
 .img {
@@ -38,7 +30,14 @@
     background-image: url("/img/dnd.svg");
 }
 
+.warning {
+    margin: 0 12px;
+}
+
 @media (min-width: 1023px) {
+    .warning {
+        margin: 0;
+    }
     .pageShell {
         width: 100%;
         max-width: none;
@@ -51,14 +50,5 @@
     .spellsContainer {
         padding: 0;
     }
-
-    .spellsWrap {
-        padding: 0 20px;
-    }
 }
 
-@media (min-width: 1440px) {
-    .tabsShell {
-        display: none;
-    }
-}

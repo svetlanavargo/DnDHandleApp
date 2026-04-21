@@ -1,23 +1,33 @@
 .spellsListViewContainer {
     position: relative;
     width: 100%;
-    height: 520px;
-
     display: block;
     overflow: visible;
-
-    padding: 20px;
-    margin-top: 20px;
     box-sizing: border-box;
+    height: 100%;
+    min-height: 560px;
+    margin-top: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-inline: contain;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.mobileStack {
+.spellsListViewContainer::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.singleStack {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-.cardWrapper {
+.singleCardWrapper {
     position: absolute;
     top: 0;
     left: 50%;
@@ -35,11 +45,11 @@
             rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
-.cardWrapper a {
+.singleCardWrapper a {
     pointer-events: none;
 }
 
-.active a {
+.singleCardActive a {
     pointer-events: auto;
 }
 
@@ -52,122 +62,135 @@
     background-size: contain;
 }
 
-.desktopStacks {
+.singleStack {
     display: none;
 }
 
-@media (min-width: 1440px) {
-    .spellsListViewContainer {
-        height: 100%;
-        min-height: 560px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 8px 56px 20px;
-        margin-top: 0;
-    }
+.stacks {
+    display: inline-grid;
+    align-items: start;
+    width: max-content;
+    height: 100%;
+    box-sizing: border-box;
+}
 
-    .mobileStack {
-        display: none;
-    }
+.levelStack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
-    .desktopStacks {
-        display: grid;
-        grid-template-columns: repeat(10, minmax(176px, 1fr));
-        gap: 80px;
-        align-items: start;
-        min-width: 1920px;
-        height: 100%;
-        padding: 0 12px;
-        box-sizing: border-box;
-    }
+.levelStack::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
 
-    .levelStack {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 0;
-        height: 100%;
-    }
+.levelBadge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 228px;
+    min-height: 32px;
+    padding: 0 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #242424;
+    color: #f5f5f5;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    appearance: none;
+    font-family: inherit;
+}
 
-    .levelBadge {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 168px;
-        min-height: 32px;
-        padding: 0 12px;
-        margin-bottom: 16px;
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(31, 31, 31, 0.92);
-        color: #f5f5f5;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-        appearance: none;
-        padding: 0 12px;
-        font-family: inherit;
-    }
+.levelBadge:hover {
+    border-color: rgba(46, 185, 161, 0.4);
+    background: rgba(46, 185, 161, 0.08);
+    color: #ffffff;
+}
 
-    .levelBadge:hover {
-        border-color: rgba(46, 185, 161, 0.4);
-        background: rgba(46, 185, 161, 0.08);
-        color: #ffffff;
-    }
+.stackField {
+    position: relative;
+    width: 100%;
+    min-width: 280px;
+    min-height: 420px;
+    overflow: visible;
+}
 
+@media (min-width: 425px) {
     .stackField {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 520px;
-        min-width: 176px;
+        min-width: 300px;
     }
+}
 
-    .desktopCardWrapper {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transition: transform 0.2s ease;
-        will-change: transform;
-        transform-origin: top center;
-        box-shadow:
-                0 10px 20px rgba(0, 0, 0, 0.18),
-                0 2px 8px rgba(0, 0, 0, 0.14);
-    }
+.stackContent {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+}
 
-    .desktopCardWrapper a {
-        pointer-events: none;
-    }
+.stackCardWrapper {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transition: transform 0.2s ease;
+    will-change: transform;
+    transform-origin: top center;
+    border-radius: 16px;
+}
 
-    .desktopActive a {
-        pointer-events: auto;
+.stackCardWrapper a {
+    pointer-events: none;
+}
+
+.stackCardActive a {
+    pointer-events: auto;
+}
+
+.emptyStack {
+    width: 228px;
+    height: 318px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-radius: 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 40px;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    appearance: none;
+    padding: 0;
+    font: inherit;
+}
+
+.emptyStack:hover {
+    border-color: rgba(46, 185, 161, 0.4);
+    background: rgba(46, 185, 161, 0.08);
+    color: rgba(255, 255, 255, 0.92);
+}
+
+@media (min-width: 1024px) {
+    .levelBadge {
+        width: 228px;
     }
 
     .emptyStack {
-        width: 168px;
-        height: 236px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        border-radius: 14px;
-        border: 1px dashed rgba(255, 255, 255, 0.16);
-        background: rgba(255, 255, 255, 0.03);
-        color: rgba(255, 255, 255, 0.55);
-        font-size: 40px;
-        line-height: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-        appearance: none;
-        padding: 0;
-        font: inherit;
-    }
-
-    .emptyStack:hover {
-        border-color: rgba(46, 185, 161, 0.4);
-        background: rgba(46, 185, 161, 0.08);
-        color: rgba(255, 255, 255, 0.92);
+        width: 228px;
+        height: 318px;
     }
 }

@@ -89,7 +89,7 @@ function CharacterModal({ character, onClose, onSave, onDelete, disabled }: Prop
                 ref={firstInputRef}
                 type="text"
                 value={formValues.name}
-                onChange={e => handleChange("name", e.target.value)}
+                onChange={e => handleChange("name", e.target.value.slice(0, 50))}
             >
                 Имя
             </Input>

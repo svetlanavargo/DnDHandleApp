@@ -195,6 +195,20 @@ function SpellsAddCard({
         });
     }, [character, filters]);
 
+    const maxAvailableSpellLevel = useMemo(() => {
+        if (!character) {
+            return 0;
+        }
+
+        const activeClass = (filters.class || character.class) as ClassKey;
+
+        return getMaxSpellLevel(
+            character.level,
+            activeClass,
+            filters.subclass || character.subclass
+        );
+    }, [character, filters.class, filters.subclass]);
+
     // ================= RANDOM PLACEHOLDER =================
 
     function getRandomSpellName(spells: Spell[]) {
@@ -236,6 +250,14 @@ function SpellsAddCard({
 
         return character.spells?.[levelKey]?.includes(activeSpell.url);
     }, [character, activeSpell]);
+
+    const isActiveSpellAvailable = useMemo(() => {
+        if (!activeSpell) {
+            return false;
+        }
+
+        return Number(activeSpell.lvl) <= maxAvailableSpellLevel;
+    }, [activeSpell, maxAvailableSpellLevel]);
 
     // ================= UI =================
 
@@ -282,7 +304,7 @@ function SpellsAddCard({
             />
 
             <div className={styles.spellsList}>
-                <h3>Доступные заклинания:</h3>
+                <h3>Заклинания:</h3>
 
                 {availableSpells.length === 0 ? (
                     <p>Нет доступных заклинаний</p>
@@ -311,8 +333,11 @@ function SpellsAddCard({
                             <Btn
                                 onClick={handleToggleSpell}
                                 classBtn={isActiveSpellAdded ? "btnRed" : "btnColor"}
+                                disabled={!activeSpell || !isActiveSpellAvailable}
                             >
-                                {isActiveSpellAdded
+                                {!activeSpell || !isActiveSpellAvailable
+                                    ? "Недоступно"
+                                    : isActiveSpellAdded
                                     ? "Удалить заклинание"
                                     : "Добавить заклинание"}
                             </Btn>

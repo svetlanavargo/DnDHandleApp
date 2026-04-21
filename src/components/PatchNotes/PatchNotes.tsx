@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import patchNotes from '../../data/PatchNotesData/PatchNotes.json';
 import FormToggle from '../MainPage/FormToggle/FormToggle.tsx';
 import styles from './PatchNotes.module.css';
@@ -58,6 +58,17 @@ function getDateValue(date: string) {
 
 export default function PatchNotes() {
     const [activeForm, setActiveForm] = useState<'feedback' | 'report'>('feedback');
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+
+        const root = document.getElementById('root');
+
+        if (root) {
+            root.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    }, []);
+
     const entries = [...(patchNotes as PatchNote[])].sort((left, right) => (
         getDateValue(right.date) - getDateValue(left.date)
     ));

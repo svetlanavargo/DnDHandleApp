@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import Btn from '../Btn/Btn.tsx';
 import styles from './Tabs.module.css';
 
@@ -25,9 +26,43 @@ function Tabs({
     addStatusText,
     maxItems = 6
 }: TabsProps) {
+    const tabsRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const tabsElement = tabsRef.current;
+
+        if (!tabsElement) {
+            return;
+        }
+
+        const handleWheel = (event: WheelEvent) => {
+            if (tabsElement.scrollWidth <= tabsElement.clientWidth) {
+                return;
+            }
+
+            const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+                ? event.deltaX
+                : event.deltaY;
+
+            if (delta === 0) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            tabsElement.scrollLeft += delta;
+        };
+
+        tabsElement.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            tabsElement.removeEventListener('wheel', handleWheel);
+        };
+    }, []);
+
     return (
         <div className={styles.tabsWrapper}>
-            <div className={styles.tabs}>
+            <div ref={tabsRef} className={styles.tabs}>
                 {items.map((item) => (
                     <div
                         key={item.id}

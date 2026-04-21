@@ -16,15 +16,22 @@ function CardSlider<T>({
                        }: Props<T>) {
     const ref = useRef<HTMLDivElement | null>(null);
     const timeoutRef = useRef<number | null>(null);
+    const isDraggingRef = useRef(false);
+    const dragStartXRef = useRef(0);
+    const startScrollLeftRef = useRef(0);
+    const movedDuringDragRef = useRef(false);
 
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
 
     // 🔥 защита от out-of-range
     const safeItems = useMemo(() => items ?? [], [items]);
+    const normalizedActiveIndex = Math.min(
+        activeIndex,
+        Math.max(safeItems.length - 1, 0)
+    );
+    const activeItem = safeItems[normalizedActiveIndex];
 
-    const activeItem = safeItems[activeIndex];
-
-    // 🚀 уведомляем родителя только когда реально есть item
     useEffect(() => {
         if (activeItem) {
             onActiveChange?.(activeItem);
@@ -82,6 +89,10 @@ function CardSlider<T>({
     };
 
     const onScroll = () => {
+        if (isDraggingRef.current) {
+            return;
+        }
+
         const index = getActiveIndex();
 
         setActiveIndex(index);
@@ -95,17 +106,80 @@ function CardSlider<T>({
         }, 120);
     };
 
-    useEffect(() => {
-        if (safeItems.length > 0) {
-            setActiveIndex(0);
+    const stopDragging = () => {
+        if (!isDraggingRef.current) {
+            return;
         }
-    }, [safeItems]);
+
+        isDraggingRef.current = false;
+        setIsDragging(false);
+
+        const index = getActiveIndex();
+        setActiveIndex(index);
+        snapTo(index);
+    };
+
+    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) {
+            return;
+        }
+
+        isDraggingRef.current = true;
+        movedDuringDragRef.current = false;
+        setIsDragging(true);
+        dragStartXRef.current = event.clientX;
+        startScrollLeftRef.current = ref.current.scrollLeft;
+    };
+
+    const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDraggingRef.current || !ref.current) {
+            return;
+        }
+
+        const deltaX = event.clientX - dragStartXRef.current;
+
+        if (Math.abs(deltaX) > 3) {
+            movedDuringDragRef.current = true;
+        }
+
+        ref.current.scrollLeft = startScrollLeftRef.current - deltaX;
+    };
+
+    const handleClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (movedDuringDragRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            movedDuringDragRef.current = false;
+        }
+    };
+
+    const handleDragStartCapture = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    useEffect(() => {
+        window.addEventListener('mouseup', stopDragging);
+
+        return () => {
+            window.removeEventListener('mouseup', stopDragging);
+        };
+    });
 
     return (
         <div className={styles.wrapper}>
-            <div ref={ref} className={styles.slider} onScroll={onScroll}>
+            <div
+                ref={ref}
+                className={`${styles.slider} ${isDragging ? styles.sliderDragging : ''}`}
+                onScroll={onScroll}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={stopDragging}
+                onMouseLeave={stopDragging}
+                onClickCapture={handleClickCapture}
+                onDragStartCapture={handleDragStartCapture}
+            >
                 {safeItems.map((item, i) => {
-                    const distance = Math.abs(i - activeIndex);
+                    const distance = Math.abs(i - normalizedActiveIndex);
 
                     const scale = Math.max(0.85, 1 - distance * 0.12);
                     const opacity = Math.max(0.5, 1 - distance * 0.25);
@@ -114,12 +188,13 @@ function CardSlider<T>({
                         <div
                             key={getKey(item)}
                             className={styles.card}
+                            draggable={false}
                             style={{
                                 transform: `scale(${scale})`,
                                 opacity
                             }}
                         >
-                            {renderItem(item, i === activeIndex)}
+                            {renderItem(item, i === normalizedActiveIndex)}
                         </div>
                     );
                 })}

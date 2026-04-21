@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import type { Character, CharacterNote } from '../../../types/Character.ts';
 import Btn from '../../UI/Btn/Btn.tsx';
 import { createCharacterNote } from '../../../utils/characterNotes.ts';
@@ -56,10 +56,16 @@ function Note({
                              }: NoteProps) {
     const [draggedNoteId, setDraggedNoteId] = useState<string | null>(null);
     const [dropTargetNoteId, setDropTargetNoteId] = useState<string | null>(null);
+    const [isMouseDraggingTabs, setIsMouseDraggingTabs] = useState(false);
     const editorRef = useRef<NoteEditorHandle | null>(null);
+    const tabsScrollRef = useRef<HTMLDivElement | null>(null);
     const longPressTimerRef = useRef<number | null>(null);
     const touchStartRef = useRef<{ x: number; y: number } | null>(null);
     const suppressClickRef = useRef(false);
+    const mouseDragStartXRef = useRef(0);
+    const mouseStartScrollLeftRef = useRef(0);
+    const isMouseDraggingTabsRef = useRef(false);
+    const movedDuringMouseDragRef = useRef(false);
     const activeNote = useMemo(
         () => notes.find(note => note.id === activeNoteId) ?? notes[0] ?? null,
         [notes, activeNoteId]
@@ -185,6 +191,87 @@ function Note({
         touchStartRef.current = null;
     }, [clearLongPressTimer, draggedNoteId, dropTargetNoteId, reorderNotes, resolveNoteIdFromPoint]);
 
+    const stopMouseDraggingTabs = useCallback(() => {
+        if (!isMouseDraggingTabsRef.current) {
+            return;
+        }
+
+        isMouseDraggingTabsRef.current = false;
+        setIsMouseDraggingTabs(false);
+    }, []);
+
+    const handleTabsMouseDown = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        if (!tabsScrollRef.current) {
+            return;
+        }
+
+        const target = event.target;
+
+        if (target instanceof HTMLElement && target.closest('[data-note-id]')) {
+            return;
+        }
+
+        isMouseDraggingTabsRef.current = true;
+        movedDuringMouseDragRef.current = false;
+        setIsMouseDraggingTabs(true);
+        mouseDragStartXRef.current = event.clientX;
+        mouseStartScrollLeftRef.current = tabsScrollRef.current.scrollLeft;
+    }, []);
+
+    const handleTabsMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        if (!isMouseDraggingTabsRef.current || !tabsScrollRef.current) {
+            return;
+        }
+
+        const deltaX = event.clientX - mouseDragStartXRef.current;
+
+        if (Math.abs(deltaX) > 3) {
+            movedDuringMouseDragRef.current = true;
+        }
+
+        tabsScrollRef.current.scrollLeft = mouseStartScrollLeftRef.current - deltaX;
+    }, []);
+
+    const handleTabsClickCapture = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        if (movedDuringMouseDragRef.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            movedDuringMouseDragRef.current = false;
+        }
+    }, []);
+
+    useEffect(() => {
+        const tabsScroll = tabsScrollRef.current;
+
+        if (!tabsScroll) {
+            return;
+        }
+
+        const handleWheel = (event: WheelEvent) => {
+            if (tabsScroll.scrollWidth <= tabsScroll.clientWidth) {
+                return;
+            }
+
+            const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+                ? event.deltaX
+                : event.deltaY;
+
+            if (delta === 0) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            tabsScroll.scrollLeft += delta;
+        };
+
+        tabsScroll.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            tabsScroll.removeEventListener('wheel', handleWheel);
+        };
+    }, []);
+
     return (
         <div className={styles.noteContainer}>
             <div
@@ -196,7 +283,15 @@ function Note({
 
             <div className={`${styles.textareaWrapper} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.tabsWrapper}>
-                    <div className={`${styles.tabsScroll} ${draggedNoteId ? styles.tabsScrollDragging : ''}`}>
+                    <div
+                        ref={tabsScrollRef}
+                        className={`${styles.tabsScroll} ${draggedNoteId ? styles.tabsScrollDragging : ''} ${isMouseDraggingTabs ? styles.tabsScrollMouseDragging : ''}`}
+                        onMouseDown={handleTabsMouseDown}
+                        onMouseMove={handleTabsMouseMove}
+                        onMouseUp={stopMouseDraggingTabs}
+                        onMouseLeave={stopMouseDraggingTabs}
+                        onClickCapture={handleTabsClickCapture}
+                    >
                         {notes.map((note) => (
                             <div
                                 key={note.id}
@@ -216,7 +311,13 @@ function Note({
                                     saveCurrentDraft();
                                     setActiveNote(note.id);
                                 }}
-                                onDragStart={() => setDraggedNoteId(note.id)}
+                                onDragStart={(e) => {
+                                    if (isMouseDraggingTabsRef.current) {
+                                        e.preventDefault();
+                                        return;
+                                    }
+                                    setDraggedNoteId(note.id);
+                                }}
                                 onDragOver={(e) => {
                                     e.preventDefault();
                                     if (note.id !== draggedNoteId) {

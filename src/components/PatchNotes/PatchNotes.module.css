@@ -1,6 +1,6 @@
 .patchNotesContainer {
     min-height: 100dvh;
-    padding: 96px 16px 56px;
+    padding: 50px 12px 20px;
 }
 
 .hero {
@@ -329,6 +329,8 @@
 
     .overviewHeader {
         margin-bottom: 18px;
+        display: flex;
+        align-items: center
     }
 
     .overviewDate {
@@ -344,6 +346,9 @@
         gap: 8px;
         padding: 18px;
         border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .statValue {

@@ -10,10 +10,6 @@
     position: relative;
 }
 
-/* =========================
-   BIG CARD (твой текущий дизайн)
-   ========================= */
-
 .spellCardBig {
     width: 286px;
     height: 397px;
@@ -182,6 +178,7 @@
 .cardFillBard {
     background-image: url("/img/CardsFill/Bard.svg");
     color: #4f1e7a;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
 .cardFillBard .titleSmall,
 .cardFillBard .titleBig {
@@ -194,6 +191,7 @@
 .cardFillCleric {
     background-image: url("/img/CardsFill/Cleric.svg");
     color: #7a5a1a;
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
 .cardFillCleric .titleSmall,
 .cardFillCleric .titleBig {
@@ -206,6 +204,7 @@
 .cardFillDruid {
     background-image: url("/img/CardsFill/Druid.svg");
     color: #755436;
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
 .cardFillDruid .titleSmall,
 .cardFillDruid .titleBig {
@@ -218,6 +217,7 @@
 .cardFillPaladin {
     background-image: url("/img/CardsFill/Paladin.svg");
     color: #1c7293;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
 .cardFillPaladin .titleSmall,
 .cardFillPaladin .titleBig {
@@ -230,6 +230,7 @@
 .cardFillRanger {
     background-image: url("/img/CardsFill/Ranger.svg");
     color: #113317;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
 .cardFillRanger .titleSmall,
 .cardFillRanger .titleBig {
@@ -242,6 +243,7 @@
 .cardFillSorcerer {
     background-image: url("/img/CardsFill/Sorcerer.svg");
     color: #2c7a65;
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
 .cardFillSorcerer .titleSmall,
 .cardFillSorcerer .titleBig {
@@ -254,6 +256,7 @@
 .cardFillWarlock {
     background-image: url("/img/CardsFill/Warlock.svg");
     color: #72111d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
 .cardFillWarlock .titleSmall,
 .cardFillWarlock .titleBig {
@@ -266,6 +269,7 @@
 .cardFillWizard {
     background-image: url("/img/CardsFill/Wizard.svg");
     color: #161951;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
 .cardFillWizard .titleSmall,
 .cardFillWizard .titleBig {
@@ -274,4 +278,3 @@
 .cardFillWizard .color {
     color: #1a1a1a;
 }
-

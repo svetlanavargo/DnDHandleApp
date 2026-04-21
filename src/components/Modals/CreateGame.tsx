@@ -36,7 +36,7 @@ function CreateGame({ onCreate, onClose, disabled }: CreateGameProps) {
                 ref={inputRef}
                 type='text'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value.slice(0, 50))}
                 placeholder="Например: Кампания в подземелье"
             />
 

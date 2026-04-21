@@ -95,7 +95,7 @@ function Inventory() {
 
     return (
         <div className={styles.inventoryContainer}>
-            {!user && <Warning />}
+            {!user && <div className={styles.warning}><Warning /></div>}
             <div className={styles.inventory}>
                 <InventoryList
                     text={text}
