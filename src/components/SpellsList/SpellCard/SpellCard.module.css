@@ -21,9 +21,6 @@
 }
 
 .levelBig {
-    /*position: absolute;*/
-    /*top: 25px;*/
-    /*right: 25px;*/
     display: none;
 }
 
@@ -71,9 +68,7 @@
     background-image: url("/img/link.svg");
 }
 
-/* =========================
-   BIG CARD (media)
-   ========================= */
+
 
 @media (min-width: 424px) {
     .spellCardBig {
@@ -105,9 +100,7 @@
     }
 }
 
-/* =========================
-   SMALL CARD (дубликат для свайпера)
-   ========================= */
+
 
 .spellCardSmall {
     width: 220px;
@@ -154,7 +147,7 @@
     position: relative;
     overflow-y: auto;
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
 }
 

@@ -70,7 +70,7 @@
     color: #1a1a1a;
     background-image: url("/img/MainPage/card8.png");
     background-position: right bottom;
-    background-size: 100px;
+    background-size: 80px;
 }
 
 .card1Inner {
@@ -169,7 +169,7 @@
     .card8 {
         grid-column: span 4;
         min-height: 220px;
-        background-size: 250px;
+        background-size: 200px;
     }
 
     .card8 .cardTitle {

@@ -110,9 +110,9 @@ ul {
     font-size: 12px;
     margin: 0;
     white-space: pre-wrap;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
     padding: 0 1rem;
     color: var(--card-muted-text-color);

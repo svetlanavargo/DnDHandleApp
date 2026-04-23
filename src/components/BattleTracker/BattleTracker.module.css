@@ -40,14 +40,6 @@
     position: relative;
     flex: 1;
     min-height: 0;
-    /*border-top: 1px solid rgba(255, 255, 255, 0.08);*/
-    /*border-left: 1px solid rgba(255, 255, 255, 0.08);*/
-    /*border-right: 1px solid rgba(255, 255, 255, 0.08);*/
-    /*border-radius: 16px 16px 0 0;*/
-    /*background:*/
-    /*    linear-gradient(180deg, #242424, rgba(255, 255, 255, 0.015)),*/
-    /*    rgba(22, 22, 22, 0.96);*/
-    /*box-shadow: 0 24px 54px rgba(0, 0, 0, 0.2);*/
 }
 
 .container > div:nth-child(2) {

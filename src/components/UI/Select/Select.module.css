@@ -47,9 +47,9 @@
     max-height: 200px;
     overflow-y: auto;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
 }
 

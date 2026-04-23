@@ -53,3 +53,25 @@
     text-shadow: 0 0 2px rgba(79, 151, 255, 0.7);
     pointer-events: none;
 }
+
+@media (min-width: 1024px) {
+    .domainFieldContainer {
+        margin-bottom: 0;
+        gap: 20px;
+    }
+
+    .domainFieldWrapper {
+        padding: 18px 16px;
+        flex-basis: calc(50% - 8px);
+    }
+
+    .header {
+        margin-bottom: 8px;
+        font-size: 8px;
+    }
+
+    .text {
+        font-size: 13px;
+        line-height: 1.45;
+    }
+}

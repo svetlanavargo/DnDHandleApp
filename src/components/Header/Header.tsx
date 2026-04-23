@@ -93,21 +93,25 @@ export default function Header({ setIsDiceOpen }: HeaderProps) {
             </div>
 
             <div className={styles.linkContainer}>
-                {menuItems.map(renderItem)}
+                <div className={styles.linkWrapper}>
+                    {menuItems.map(renderItem)}
+                </div>
 
-                {user ? (
-                    <div onClick={() => setIsLogoutModalOpen(true)} className={styles.wrapperLink}>
-                        <img className={styles.icon} src={Logout} alt="" />
-                        <p className={styles.menuText}>Выйти</p>
-                    </div>
-                ) : (
-                    <Link to="/login">
-                        <div className={styles.wrapperLink}>
-                            <img className={styles.icon} src={Login} alt="" />
-                            <p className={styles.menuText}>Войти</p>
+                <div>
+                    {user ? (
+                        <div onClick={() => setIsLogoutModalOpen(true)} className={styles.wrapperLink}>
+                            <img className={styles.icon} src={Logout} alt="" />
+                            <p className={styles.menuText}>Выйти</p>
                         </div>
-                    </Link>
-                )}
+                    ) : (
+                        <Link to="/login">
+                            <div className={styles.wrapperLink}>
+                                <img className={styles.icon} src={Login} alt="" />
+                                <p className={styles.menuText}>Войти</p>
+                            </div>
+                        </Link>
+                    )}
+                </div>
             </div>
 
             {isLogoutModalOpen && (

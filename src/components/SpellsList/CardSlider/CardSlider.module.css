@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-/* ===== CAROUSEL ===== */
+
 
 .slider {
     width: 100%;
@@ -15,7 +15,7 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 
-    padding: 25px; /* важно */
+    padding: 25px; 
     align-items: center;
 
     scrollbar-width: none;
@@ -32,7 +32,7 @@
     display: none;
 }
 
-/* ===== CARD ===== */
+
 
 .card {
     flex: 0 0 auto;
@@ -42,7 +42,7 @@
     will-change: transform;
 }
 
-/* ===== ACTION BUTTON ===== */
+
 
 .actions {
     margin-top: 16px;

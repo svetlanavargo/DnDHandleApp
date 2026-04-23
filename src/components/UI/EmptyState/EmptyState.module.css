@@ -14,7 +14,6 @@
         radial-gradient(circle at top left, rgba(46, 185, 161, 0.14), transparent 24%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
         rgba(24, 24, 24, 0.96);
-    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.22);
     display: flex;
     flex-direction: column;
     align-items: center;

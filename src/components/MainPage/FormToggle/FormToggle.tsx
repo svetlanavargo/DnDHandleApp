@@ -26,6 +26,7 @@ type ReportFormState = {
 
 type FeedbackTouchedState = Record<keyof FeedbackFormState, boolean>;
 type ReportTouchedState = Record<keyof ReportFormState, boolean>;
+const MAX_FORM_FIELD_LENGTH = 1000;
 
 // Меняй здесь тексты переключателя, заголовки формы и текст кнопок.
 const FEEDBACK_TEXT = {
@@ -77,6 +78,10 @@ const EMAIL_REGEXP = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isBlank(value: string) {
     return value.trim().length === 0;
+}
+
+function limitFieldLength(value: string) {
+    return value.slice(0, MAX_FORM_FIELD_LENGTH);
 }
 
 function getFeedbackErrors(values: FeedbackFormState) {
@@ -211,7 +216,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
     function handleFeedbackChange<K extends keyof FeedbackFormState>(field: K, value: FeedbackFormState[K]) {
         setSubmittedType(null);
         setSubmitError(null);
-        setFeedbackForm(prev => ({ ...prev, [field]: value }));
+        setFeedbackForm(prev => ({ ...prev, [field]: limitFieldLength(String(value)) }));
     }
 
     function handleFeedbackBlur(field: keyof FeedbackFormState) {
@@ -221,7 +226,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
     function handleReportChange<K extends keyof ReportFormState>(field: K, value: ReportFormState[K]) {
         setSubmittedType(null);
         setSubmitError(null);
-        setReportForm(prev => ({ ...prev, [field]: value }));
+        setReportForm(prev => ({ ...prev, [field]: limitFieldLength(String(value)) }));
     }
 
     function handleReportBlur(field: keyof ReportFormState) {
@@ -276,6 +281,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                                 <Input
                                     type="text"
                                     value={feedbackForm.name}
+                                    maxLength={MAX_FORM_FIELD_LENGTH}
                                     onChange={(e) => handleFeedbackChange('name', e.target.value)}
                                     onBlur={() => handleFeedbackBlur('name')}
                                     placeholder="Как к тебе обращаться"
@@ -291,6 +297,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                                 <Input
                                     type="email"
                                     value={feedbackForm.email}
+                                    maxLength={MAX_FORM_FIELD_LENGTH}
                                     onChange={(e) => handleFeedbackChange('email', e.target.value)}
                                     onBlur={() => handleFeedbackBlur('email')}
                                     placeholder="name@email.com"
@@ -306,6 +313,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                         <div className={styles.field}>
                             <TextArea
                                 value={feedbackForm.message}
+                                maxLength={MAX_FORM_FIELD_LENGTH}
                                 onChange={(e) => handleFeedbackChange('message', e.target.value)}
                                 onBlur={() => handleFeedbackBlur('message')}
                                 placeholder="Что понравилось, чего не хватает, что хотелось бы улучшить"
@@ -331,6 +339,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                                 <Input
                                     type="text"
                                     value={reportForm.name}
+                                    maxLength={MAX_FORM_FIELD_LENGTH}
                                     onChange={(e) => handleReportChange('name', e.target.value)}
                                     onBlur={() => handleReportBlur('name')}
                                     placeholder="Как к тебе обращаться"
@@ -346,6 +355,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                                 <Input
                                     type="email"
                                     value={reportForm.email}
+                                    maxLength={MAX_FORM_FIELD_LENGTH}
                                     onChange={(e) => handleReportChange('email', e.target.value)}
                                     onBlur={() => handleReportBlur('email')}
                                     placeholder="name@email.com"
@@ -362,6 +372,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                             <Input
                                 type="text"
                                 value={reportForm.page}
+                                maxLength={MAX_FORM_FIELD_LENGTH}
                                 onChange={(e) => handleReportChange('page', e.target.value)}
                                 onBlur={() => handleReportBlur('page')}
                                 placeholder="Например: /character_list"
@@ -376,6 +387,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                         <div className={styles.field}>
                             <TextArea
                                 value={reportForm.bug}
+                                maxLength={MAX_FORM_FIELD_LENGTH}
                                 onChange={(e) => handleReportChange('bug', e.target.value)}
                                 onBlur={() => handleReportBlur('bug')}
                                 placeholder="Что сломалось или работает не так"
@@ -390,6 +402,7 @@ export default function FormToggle({ activeForm, onChange }: FormToggleProps) {
                         <div className={styles.field}>
                             <TextArea
                                 value={reportForm.steps}
+                                maxLength={MAX_FORM_FIELD_LENGTH}
                                 onChange={(e) => handleReportChange('steps', e.target.value)}
                                 onBlur={() => handleReportBlur('steps')}
                                 placeholder="1. Открыл страницу 2. Нажал кнопку 3. Получил ошибку"

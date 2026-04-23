@@ -37,9 +37,9 @@
     min-width: 100%;
     width: max-content;
     max-width: 100%;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
 }
 

@@ -8,13 +8,13 @@ const OFFER_TEXT = {
 } as const;
 
 const DICE_ITEMS = [
-    { src: '/img/3DDices/d20.png', alt: 'D20', className: 'diceD20', side: 'left' },
-    { src: '/img/3DDices/d12.png', alt: 'D12', className: 'diceD12', side: 'left' },
-    { src: '/img/3DDices/d10.png', alt: 'D10', className: 'diceD10', side: 'left' },
-    { src: '/img/3DDices/d8.png', alt: 'D8', className: 'diceD8', side: 'right' },
-    { src: '/img/3DDices/d6.png', alt: 'D6', className: 'diceD6', side: 'right' },
-    { src: '/img/3DDices/d4.png', alt: 'D4', className: 'diceD4', side: 'right' },
-    { src: '/img/3DDices/d100.png', alt: 'D100', className: 'diceD100', side: 'right' },
+    { src: '/img/MainPage/3DDices/d20.png', alt: 'D20', className: 'diceD20', side: 'left' },
+    { src: '/img/MainPage/3DDices/d12.png', alt: 'D12', className: 'diceD12', side: 'left' },
+    { src: '/img/MainPage/3DDices/d10.png', alt: 'D10', className: 'diceD10', side: 'left' },
+    { src: '/img/MainPage/3DDices/d8.png', alt: 'D8', className: 'diceD8', side: 'right' },
+    { src: '/img/MainPage/3DDices/d6.png', alt: 'D6', className: 'diceD6', side: 'right' },
+    { src: '/img/MainPage/3DDices/d4.png', alt: 'D4', className: 'diceD4', side: 'right' },
+    { src: '/img/MainPage/3DDices/d100.png', alt: 'D100', className: 'diceD100', side: 'right' },
 ] as const;
 
 export default function Offer() {

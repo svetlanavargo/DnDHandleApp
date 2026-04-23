@@ -1,47 +1,174 @@
-/* components/NotFound/NotFound.module.css */
-
 .wrapper {
-    height: calc(100% - 60px);
+    position: relative;
+    min-height: calc(100% - 60px);
+    padding: 32px 20px 40px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: #1F1F1F;
-    color: #FBFAFA;
-    padding: 20px;
+    justify-content: center;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.glowLeft,
+.glowRight {
+    position: absolute;
+    inset: auto;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(12px);
+    opacity: 0.7;
+}
+
+.glowLeft {
+    top: 72px;
+    left: -80px;
+    background: radial-gradient(circle, rgba(46, 185, 161, 0.18) 0%, rgba(46, 185, 161, 0) 72%);
+}
+
+.glowRight {
+    right: -110px;
+    bottom: 40px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 72%);
 }
 
 .content {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    width: min(1160px, 100%);
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        radial-gradient(circle at top left, rgba(46, 185, 161, 0.08), transparent 26%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+        rgba(26, 26, 26, 0.94);
+}
+
+.badge {
+    display: inline-flex;
     align-items: center;
+    min-height: 32px;
+    padding: 0 14px;
+    margin-bottom: 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(46, 185, 161, 0.24);
+    background: rgba(46, 185, 161, 0.08);
+    color: #9de4d8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.hero {
+    display: grid;
+    gap: 24px;
+}
+
+.codeBlock {
+    padding: 22px 20px;
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+        #1f1f1f;
+    border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .code {
-    font-size: 120px;
-    font-weight: bold;
     margin: 0;
-    line-height: 1;
+    font-size: clamp(72px, 18vw, 172px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
     color: #2eb9a1;
 }
 
+.caption {
+    margin: 10px 0 0;
+    color: #d3d3d3;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+}
+
+.textBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    margin: 0 0 14px;
+    font-size: clamp(28px, 4vw, 50px);
+    line-height: 1.02;
+    color: #fbfafa;
+}
+
 .text {
-    font-size: 18px;
-    color: #cfcfcf;
-    margin: 10px 0 30px;
+    margin: 0;
+    max-width: 580px;
+    color: #c7c7c7;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-.button {
-    padding: 10px 20px;
-    background-color: #FBFAFA;
-    color: #3D3D3D;
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.primaryButton,
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 18px;
+    border-radius: 12px;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: all 0.2s ease;
+    font-weight: 700;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.button:hover {
-    background-color: #e2e2e2;
+.primaryButton {
+    background: #2eb9a1;
+    color: #1a1a1a;
+}
+
+.secondaryButton {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fbfafa;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+    transform: translateY(-1px);
+}
+
+@media (min-width: 1100px) {
+    .wrapper {
+        padding: 40px 24px 48px;
+    }
+
+    .content {
+        padding: 34px;
+    }
+
+    .hero {
+        grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+        gap: 28px;
+        align-items: stretch;
+    }
+
+    .codeBlock {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 28px 24px;
+    }
 }

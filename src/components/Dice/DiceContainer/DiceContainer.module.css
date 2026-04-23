@@ -2,16 +2,16 @@
     background: #242424;
     padding: 40px 0;
     display: flex;
-    justify-content: center; /* по горизонтали */
-    align-items: center;    /* по вертикали */
+    justify-content: center; 
+    align-items: center;    
     margin: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .containerDices {
     display: grid;
-    grid-template-columns: repeat(4, 80px); /* 4 колонки фиксированной ширины */
-    grid-template-rows: repeat(2, 80px);    /* 4 ряда фиксированной высоты */
+    grid-template-columns: repeat(4, 80px); 
+    grid-template-rows: repeat(2, 80px);    
     gap: 10px;
     padding: 16px;
     border-radius: 20px;
@@ -19,5 +19,4 @@
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
         rgba(31, 31, 31, 0.92);
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.16);
 }

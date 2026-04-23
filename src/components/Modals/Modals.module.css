@@ -38,9 +38,9 @@
     gap: 12px;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
     animation: modalFadeIn 0.25s ease;
 }

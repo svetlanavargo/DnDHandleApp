@@ -4,18 +4,67 @@
     align-items: start;
     width: 100%;
     overflow: auto;
-    /* Firefox */
     scrollbar-width: none;
-    /* IE и старые Edge */
     -ms-overflow-style: none;
 }
 
 .characterContent {
-    border-radius: 6px;
-    max-width: 600px;
     width: 100%;
+    max-width: 600px;
+}
+
+.headerSection,
+.noteSection {
+    width: 100%;
+}
+
+.mobileFlow {
+    display: block;
+}
+
+.desktopLayout {
+    display: none;
+}
+
+.desktopLeftColumn,
+.desktopRightColumn {
+    display: flex;
+    flex-direction: column;
 }
 
 .flex {
     display: flex;
+}
+
+@media (min-width: 1024px) {
+    .characterContentWrapper {
+        padding: 0 20px 28px;
+        box-sizing: border-box;
+    }
+
+    .characterContent {
+        max-width: none;
+    }
+
+    .noteSection,
+    .mobileFlow {
+        display: none;
+    }
+
+    .headerSection {
+        margin-bottom: 20px;
+    }
+
+    .desktopLayout {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        align-items: start;
+    }
+
+    .desktopLeftColumn,
+    .desktopRightColumn {
+        gap: 20px;
+        min-width: 0;
+    }
 }

@@ -17,13 +17,13 @@
     overflow: auto;
     margin-bottom: 10px;
     flex: 1;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
 }
 
-/* Chrome, Safari */
+
 .history::-webkit-scrollbar {
     display: none;
 }

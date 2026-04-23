@@ -7,7 +7,7 @@
 
 @media (min-width: 1023px) {
     .logoWrapper {
-        width: 200px;
+        width: 120px;
     }
 }
 
@@ -28,7 +28,7 @@
     user-select: none;
 }
 
-/* Анимация броска кубика */
+
 .rolling {
     animation: diceRoll 2s ease-out forwards;
 }

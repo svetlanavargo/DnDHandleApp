@@ -9,9 +9,9 @@
     display: flex;
     align-items: center;
     overflow-x: auto;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
     background-color: #1F1F1F;
     overscroll-behavior-x: contain;
@@ -28,7 +28,7 @@
     padding: 6px 20px;
     flex-shrink: 0;
     white-space: nowrap;
-    /*border-radius: 4px 4px 0 0;*/
+    
     background-color: #1F1F1F;
 }
 

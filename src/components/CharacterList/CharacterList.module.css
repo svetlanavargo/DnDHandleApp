@@ -5,9 +5,7 @@
 }
 
 .pageShell {
-    width: min(1320px, 100%);
     height: 100%;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -48,6 +46,6 @@
     }
 
     .tabsShell {
-        margin: 20px 20px 12px;
+        margin: 0 20px 16px;
     }
 }

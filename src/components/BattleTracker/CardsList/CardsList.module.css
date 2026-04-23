@@ -57,9 +57,9 @@
     grid-template-columns: 1fr;
     gap: 12px;
     justify-content: center;
-    /* Firefox */
+    
     scrollbar-width: none;
-    /* IE и старые Edge */
+    
     -ms-overflow-style: none;
 }
 

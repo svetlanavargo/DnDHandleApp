@@ -93,3 +93,10 @@
     background-color: #2eb9a1;
     border: 1px solid #242424;
 }
+
+@media (min-width: 1024px) {
+    .characteristicsFieldContainer {
+        padding: 18px 16px;
+        margin-bottom: 0;
+    }
+}

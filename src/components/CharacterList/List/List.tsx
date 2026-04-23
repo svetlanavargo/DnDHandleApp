@@ -29,96 +29,167 @@ interface ListProps {
 }
 
 function List({
-                                 activeCharacter,
-                                 openEditModal,
-                                 longRest,
-                                 addHits,
-                                 subtractHits,
-                                 subtractDice,
-                                 isNoteOpen,
-                                 toggleNoteOpen,
-                                 updateCharacter,
-                                 deleteNote,
-                                 reorderNotes,
-                                 notes,
-                                 activeNoteId,
-                                 setActiveNote
-                             }: ListProps) {
+    activeCharacter,
+    openEditModal,
+    longRest,
+    addHits,
+    subtractHits,
+    subtractDice,
+    isNoteOpen,
+    toggleNoteOpen,
+    updateCharacter,
+    deleteNote,
+    reorderNotes,
+    notes,
+    activeNoteId,
+    setActiveNote
+}: ListProps) {
     const raceKey = activeCharacter.race as RaceKey;
     const classKey = activeCharacter.class as ClassKey;
 
     return (
         <div className={styles.characterContentWrapper}>
             <div className={styles.characterContent}>
-                <ListHeader
-                    name={activeCharacter.name}
-                    level={activeCharacter.level}
-                    race={raceKey}
-                    subrace={activeCharacter.subrace}
-                    spec={classKey}
-                    charSubclass={activeCharacter.subclass}
-                    onEdit={openEditModal}
-                    longRest={longRest}
-                />
+                <div className={styles.headerSection}>
+                    <ListHeader
+                        name={activeCharacter.name}
+                        level={activeCharacter.level}
+                        race={raceKey}
+                        subrace={activeCharacter.subrace}
+                        spec={classKey}
+                        charSubclass={activeCharacter.subclass}
+                        onEdit={openEditModal}
+                        longRest={longRest}
+                    />
+                </div>
 
-                <Note
-                    character={activeCharacter}
-                    updateCharacter={updateCharacter}
-                    isOpen={isNoteOpen}
-                    toggleOpen={toggleNoteOpen}
-                    deleteNote={deleteNote}
-                    reorderNotes={reorderNotes}
-                    notes={notes}
-                    activeNoteId={activeNoteId}
-                    setActiveNote={setActiveNote}
-                />
+                <div className={styles.noteSection}>
+                    <Note
+                        character={activeCharacter}
+                        updateCharacter={updateCharacter}
+                        isOpen={isNoteOpen}
+                        toggleOpen={toggleNoteOpen}
+                        deleteNote={deleteNote}
+                        reorderNotes={reorderNotes}
+                        notes={notes}
+                        activeNoteId={activeNoteId}
+                        setActiveNote={setActiveNote}
+                    />
+                </div>
 
-                <InfoField
-                    speed={activeCharacter.speed}
-                    initiative={activeCharacter.initiative}
-                    level={activeCharacter.level}
-                    ac={activeCharacter.ac}
-                    characteristics={activeCharacter.characteristics}
-                    proficientSkills={activeCharacter.skills}
-                    expertise={activeCharacter.expertise}
-                />
+                <div className={styles.mobileFlow}>
+                    <InfoField
+                        speed={activeCharacter.speed}
+                        initiative={activeCharacter.initiative}
+                        level={activeCharacter.level}
+                        ac={activeCharacter.ac}
+                        characteristics={activeCharacter.characteristics}
+                        proficientSkills={activeCharacter.skills}
+                        expertise={activeCharacter.expertise}
+                    />
 
-                <HitsField
-                    charClass={activeCharacter.class as ClassKey}
-                    hits={activeCharacter.hits}
-                    diceHitsCount={activeCharacter.diceHitsCount}
-                    temporaryHits={activeCharacter.temporaryHits}
-                    currentHits={activeCharacter.currentHits}
-                    addHits={addHits}
-                    subtractHits={subtractHits}
-                    subtractDice={subtractDice}
-                />
+                    <HitsField
+                        charClass={activeCharacter.class as ClassKey}
+                        hits={activeCharacter.hits}
+                        diceHitsCount={activeCharacter.diceHitsCount}
+                        temporaryHits={activeCharacter.temporaryHits}
+                        currentHits={activeCharacter.currentHits}
+                        addHits={addHits}
+                        subtractHits={subtractHits}
+                        subtractDice={subtractDice}
+                    />
 
-                <CharacteristicsField
-                    characteristics={activeCharacter.characteristics}
-                    charClass={activeCharacter.class}
-                    level={activeCharacter.level}
-                />
+                    <CharacteristicsField
+                        characteristics={activeCharacter.characteristics}
+                        charClass={activeCharacter.class}
+                        level={activeCharacter.level}
+                    />
 
-                <Skills
-                    characteristics={activeCharacter.characteristics}
-                    expertise={activeCharacter.expertise}
-                    skills={activeCharacter.skills}
-                    level={activeCharacter.level}
-                />
+                    <Skills
+                        characteristics={activeCharacter.characteristics}
+                        expertise={activeCharacter.expertise}
+                        skills={activeCharacter.skills}
+                        level={activeCharacter.level}
+                    />
 
-                <DomainField
-                    lang={activeCharacter.languages}
-                    armors={activeCharacter.armors}
-                    weapons={activeCharacter.weapons}
-                    tools={activeCharacter.tools}
-                    expertise={activeCharacter.expertise}
-                />
+                    <DomainField
+                        lang={activeCharacter.languages}
+                        armors={activeCharacter.armors}
+                        weapons={activeCharacter.weapons}
+                        tools={activeCharacter.tools}
+                        expertise={activeCharacter.expertise}
+                    />
 
-                <Spells
-                    character={activeCharacter}
-                    updateCharacter={updateCharacter}
-                />
+                    <Spells
+                        character={activeCharacter}
+                        updateCharacter={updateCharacter}
+                    />
+                </div>
+
+                <div className={styles.desktopLayout}>
+                    <div className={styles.desktopLeftColumn}>
+                        <CharacteristicsField
+                            characteristics={activeCharacter.characteristics}
+                            charClass={activeCharacter.class}
+                            level={activeCharacter.level}
+                        />
+
+                        <Skills
+                            characteristics={activeCharacter.characteristics}
+                            expertise={activeCharacter.expertise}
+                            skills={activeCharacter.skills}
+                            level={activeCharacter.level}
+                        />
+                    </div>
+
+                    <div className={styles.desktopRightColumn}>
+                        <InfoField
+                            speed={activeCharacter.speed}
+                            initiative={activeCharacter.initiative}
+                            level={activeCharacter.level}
+                            ac={activeCharacter.ac}
+                            characteristics={activeCharacter.characteristics}
+                            proficientSkills={activeCharacter.skills}
+                            expertise={activeCharacter.expertise}
+                        />
+
+                        <HitsField
+                            charClass={activeCharacter.class as ClassKey}
+                            hits={activeCharacter.hits}
+                            diceHitsCount={activeCharacter.diceHitsCount}
+                            temporaryHits={activeCharacter.temporaryHits}
+                            currentHits={activeCharacter.currentHits}
+                            addHits={addHits}
+                            subtractHits={subtractHits}
+                            subtractDice={subtractDice}
+                        />
+
+                        <Note
+                            character={activeCharacter}
+                            updateCharacter={updateCharacter}
+                            isOpen={isNoteOpen}
+                            toggleOpen={toggleNoteOpen}
+                            deleteNote={deleteNote}
+                            reorderNotes={reorderNotes}
+                            notes={notes}
+                            activeNoteId={activeNoteId}
+                            setActiveNote={setActiveNote}
+                        />
+
+                        <DomainField
+                            lang={activeCharacter.languages}
+                            armors={activeCharacter.armors}
+                            weapons={activeCharacter.weapons}
+                            tools={activeCharacter.tools}
+                            expertise={activeCharacter.expertise}
+                        />
+
+                        <Spells
+                            character={activeCharacter}
+                            updateCharacter={updateCharacter}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

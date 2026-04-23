@@ -53,3 +53,27 @@
 .margin {
     margin-left: 12px;
 }
+
+@media (min-width: 1024px) {
+    .listHeader {
+        padding: 18px 20px;
+        margin-bottom: 0;
+    }
+
+    .name {
+        margin-right: 10px;
+        font-size: 24px;
+        line-height: 1.1;
+    }
+
+    .level {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin-right: 14px;
+    }
+
+    .margin {
+        margin-left: 16px;
+    }
+}

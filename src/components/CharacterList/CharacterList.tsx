@@ -22,7 +22,6 @@ export default function CharacterList() {
         activeCharacter,
         activeCharacterId,
         setActiveCharacterId,
-
         actions,
         notes,
         modals
