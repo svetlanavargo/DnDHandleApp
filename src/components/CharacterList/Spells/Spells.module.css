@@ -46,7 +46,18 @@
 
 .spellsSlots {
     display: flex;
-    gap: 18px;
+    gap: 10px;
+}
+@media (min-width: 425px) {
+    .spellsSlots {
+        gap: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+    .spellsSlots {
+        gap: 41px;
+    }
 }
 
 .flex {
@@ -73,7 +84,7 @@
 .slotsWrapper {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .slot {
@@ -94,6 +105,10 @@
 @media (min-width: 1024px) {
     .spellsContainer {
         margin-bottom: 0;
+    }
+
+    .spellsSlots {
+        gap: 26px;
     }
 
     .spellsInfoWrapper {
