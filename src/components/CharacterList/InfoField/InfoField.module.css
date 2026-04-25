@@ -39,24 +39,24 @@
 }
 
 .proficiencyBonus {
-    background-image: url("/img/frame/proficiencyBonus.svg");
+    background-image: url("../../../assets/img/frame/proficiencyBonus.svg");
     background-position: top;
 }
 
 .initiative {
-    background-image: url("/img/frame/initiative.svg");
+    background-image: url("../../../assets/img/frame/initiative.svg");
 }
 
 .speed {
-    background-image: url("/img/frame/speed.svg");
+    background-image: url("../../../assets/img/frame/speed.svg");
 }
 
 .ac {
-    background-image: url("/img/frame/ac.svg");
+    background-image: url("../../../assets/img/frame/ac.svg");
 }
 
 .perception {
-    background-image: url("/img/frame/Perception.svg");
+    background-image: url("../../../assets/img/frame/Perception.svg");
     background-position: top;
 }
 

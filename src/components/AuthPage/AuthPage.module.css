@@ -133,7 +133,7 @@
     height: 64px;
     flex-shrink: 0;
     border-radius: 18px;
-    background-image: url("/img/dnd.svg");
+    background-image: url("../../assets/img/dnd.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 42px;

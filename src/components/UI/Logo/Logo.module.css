@@ -12,7 +12,7 @@
 }
 
 .logo {
-    background-image: url("/img/dnd.svg");
+    background-image: url("../../../assets/img/dnd.svg");
     background-repeat: no-repeat;
     background-size: cover;
     cursor: pointer;

@@ -42,27 +42,27 @@
     background-position: center;
 }
 .d2 {
-    background-image: url("/img/Dices/d2.svg");
+    background-image: url("../../../assets/img/Dices/d2.svg");
 }
 .d4 {
-    background-image: url("/img/Dices/d4.svg");
+    background-image: url("../../../assets/img/Dices/d4.svg");
 }
 .d6 {
-    background-image: url("/img/Dices/d6.svg");
+    background-image: url("../../../assets/img/Dices/d6.svg");
 }
 .d8 {
-    background-image: url("/img/Dices/d8.svg");
+    background-image: url("../../../assets/img/Dices/d8.svg");
 }
 .d10 {
-    background-image: url("/img/Dices/d10.svg");
+    background-image: url("../../../assets/img/Dices/d10.svg");
 }
 .d12 {
-    background-image: url("/img/Dices/d12.svg");
+    background-image: url("../../../assets/img/Dices/d12.svg");
 }
 
 .d20 {
-    background-image: url("/img/Dices/d20.svg");
+    background-image: url("../../../assets/img/Dices/d20.svg");
 }
 .d100 {
-    background-image: url("/img/Dices/d100.svg");
+    background-image: url("../../../assets/img/Dices/d100.svg");
 }

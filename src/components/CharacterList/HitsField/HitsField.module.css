@@ -56,11 +56,11 @@
 }
 
 .iconAlive {
-    background-image: url("/img/alive.svg");
+    background-image: url("../../../assets/img/alive.svg");
 }
 
 .iconDied {
-    background-image: url("/img/dead.svg");
+    background-image: url("../../../assets/img/dead.svg");
 }
 
 .lineSaveRoll {

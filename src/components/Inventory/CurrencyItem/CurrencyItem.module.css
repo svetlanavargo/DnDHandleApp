@@ -36,17 +36,17 @@
 }
 
 .platinum {
-    background-image: url("/img/Currency/platinum.svg");
+    background-image: url("../../../assets/img/Currency/platinum.svg");
 }
 
 .gold {
-    background-image: url("/img/Currency/gold.svg");
+    background-image: url("../../../assets/img/Currency/gold.svg");
 }
 
 .silver {
-    background-image: url("/img/Currency/silver.svg");
+    background-image: url("../../../assets/img/Currency/silver.svg");
 }
 
 .bronze {
-    background-image: url("/img/Currency/bronze.svg");
+    background-image: url("../../../assets/img/Currency/bronze.svg");
 }

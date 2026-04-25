@@ -68,7 +68,7 @@
 .card8 {
     background-color: #FBFAFA;
     color: #1a1a1a;
-    background-image: url("/img/MainPage/card8.png");
+    background-image: url("../../../assets/img/MainPage/card8.png");
     background-position: right bottom;
     background-size: 80px;
 }
@@ -112,7 +112,7 @@
 @media (min-width: 767px) {
     .card1 {
         min-height: 260px;
-        background-image: url("/img/MainPage/card1.png");
+        background-image: url("../../../assets/img/MainPage/card1.png");
         background-repeat: no-repeat;
         background-position: right center;
         background-size: 300px;
@@ -134,7 +134,7 @@
     .card2 {
         grid-column: span 4;
         min-height: 320px;
-        background-image: url("/img/MainPage/card2.png");
+        background-image: url("../../../assets/img/MainPage/card2.png");
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 400px;
@@ -155,7 +155,7 @@
     .card6 {
         grid-column: span 4;
         min-height: 220px;
-        background-image: url("/img/MainPage/card6.png");
+        background-image: url("../../../assets/img/MainPage/card6.png");
         background-repeat: no-repeat;
         background-position: bottom right;
         background-size: 200px;

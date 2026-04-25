@@ -65,7 +65,7 @@
     width: 20px;
     height: 20px;
     margin-left: 6px;
-    background-image: url("/img/link.svg");
+    background-image: url("../../../assets/img/link.svg");
 }
 
 
@@ -165,11 +165,11 @@
     width: 15px;
     height: 15px;
     margin-left: 6px;
-    background-image: url("/img/link.svg");
+    background-image: url("../../../assets/img/link.svg");
 }
 
 .cardFillBard {
-    background-image: url("/img/CardsFill/Bard.svg");
+    background-image: url("../../../assets/img/CardsFill/Bard.svg");
     color: #4f1e7a;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
@@ -182,7 +182,7 @@
 }
 
 .cardFillCleric {
-    background-image: url("/img/CardsFill/Cleric.svg");
+    background-image: url("../../../assets/img/CardsFill/Cleric.svg");
     color: #7a5a1a;
     box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
@@ -195,7 +195,7 @@
 }
 
 .cardFillDruid {
-    background-image: url("/img/CardsFill/Druid.svg");
+    background-image: url("../../../assets/img/CardsFill/Druid.svg");
     color: #755436;
     box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
@@ -208,7 +208,7 @@
 }
 
 .cardFillPaladin {
-    background-image: url("/img/CardsFill/Paladin.svg");
+    background-image: url("../../../assets/img/CardsFill/Paladin.svg");
     color: #1c7293;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
@@ -221,7 +221,7 @@
 }
 
 .cardFillRanger {
-    background-image: url("/img/CardsFill/Ranger.svg");
+    background-image: url("../../../assets/img/CardsFill/Ranger.svg");
     color: #113317;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
@@ -234,7 +234,7 @@
 }
 
 .cardFillSorcerer {
-    background-image: url("/img/CardsFill/Sorcerer.svg");
+    background-image: url("../../../assets/img/CardsFill/Sorcerer.svg");
     color: #2c7a65;
     box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 -18px 28px rgba(255, 255, 255, 0.12);
 }
@@ -247,7 +247,7 @@
 }
 
 .cardFillWarlock {
-    background-image: url("/img/CardsFill/Warlock.svg");
+    background-image: url("../../../assets/img/CardsFill/Warlock.svg");
     color: #72111d;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }
@@ -260,7 +260,7 @@
 }
 
 .cardFillWizard {
-    background-image: url("/img/CardsFill/Wizard.svg");
+    background-image: url("../../../assets/img/CardsFill/Wizard.svg");
     color: #161951;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -18px 28px rgba(0, 0, 0, 0.12);
 }

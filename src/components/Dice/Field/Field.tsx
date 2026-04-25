@@ -1,6 +1,16 @@
 import Btn from '../../UI/Btn/Btn.tsx';
 import type { Roll } from '../../../types/dnd.ts';
 import styles from './Field.module.css';
+import plusIcon from '../../../assets/img/plus.svg';
+import minusIcon from '../../../assets/img/minus.svg';
+import d2Icon from '../../../assets/img/Dices/d2.svg';
+import d4Icon from '../../../assets/img/Dices/d4.svg';
+import d6Icon from '../../../assets/img/Dices/d6.svg';
+import d8Icon from '../../../assets/img/Dices/d8.svg';
+import d10Icon from '../../../assets/img/Dices/d10.svg';
+import d12Icon from '../../../assets/img/Dices/d12.svg';
+import d20Icon from '../../../assets/img/Dices/d20.svg';
+import d100Icon from '../../../assets/img/Dices/d100.svg';
 
 
 interface Props {
@@ -11,14 +21,25 @@ interface Props {
     onDec: () => void;
 }
 
+const DICE_ICONS: Record<number, string> = {
+    2: d2Icon,
+    4: d4Icon,
+    6: d6Icon,
+    8: d8Icon,
+    10: d10Icon,
+    12: d12Icon,
+    20: d20Icon,
+    100: d100Icon,
+};
+
 const getDiceIcon = (roll: Roll): string => {
     if (roll.magnitude === 'manual') {
         return roll.type === 'plus'
-            ? '/img/plus.svg'
-            : '/img/minus.svg';
+            ? plusIcon
+            : minusIcon;
     }
 
-    return `/img/Dices/d${roll.magnitude}.svg`;
+    return DICE_ICONS[roll.magnitude];
 };
 
 function Field({ total, history, onReset, onInc, onDec }: Props) {

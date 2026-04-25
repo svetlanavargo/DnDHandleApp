@@ -1,4 +1,11 @@
 import styles from './Offer.module.css';
+import d4Image from '../../../assets/img/MainPage/3DDices/d4.png';
+import d6Image from '../../../assets/img/MainPage/3DDices/d6.png';
+import d8Image from '../../../assets/img/MainPage/3DDices/d8.png';
+import d10Image from '../../../assets/img/MainPage/3DDices/d10.png';
+import d12Image from '../../../assets/img/MainPage/3DDices/d12.png';
+import d20Image from '../../../assets/img/MainPage/3DDices/d20.png';
+import d100Image from '../../../assets/img/MainPage/3DDices/d100.png';
 
 const OFFER_TEXT = {
     eyebrow: 'DnD App',
@@ -8,13 +15,13 @@ const OFFER_TEXT = {
 } as const;
 
 const DICE_ITEMS = [
-    { src: '/img/MainPage/3DDices/d20.png', alt: 'D20', className: 'diceD20', side: 'left' },
-    { src: '/img/MainPage/3DDices/d12.png', alt: 'D12', className: 'diceD12', side: 'left' },
-    { src: '/img/MainPage/3DDices/d10.png', alt: 'D10', className: 'diceD10', side: 'left' },
-    { src: '/img/MainPage/3DDices/d8.png', alt: 'D8', className: 'diceD8', side: 'right' },
-    { src: '/img/MainPage/3DDices/d6.png', alt: 'D6', className: 'diceD6', side: 'right' },
-    { src: '/img/MainPage/3DDices/d4.png', alt: 'D4', className: 'diceD4', side: 'right' },
-    { src: '/img/MainPage/3DDices/d100.png', alt: 'D100', className: 'diceD100', side: 'right' },
+    { src: d20Image, alt: 'D20', className: 'diceD20', side: 'left' },
+    { src: d12Image, alt: 'D12', className: 'diceD12', side: 'left' },
+    { src: d10Image, alt: 'D10', className: 'diceD10', side: 'left' },
+    { src: d8Image, alt: 'D8', className: 'diceD8', side: 'right' },
+    { src: d6Image, alt: 'D6', className: 'diceD6', side: 'right' },
+    { src: d4Image, alt: 'D4', className: 'diceD4', side: 'right' },
+    { src: d100Image, alt: 'D100', className: 'diceD100', side: 'right' },
 ] as const;
 
 export default function Offer() {
