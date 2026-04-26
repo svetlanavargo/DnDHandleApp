@@ -19,6 +19,7 @@ const classes: Classes = classesData as unknown as Classes;
 export function useList() {
     const {
         characters,
+        isCharactersLoading,
         activeCharacterId,
         setActiveCharacterId,
         addCharacter,
@@ -336,6 +337,7 @@ export function useList() {
 
     return {
         characters,
+        isCharactersLoading,
         addCharacter,
         activeCharacter,
         activeCharacterId,

@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { SEO_LANDING } from './constants/SEO_LANDING.ts';
 import { AppProvider } from './context/AppProvider.tsx';
 import { useAuth } from './context/auth/useAuth.ts';
+import { useDelayedFlag } from './hooks/useDelayedFlag.ts';
 
 import NotFound from './components/NotFound/NotFound.tsx';
 
@@ -28,8 +29,13 @@ import './App.css';
 function App() {
     const [isDiceOpen, setIsDiceOpen] = useState(false);
     const { loading } = useAuth();
+    const showSessionLoading = useDelayedFlag(loading);
 
     if (loading) {
+        if (!showSessionLoading) {
+            return null;
+        }
+
         return (
             <>
                 <Helmet>

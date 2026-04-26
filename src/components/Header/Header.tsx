@@ -6,14 +6,14 @@ import Logo from '../UI/Logo/Logo.tsx';
 import Modal from '../Modals/Modal.tsx';
 import Confirm from '../Modals/Confirm.tsx';
 
-import Home from '../../../public/img/home.svg';
-import DiceImg from '../../../public/img/dnd.svg';
-import ListImg from '../../../public/img/User.svg';
-import Pouch from '../../../public/img/pouch.svg';
-import Spells from '../../../public/img/spells.svg';
-import Battle from '../../../public/img/battleUser.svg';
-import Login from '../../../public/img/login.svg';
-import Logout from '../../../public/img/logout.svg';
+import Home from '../../assets/img/home.svg';
+import DiceImg from '../../assets/img/dnd.svg';
+import ListImg from '../../assets/img/User.svg';
+import Pouch from '../../assets/img/pouch.svg';
+import Spells from '../../assets/img/spells.svg';
+import Battle from '../../assets/img/battleUser.svg';
+import Login from '../../assets/img/login.svg';
+import Logout from '../../assets/img/logout.svg';
 
 import styles from './Header.module.css';
 

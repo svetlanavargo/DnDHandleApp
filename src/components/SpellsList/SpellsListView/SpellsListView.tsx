@@ -7,7 +7,6 @@ import type { Spell, SpellLevel } from "../../../types/dnd";
 
 interface SpellsListViewProps {
     fill: string;
-    spells: Spell[];
     groupedSpells?: Record<string, Spell[]>;
     onEmptyStackClick?: (level: SpellLevel) => void;
 }
@@ -28,7 +27,7 @@ function getStackContentHeight(cardsCount: number) {
     return baseCardHeight + Math.max(cardsCount - 1, 0) * overlapOffset;
 }
 
-function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: SpellsListViewProps) {
+function SpellsListView({ fill, groupedSpells, onEmptyStackClick }: SpellsListViewProps) {
     const [activeCard, setActiveCard] = useState<string | null>(null);
     const hasStacks = Boolean(groupedSpells);
     const stackEntries = groupedSpells ? Object.entries(groupedSpells) : [];
@@ -45,9 +44,9 @@ function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: Spel
             const target = event.target;
 
             if (target instanceof HTMLElement) {
-                const levelStack = target.closest<HTMLElement>(`.${styles.levelStack}`);
+                const stackField = target.closest<HTMLElement>(`.${styles.stackField}`);
 
-                if (levelStack && levelStack.scrollHeight > levelStack.clientHeight) {
+                if (stackField && stackField.scrollHeight > stackField.clientHeight) {
                     const verticalDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX)
                         ? event.deltaY
                         : event.deltaX;
@@ -55,7 +54,7 @@ function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: Spel
                     if (verticalDelta !== 0) {
                         event.preventDefault();
                         event.stopPropagation();
-                        levelStack.scrollTop += verticalDelta;
+                        stackField.scrollTop += verticalDelta;
                         return;
                     }
                 }
@@ -85,7 +84,7 @@ function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: Spel
         };
     }, []);
 
-    if ((!spells || spells.length === 0) && !hasStacks) {
+    if (!hasStacks) {
         return (
             <div className={styles.spellsListViewContainer}>
                 <EmptyState
@@ -98,53 +97,11 @@ function SpellsListView({ spells, fill, groupedSpells, onEmptyStackClick }: Spel
 
     return (
         <div ref={containerRef} className={styles.spellsListViewContainer}>
-            <div className={styles.singleStack}>
-                {spells.length === 0 ? (
-                    <EmptyState
-                        image={<div className={styles.cards} />}
-                        text="В списке заклинаний пусто :("
-                    />
-                ) : (
-                    spells.map((spell, i) => {
-                        const overlap = 120;
-                        const offset = i * overlap;
-
-                        const isActive = activeCard === spell.url;
-
-                        return (
-                            <div
-                                key={spell.url}
-                                className={`${styles.singleCardWrapper} ${
-                                    isActive ? styles.singleCardActive : ""
-                                }`}
-                                onClick={() =>
-                                    setActiveCard((prev) =>
-                                        prev === spell.url ? null : spell.url
-                                    )
-                                }
-                                style={{
-                                    transform: `
-                                        translateX(-50%)
-                                        translateY(${offset}px)
-                                        ${isActive ? "translateY(-20px)" : ""}
-                                        scale(${isActive ? 1.04 : 1})
-                                    `,
-                                    zIndex: isActive ? 10 : i,
-                                    cursor: "pointer"
-                                }}
-                            >
-                                <SpellCard spell={spell} fill={fill} />
-                            </div>
-                        );
-                    })
-                )}
-            </div>
-
             {groupedSpells && (
                 <div
                     className={styles.stacks}
                     style={{
-                        gridTemplateColumns: `repeat(${stackEntries.length}, minmax(280px, 1fr))`
+                        gridTemplateColumns: `repeat(${stackEntries.length}, minmax(250px, 1fr))`
                     }}
                 >
                     {stackEntries.map(([level, levelSpells]) => (

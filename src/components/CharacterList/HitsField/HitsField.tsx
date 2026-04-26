@@ -51,35 +51,36 @@ function HitsField({
                     <Btn onClick={subtractHits} classBtn='subtractHits' />
                 </div>
             </div>
-
-            <div className={styles.hitsWrapper}>
-                <div>
-                    {activeRolls.map((line, lineIndex) => (
-                        <div key={lineIndex} className={styles.lineSaveRoll}>
-                            {line.map((isActive, rollIndex) => (
-                                <div
-                                    key={rollIndex}
-                                    className={`${styles.saveRoll} ${isActive ? styles.active : ''}`}
-                                    onClick={() => toggleRoll(lineIndex, rollIndex)}
-                                />
-                            ))}
-                        </div>
-                    ))}
-                </div>
-                <div className={styles.icons}>
-                    <div className={styles.iconAlive} />
-                    <div className={styles.iconDied} />
-                </div>
-            </div>
-
-            <div className={styles.hitsWrapper}>
-                <div className={styles.dices}>
-                    <div className={styles.diceBtn}>
-                        <Btn onClick={subtractDice} classBtn='subtractHits' />
-                        <p className={styles.margin}>{diceHitsCount}</p>
-                    </div>
+            <div className={styles.wrapperBigMob}>
+                <div className={styles.hitsWrapper}>
                     <div>
-                        1d{diceNumber}
+                        {activeRolls.map((line, lineIndex) => (
+                            <div key={lineIndex} className={styles.lineSaveRoll}>
+                                {line.map((isActive, rollIndex) => (
+                                    <div
+                                        key={rollIndex}
+                                        className={`${styles.saveRoll} ${isActive ? styles.active : ''}`}
+                                        onClick={() => toggleRoll(lineIndex, rollIndex)}
+                                    />
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                    <div className={styles.icons}>
+                        <div className={styles.iconAlive} />
+                        <div className={styles.iconDied} />
+                    </div>
+                </div>
+
+                <div className={styles.hitsWrapper}>
+                    <div className={styles.dices}>
+                        <div className={styles.diceBtn}>
+                            <Btn onClick={subtractDice} classBtn='subtractHits' />
+                            <p className={styles.margin}>{diceHitsCount}</p>
+                        </div>
+                        <div>
+                            1d{diceNumber}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@ export type Game = {
 
 export type GameContextType = {
     games: Game[];
+    isGamesLoading: boolean;
     currentGame: Game | null;
     currentGameId: string | null;
     setCurrentGame: (id: string) => void;

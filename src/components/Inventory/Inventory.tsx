@@ -9,12 +9,14 @@ import { useNumberModal } from '../../hooks/useNumberModal.ts';
 import Modal from '../Modals/Modal.tsx';
 import ChangeHitsModal from '../Modals/ChangeHitsModal.tsx';
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
+import SessionLoading from '../SessionLoading/SessionLoading.tsx';
 import Warning from '../UI/Warning/Warning.tsx';
+import { useDelayedFlag } from '../../hooks/useDelayedFlag.ts';
 import styles from './Inventory.module.css';
 
 function Inventory() {
-    const { user } = useAuth();
-    const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
+    const { user, loading } = useAuth();
+    const { characters, isCharactersLoading, activeCharacterId, updateCharacter } = useContext(CharacterContext);
 
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
 
@@ -27,6 +29,8 @@ function Inventory() {
         silver: 0,
         bronze: 0
     });
+    const isLoading = loading || isCharactersLoading;
+    const showSessionLoading = useDelayedFlag(isLoading);
 
     useEffect(() => {
         if (!activeCharacter) return;
@@ -83,6 +87,14 @@ function Inventory() {
             }
         });
     }, [numberModal, updateInventory]);
+
+    if (isLoading) {
+        if (!showSessionLoading) {
+            return null;
+        }
+
+        return <SessionLoading />;
+    }
 
     if (!activeCharacter) {
         return <EmptyState

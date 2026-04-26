@@ -75,16 +75,27 @@ function getNextActiveId<T extends { id: string }>(
 
 function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInnerProps) {
     const [games, setGames] = useState<Game[]>([]);
+    const [isGamesLoading, setIsGamesLoading] = useState(!isGuest);
     const [characters, setCharacters] = useState<Character[]>([]);
+    const [isCharactersLoading, setIsCharactersLoading] = useState(!isGuest);
     const [currentGameId, setCurrentGameId] = useState<string | null>(null);
     const [activeCharacterId, setActiveCharacterId] = useState<string | null>(null);
 
     useEffect(() => {
         let cancelled = false;
 
-        if (isAuthLoading || isGuest) {
+        if (isAuthLoading) {
             return;
         }
+
+        if (isGuest) {
+            setIsGamesLoading(false);
+            setIsCharactersLoading(false);
+            return;
+        }
+
+        setIsGamesLoading(true);
+        setIsCharactersLoading(true);
 
         (async () => {
             try {
@@ -118,6 +129,11 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
                 setCharacters([]);
                 setCurrentGameId(null);
                 setActiveCharacterId(null);
+            } finally {
+                if (!cancelled) {
+                    setIsGamesLoading(false);
+                    setIsCharactersLoading(false);
+                }
             }
         })();
 
@@ -305,6 +321,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
 
     const gameValue = useMemo(() => ({
         games,
+        isGamesLoading,
         currentGame,
         currentGameId,
         setCurrentGame,
@@ -322,6 +339,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
         setCards,
     }), [
         games,
+        isGamesLoading,
         currentGame,
         currentGameId,
         setCurrentGame,
@@ -334,6 +352,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
 
     const characterValue = useMemo(() => ({
         characters,
+        isCharactersLoading,
         activeCharacterId,
         setActiveCharacterId,
         addCharacter,
@@ -341,6 +360,7 @@ function AppProviderInner({ children, isAuthLoading, isGuest }: AppProviderInner
         removeCharacter,
     }), [
         characters,
+        isCharactersLoading,
         activeCharacterId,
         addCharacter,
         updateCharacter,

@@ -4,14 +4,14 @@ import type { Character } from '../../types/Character.ts';
 import Btn from '../UI/Btn/Btn.tsx';
 import CardSlider from '../SpellsList/CardSlider/CardSlider.tsx';
 
-import bard from '../../../public/img/CardsFill/Bard.svg';
-import cleric from '../../../public/img/CardsFill/Cleric.svg';
-import druid from '../../../public/img/CardsFill/Druid.svg';
-import paladin from '../../../public/img/CardsFill/Paladin.svg';
-import ranger from '../../../public/img/CardsFill/Ranger.svg';
-import sorcerer from '../../../public/img/CardsFill/Sorcerer.svg';
-import warlock from '../../../public/img/CardsFill/Warlock.svg';
-import wizard from '../../../public/img/CardsFill/Wizard.svg';
+import bard from '../../assets/img/CardsFill/Bard.svg';
+import cleric from '../../assets/img/CardsFill/Cleric.svg';
+import druid from '../../assets/img/CardsFill/Druid.svg';
+import paladin from '../../assets/img/CardsFill/Paladin.svg';
+import ranger from '../../assets/img/CardsFill/Ranger.svg';
+import sorcerer from '../../assets/img/CardsFill/Sorcerer.svg';
+import warlock from '../../assets/img/CardsFill/Warlock.svg';
+import wizard from '../../assets/img/CardsFill/Wizard.svg';
 
 interface SpellsSettingsProps {
     character?: Character;

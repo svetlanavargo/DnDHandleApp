@@ -21,38 +21,6 @@
     height: 0;
 }
 
-.singleStack {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.singleCardWrapper {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transition: transform 0.2s ease;
-    will-change: transform;
-    box-shadow:
-            rgba(0, 0, 0, 0.25) 0px 54px 55px,
-            rgba(0, 0, 0, 0.12) 0px -12px 30px,
-            rgba(0, 0, 0, 0.12) 0px 4px 6px,
-            rgba(0, 0, 0, 0.17) 0px 12px 13px,
-            rgba(0, 0, 0, 0.09) 0px -3px 5px,
-
-            rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-            rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-            rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-}
-
-.singleCardWrapper a {
-    pointer-events: none;
-}
-
-.singleCardActive a {
-    pointer-events: auto;
-}
-
 .cards {
     width: 300px;
     height: 300px;
@@ -60,10 +28,6 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-}
-
-.singleStack {
-    display: none;
 }
 
 .stacks {
@@ -81,16 +45,7 @@
     min-width: 0;
     height: 100%;
     max-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    overscroll-behavior-y: contain;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.levelStack::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+    min-height: 0;
 }
 
 .levelBadge {
@@ -121,10 +76,20 @@
 
 .stackField {
     position: relative;
+    flex: 1 1 auto;
     width: 100%;
     min-width: 280px;
     min-height: 420px;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.stackField::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 @media (min-width: 425px) {

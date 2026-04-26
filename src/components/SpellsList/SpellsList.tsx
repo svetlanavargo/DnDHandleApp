@@ -1,7 +1,6 @@
 import { useContext, useMemo, useState } from 'react';
 import {classesData} from '../../constants/classesData.ts';
 import { useAuth } from '../../context/auth/useAuth.ts';
-import Tabs from '../UI/Tabs/Tabs.tsx';
 import SpellsMenu from './SpellsMenu/SpellsMenu.tsx';
 import SpellsListView from './SpellsListView/SpellsListView.tsx';
 import Modal from '../Modals/Modal.tsx';
@@ -9,8 +8,11 @@ import SpellsAddCard from '../Modals/SpellsAddCard.tsx';
 import SpellsDeleteCard from '../Modals/SpellsDeleteCard.tsx';
 import SpellsSettings from '../Modals/SpellsSettings.tsx';
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
+import SessionLoading from '../SessionLoading/SessionLoading.tsx';
 import Warning from '../UI/Warning/Warning.tsx';
+import SpellSlotsTracker from "../CharacterList/Spells/SpellSlotsTracker.tsx";
 import { CharacterContext } from '../../context/CharacterContext.ts';
+import { useDelayedFlag } from '../../hooks/useDelayedFlag.ts';
 import rawSpellsJson from '../../data/Spells/spells.json';
 
 import type { Spell, SpellSchool, SpellLevel } from '../../types/dnd';
@@ -63,11 +65,12 @@ function getMaxSpellLevel(
 }
 
 function SpellsList() {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
-    const [activeTab, setActiveTab] = useState<SpellLevel>('0');
     const [addModalLevel, setAddModalLevel] = useState<SpellLevel | undefined>(undefined);
-    const { characters, activeCharacterId, updateCharacter } = useContext(CharacterContext);
+    const { characters, isCharactersLoading, activeCharacterId, updateCharacter } = useContext(CharacterContext);
+    const isLoading = loading || isCharactersLoading;
+    const showSessionLoading = useDelayedFlag(isLoading);
 
     const activeCharacter = characters.find(c => c.id === activeCharacterId) ?? null;
 
@@ -78,20 +81,6 @@ function SpellsList() {
             spellsJson.map((s) => [s.url, s])
         );
     }, [spellsJson]);
-
-    const preparedSpells = useMemo(() => {
-        if (!activeCharacter?.spells) return [];
-
-        const levelSpells = activeCharacter.spells[activeTab] || [];
-
-        return levelSpells
-            .map((url: string) => spellsMap[url])
-            .filter((spell: Spell | undefined): spell is Spell => Boolean(spell))
-            .map((spell) => ({
-                ...spell,
-                school: spell.school as SpellSchool
-            }));
-    }, [activeCharacter, activeTab, spellsMap]);
 
     const preparedDesktopSpells = useMemo(() => {
         if (!activeCharacter?.spells) {
@@ -127,6 +116,14 @@ function SpellsList() {
         ) as Partial<Record<SpellLevel, Spell[]>>;
     }, [activeCharacter, spellsMap]);
 
+    if (isLoading) {
+        if (!showSessionLoading) {
+            return null;
+        }
+
+        return <SessionLoading />;
+    }
+
     if (!activeCharacter) {
         return <EmptyState
             image={<div className={styles.img} />}
@@ -158,15 +155,6 @@ function SpellsList() {
         setAddModalLevel(undefined);
     };
 
-    function getSpellLevelLabel(level: SpellLevel): string {
-        if (level === "0") return "Заговоры";
-        return `${level}`;
-    }
-
-    const spellEntries = Object.entries(
-        activeCharacter.spells ?? {}
-    ) as [SpellLevel, string[]][];
-
     return (
         <div className={styles.spellsContainer}>
             <div className={styles.pageShell}>
@@ -177,20 +165,10 @@ function SpellsList() {
                         onDelete={() => openModal("delete")}
                         onSettings={() => openModal("settings")}
                     />
-
-                    <div className={styles.tabsShell}>
-                        <Tabs
-                            items={spellEntries.map(([level]) => ({
-                                id: level,
-                                label: getSpellLevelLabel(level)
-                            }))}
-                            activeId={activeTab}
-                            setActive={(id) => setActiveTab(id as SpellLevel)}
-                        />
+                    <div className={styles.spellsTracker}>
+                        <SpellSlotsTracker character={activeCharacter} updateCharacter={updateCharacter}/>
                     </div>
-
                     <SpellsListView
-                        spells={preparedSpells}
                         fill={activeCharacter.fill}
                         groupedSpells={preparedDesktopSpells}
                         onEmptyStackClick={(level) => openModal('add', level)}

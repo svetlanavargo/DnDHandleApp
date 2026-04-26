@@ -8,6 +8,8 @@ import type { Card } from '../../types/CardInBattleTracker.ts';
 
 import Warning from "../UI/Warning/Warning.tsx";
 import EmptyState from '../UI/EmptyState/EmptyState.tsx';
+import SessionLoading from '../SessionLoading/SessionLoading.tsx';
+import { useDelayedFlag } from '../../hooks/useDelayedFlag.ts';
 
 import Tabs from '../UI/Tabs/Tabs.tsx';
 import CardsList from './CardsList/CardsList.tsx';
@@ -56,6 +58,7 @@ function BattleTracker() {
         currentGame,
         setCards,
         games,
+        isGamesLoading,
         setTurnTimeMode,
         setCurrentGame,
         createGame,
@@ -84,6 +87,8 @@ function BattleTracker() {
     const [conditionModalOpen, setConditionModalOpen] = useState(false);
     const [currentCardForCondition, setCurrentCardForCondition] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
+    const isLoading = loading || isGamesLoading;
+    const showSessionLoading = useDelayedFlag(isLoading);
 
     const openModal = () => setIsModalOpen(true);
 
@@ -198,6 +203,14 @@ function BattleTracker() {
     };
 
     const editingCard = cards.find(c => c.id === editingCardId);
+
+    if (isLoading) {
+        if (!showSessionLoading) {
+            return null;
+        }
+
+        return <SessionLoading />;
+    }
 
     return (
         <div className={styles.battleTrackerContainer}>

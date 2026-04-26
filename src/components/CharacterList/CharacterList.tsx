@@ -9,6 +9,8 @@ import ChangeHitsModal from '../Modals/ChangeHitsModal';
 import Delete from '../Modals/Delete';
 import CharacterModal from '../Modals/CharacterModal';
 import EmptyState from '../UI/EmptyState/EmptyState';
+import SessionLoading from '../SessionLoading/SessionLoading';
+import { useDelayedFlag } from '../../hooks/useDelayedFlag';
 
 import styles from './CharacterList.module.css';
 
@@ -18,6 +20,7 @@ export default function CharacterList() {
 
     const {
         characters,
+        isCharactersLoading,
         addCharacter,
         activeCharacter,
         activeCharacterId,
@@ -30,6 +33,16 @@ export default function CharacterList() {
     const deletingNoteTitle = notes.deleteNoteId
         ? notes.normalizedNotes.find(note => note.id === notes.deleteNoteId)?.text.trim().split(/\r?\n/)[0] || 'Новая'
         : 'заметку';
+    const isLoading = loading || isCharactersLoading;
+    const showSessionLoading = useDelayedFlag(isLoading);
+
+    if (isLoading) {
+        if (!showSessionLoading) {
+            return null;
+        }
+
+        return <SessionLoading />;
+    }
 
     return (
         <div className={styles.characterListContainer}>

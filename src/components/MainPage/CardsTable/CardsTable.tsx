@@ -1,5 +1,5 @@
 import SectionHeader from '../SectionHeader/SectionHeader.tsx';
-import Logo from '../../../../public/img/dnd.svg';
+import Logo from '../../../assets/img/dnd.svg';
 import styles from './CardsTable.module.css';
 
 const CARDS_TABLE_TEXT = {

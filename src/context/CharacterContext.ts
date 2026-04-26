@@ -3,6 +3,7 @@ import type { Character } from '../types/Character';
 
 export interface CharacterContextType {
     characters: Character[];
+    isCharactersLoading: boolean;
     activeCharacterId: string | null;
     setActiveCharacterId: (id: string | null) => void;
     addCharacter: (c: Character) => void;
@@ -12,6 +13,7 @@ export interface CharacterContextType {
 
 export const CharacterContext = createContext<CharacterContextType>({
     characters: [],
+    isCharactersLoading: false,
     activeCharacterId: null,
     setActiveCharacterId: () => {},
     addCharacter: () => {},

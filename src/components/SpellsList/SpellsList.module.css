@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+.spellsTracker {
+    margin: 0 12px 12px 12px;
+}
+
 .pageShell {
     width: min(1320px, 100%);
     height: 100%;
@@ -18,10 +22,6 @@
     height: 100%;
     min-height: 0;
 
-}
-
-.tabsShell {
-    display: none;
 }
 
 .img {
@@ -43,12 +43,11 @@
         max-width: none;
     }
 
-    .tabsShell {
-        margin-bottom: 12px;
-    }
-
     .spellsContainer {
         padding: 0;
     }
-}
 
+    .spellsTracker {
+        margin: 0 20px 20px 20px;
+    }
+}

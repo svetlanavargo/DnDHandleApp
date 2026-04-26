@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Logo from '../../../../public/img/dnd.svg';
+import Logo from '../../../assets/img/dnd.svg';
 import styles from './Footer.module.css';
 
 const FOOTER_TEXT = {
