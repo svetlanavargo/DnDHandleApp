@@ -170,6 +170,10 @@ export function useCharacterForm(character: Character | null) {
         const state: SpellSlotsState = {};
 
         slotsPerLevel.forEach((count, index) => {
+            if (count <= 0) {
+                return;
+            }
+
             const slotLevel = index + 1;
             state[slotLevel] = Array.from({ length: count }, () => false);
         });

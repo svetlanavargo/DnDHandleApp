@@ -76,6 +76,10 @@ export function useList() {
         const state: SpellSlotsState = {};
 
         slotsPerLevel.forEach((count, i) => {
+            if (count <= 0) {
+                return;
+            }
+
             state[i + 1] = Array(count).fill(false);
         });
 

@@ -155,11 +155,11 @@ export const classesData: Record<ClassKey, Class> = {
         hitDice: "8",
         savingThrows: ["WIS", "CHA"],
         caster: {
-            type: "known",
+            type: "pact",
             ability: "CHA",
-            progression: "full",
+            progression: "pact",
             cantripsKnown: { 1: 2, 4: 3, 10: 4 },
-            spellsKnown: { 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 11, 11: 12, 12: 13, 13: 14, 14: 15, 15: 16, 16: 17, 17: 18, 18: 19, 19: 20, 20: 22 },
+            spellsKnown: { 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10, 10: 10, 11: 11, 12: 11, 13: 12, 14: 12, 15: 13, 16: 13, 17: 14, 18: 14, 19: 15, 20: 15 },
             spellAttack: { formula: "ability + proficiency" },
             spellSave: { formula: "8 + ability + proficiency" },
             maxSpellLevel: {
