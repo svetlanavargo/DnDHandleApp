@@ -16,7 +16,6 @@ function ChangeHitsModal({ title, min, max, onConfirm, onClose }: ChangeHitsModa
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setInput('');
         inputRef.current?.focus();
     }, []);
 

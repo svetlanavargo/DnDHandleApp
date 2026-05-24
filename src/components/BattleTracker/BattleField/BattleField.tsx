@@ -42,18 +42,30 @@ function BattleField(
         noteDraft,
         startEditNote,
         changeNoteDraft,
-        saveNote
-    }: BattleProps) {
+	                saveNote
+	            }: BattleProps) {
+    const fieldRef = useRef<HTMLDivElement | null>(null);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
         if (!isBattle) return;
         const currentCard = cardRefs.current[currentTurnIndex];
-        currentCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const field = fieldRef.current;
+        if (!currentCard || !field) return;
+
+        const nextScrollTop =
+            currentCard.offsetTop -
+            field.offsetTop -
+            (field.clientHeight - currentCard.clientHeight) / 2;
+
+        field.scrollTo({
+            top: Math.max(0, nextScrollTop),
+            behavior: 'smooth'
+        });
     }, [currentTurnIndex, isBattle]);
 
     return (
-        <div className={styles.battleField}>
+        <div ref={fieldRef} className={styles.battleField}>
             <div className={styles.battleCardsWrapper}>
                 {cards.map((card, index) => (
                     <CardItem

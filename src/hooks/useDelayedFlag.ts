@@ -4,19 +4,14 @@ export function useDelayedFlag(active: boolean, delayMs = 1000) {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        if (!active) {
-            setIsVisible(false);
-            return;
-        }
-
         const timerId = window.setTimeout(() => {
-            setIsVisible(true);
-        }, delayMs);
+            setIsVisible(active);
+        }, active ? delayMs : 0);
 
         return () => {
             window.clearTimeout(timerId);
         };
     }, [active, delayMs]);
 
-    return isVisible;
+    return active && isVisible;
 }

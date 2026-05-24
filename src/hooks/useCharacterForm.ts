@@ -148,6 +148,19 @@ export function useCharacterForm(character: Character | null) {
         return progression[Math.max(...keys)] ?? [];
     }
 
+    function getMaxSpellLevel(className: ClassKey, subclassName: string | undefined, level: number) {
+        const caster = getCaster(className, subclassName);
+        if (!caster?.maxSpellLevel) return 0;
+
+        const keys = Object.keys(caster.maxSpellLevel)
+            .map(Number)
+            .filter(l => l <= level);
+
+        if (keys.length === 0) return 0;
+
+        return caster.maxSpellLevel[Math.max(...keys)] ?? 0;
+    }
+
     // ================= SPELL SLOTS =================
     function initSpellSlots(
         className: ClassKey,
@@ -183,9 +196,9 @@ export function useCharacterForm(character: Character | null) {
 
     // ================= SPELLS =================
     function syncSpells(
-        slots: SpellSlotsState,
         existing: SpellsList | undefined,
-        caster: boolean
+        caster: boolean,
+        maxSpellLevel: number
     ): SpellsList {
         const base = existing ?? {};
 
@@ -195,9 +208,10 @@ export function useCharacterForm(character: Character | null) {
             result[0] = base[0] ?? [];
         }
 
-        Object.keys(slots).forEach((lvl) => {
-            result[lvl as SpellLevel] = base[lvl as SpellLevel] ?? [];
-        });
+        for (let level = 1; level <= maxSpellLevel; level += 1) {
+            const levelKey = String(level) as SpellLevel;
+            result[levelKey] = base[levelKey] ?? [];
+        }
 
         return result;
     }
@@ -263,9 +277,9 @@ export function useCharacterForm(character: Character | null) {
         );
 
         const spells = syncSpells(
-            spellSlots,
             existing?.spells,
-            caster
+            caster,
+            getMaxSpellLevel(formValues.class, formValues.subclass, level)
         );
 
         return {

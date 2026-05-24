@@ -7,6 +7,15 @@ export interface BattleCard extends Card {
     conditions?: Condition[];
 }
 
+export interface BattleHistoryEntry {
+    id: string;
+    round: number;
+    turn: number;
+    actorId: string;
+    actorName: string;
+    actions: string[];
+}
+
 type TurnState = {
     turnCounter: number;
     currentTurnIndex: number;
@@ -19,6 +28,7 @@ type BattleState = {
     isBattle: boolean;
     turnState: TurnState;
     expiredConditions: string[];
+    history: BattleHistoryEntry[];
 };
 
 const initialTurnState: TurnState = {
@@ -32,7 +42,8 @@ const initialBattleState: BattleState = {
     battleCards: [],
     isBattle: false,
     turnState: initialTurnState,
-    expiredConditions: []
+    expiredConditions: [],
+    history: []
 };
 
 type BattleAction =
@@ -40,7 +51,8 @@ type BattleAction =
     | { type: 'setBattleCards'; value: React.SetStateAction<BattleCard[]> }
     | { type: 'setIsBattle'; value: React.SetStateAction<boolean> }
     | { type: 'setTurnState'; value: React.SetStateAction<TurnState> }
-    | { type: 'setExpiredConditions'; value: React.SetStateAction<string[]> };
+    | { type: 'setExpiredConditions'; value: React.SetStateAction<string[]> }
+    | { type: 'setHistory'; value: React.SetStateAction<BattleHistoryEntry[]> };
 
 function resolveStateAction<T>(
     current: T,
@@ -75,9 +87,25 @@ function battleReducer(state: BattleState, action: BattleAction): BattleState {
                 ...state,
                 expiredConditions: resolveStateAction(state.expiredConditions, action.value)
             };
+        case 'setHistory':
+            return {
+                ...state,
+                history: resolveStateAction(state.history, action.value)
+            };
         default:
             return state;
     }
+}
+
+function createHistoryEntry(card: BattleCard, round: number, turn: number): BattleHistoryEntry {
+    return {
+        id: crypto.randomUUID(),
+        round,
+        turn,
+        actorId: card.id,
+        actorName: card.name,
+        actions: []
+    };
 }
 
 export const useBattle = (
@@ -100,7 +128,8 @@ export const useBattle = (
         battleCards,
         isBattle,
         turnState,
-        expiredConditions
+        expiredConditions,
+        history
     } = battleState;
 
     const setBattleCards = useCallback((value: React.SetStateAction<BattleCard[]>) => {
@@ -118,6 +147,32 @@ export const useBattle = (
     const setExpiredConditions = useCallback((value: React.SetStateAction<string[]>) => {
         dispatch({ type: 'setExpiredConditions', value });
     }, []);
+
+    const setHistory = useCallback((value: React.SetStateAction<BattleHistoryEntry[]>) => {
+        dispatch({ type: 'setHistory', value });
+    }, []);
+
+    const appendHistoryAction = useCallback((action: string) => {
+        setHistory(prev => {
+            const lastEntry = prev[prev.length - 1];
+
+            if (!lastEntry) {
+                return prev;
+            }
+
+            return [
+                ...prev.slice(0, -1),
+                {
+                    ...lastEntry,
+                    actions: [...lastEntry.actions, action]
+                }
+            ];
+        });
+    }, [setHistory]);
+
+    const getCurrentActorName = useCallback(() => {
+        return battleCards[turnState.currentTurnIndex]?.name ?? 'Мастер';
+    }, [battleCards, turnState.currentTurnIndex]);
 
     // 🔥 СБРОС ПРИ СМЕНЕ ИГРЫ
     useEffect(() => {
@@ -195,6 +250,11 @@ export const useBattle = (
         });
 
         setExpiredConditions([]);
+        setHistory(
+            newBattleCards.length > 0
+                ? [createHistoryEntry(newBattleCards[0], 1, 1)]
+                : []
+        );
     };
 
     const stopBattle = () => {
@@ -209,6 +269,7 @@ export const useBattle = (
             timer: 0
         });
         setExpiredConditions([]);
+        setHistory([]);
     };
 
     const nextMove = () => {
@@ -216,11 +277,31 @@ export const useBattle = (
 
         const totalCards = battleCards.length;
         const newTurn = turnState.turnCounter + 1;
-        const currentCardIndex = newTurn % totalCards;
+        const currentCardIndex = (turnState.currentTurnIndex + 1) % totalCards;
         const currentCard = battleCards[currentCardIndex];
+        const isNewRound = currentCardIndex === 0;
+        const nextRound = isNewRound ? turnState.round + 1 : turnState.round;
 
         const SECONDS = 6;
         const isTurnMode = turnMode === 'turn';
+
+        setHistory(prev => {
+            const finalized = prev.map((entry, index) => {
+                if (index !== prev.length - 1 || entry.actions.length > 0) {
+                    return entry;
+                }
+
+                return {
+                    ...entry,
+                    actions: ['без активных действий']
+                };
+            });
+
+            return [
+                ...finalized,
+                createHistoryEntry(currentCard, nextRound, newTurn + 1)
+            ];
+        });
 
         setBattleCards(prev => {
             const expired: string[] = [];
@@ -264,8 +345,6 @@ export const useBattle = (
         });
 
         setTurnState(prev => {
-            const isNewRound = currentCardIndex === 0;
-
             return {
                 turnCounter: newTurn,
                 currentTurnIndex: currentCardIndex,
@@ -282,16 +361,44 @@ export const useBattle = (
         });
     };
 
-    const addUserToBattle = (card: Card) => {
+    const addUserToBattle = async (card: Card) => {
         if (battleCards.some(c => c.id === card.id) || card.currentHits <= 0) return;
 
-        setBattleCards(prev => [
-            ...prev,
-            { ...card, initiative: 0 }
-        ]);
+        const initiative = isBattle ? await rollInitiative(card) : 0;
+        const currentCardId = battleCards[turnState.currentTurnIndex]?.id;
+
+        setBattleCards(prev => {
+            const updated = [
+                ...prev,
+                { ...card, initiative }
+            ].sort((a, b) => b.initiative - a.initiative);
+
+            if (isBattle && currentCardId) {
+                const nextCurrentTurnIndex = updated.findIndex(item => item.id === currentCardId);
+
+                if (nextCurrentTurnIndex >= 0) {
+                    setTurnState(prevTurnState => ({
+                        ...prevTurnState,
+                        currentTurnIndex: nextCurrentTurnIndex
+                    }));
+                }
+            }
+
+            return updated;
+        });
+
+        if (isBattle) {
+            appendHistoryAction(`${card.name} добавлен в бой с инициативой ${initiative}`);
+        }
     };
 
     const getOutOfBattle = (id: string) => {
+        const card = battleCards.find(c => c.id === id);
+
+        if (card && isBattle) {
+            appendHistoryAction(`${card.name} выведен из боя`);
+        }
+
         setBattleCards(prev => {
             const updated = prev.filter(c => c.id !== id);
 
@@ -305,6 +412,7 @@ export const useBattle = (
                     round: 0,
                     timer: 0
                 });
+                setHistory([]);
                 return [];
             }
 
@@ -322,8 +430,16 @@ export const useBattle = (
             onConfirm: (damage) => {
                 if (damage <= 0) return;
 
-                setBattleCards(prev =>
-                    prev.map(c =>
+                const sourceName = getCurrentActorName();
+                const targetName = card.name;
+                const willDie = card.currentHits - damage <= 0;
+
+                appendHistoryAction(
+                    `${sourceName} нанес ${damage} урона ${targetName}${willDie ? ', цель выбыла из боя' : ''}`
+                );
+
+                setBattleCards(prev => {
+                    const damagedCards = prev.map(c =>
                         c.id === id
                             ? {
                                 ...c,
@@ -331,25 +447,49 @@ export const useBattle = (
                                 isDead: c.currentHits - damage <= 0
                             }
                             : c
-                    )
-                );
+                    );
+
+                    syncBattleHitsToCards(damagedCards);
+
+                    if (!willDie) {
+                        return damagedCards;
+                    }
+
+                    const aliveCards = damagedCards.filter(c => c.currentHits > 0);
+
+                    if (aliveCards.length <= 1) {
+                        setIsBattle(false);
+                        setTurnState({
+                            turnCounter: 0,
+                            currentTurnIndex: 0,
+                            round: 0,
+                            timer: 0
+                        });
+                        setExpiredConditions([]);
+                        setHistory([]);
+
+                        return [];
+                    }
+
+                    setTurnState(prevTurnState => {
+                        const currentCard = damagedCards[prevTurnState.currentTurnIndex];
+                        const currentCardIndex = currentCard
+                            ? aliveCards.findIndex(aliveCard => aliveCard.id === currentCard.id)
+                            : -1;
+
+                        return {
+                            ...prevTurnState,
+                            currentTurnIndex: currentCardIndex >= 0
+                                ? currentCardIndex
+                                : Math.min(prevTurnState.currentTurnIndex, aliveCards.length - 1)
+                        };
+                    });
+
+                    return aliveCards;
+                });
             }
         });
     };
-
-    useEffect(() => {
-        const deadCards = battleCards.filter(c => c.currentHits === 0);
-        if (deadCards.length === 0) return;
-
-        syncBattleHitsToCards(battleCards);
-
-        const timer = setTimeout(() => {
-            // ✅ 2. ПОТОМ удаляем
-            setBattleCards(prev => prev.filter(c => c.currentHits > 0));
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [battleCards, syncBattleHitsToCards, setBattleCards]);
 
     const addHits = (id: string) => {
         const card = battleCards.find(c => c.id === id);
@@ -361,6 +501,8 @@ export const useBattle = (
             max: 1000,
             onConfirm: (heal) => {
                 if (heal <= 0) return;
+
+                appendHistoryAction(`${getCurrentActorName()} восстановил ${heal} хитов ${card.name}`);
 
                 setBattleCards(prev =>
                     prev.map(c =>
@@ -388,6 +530,12 @@ export const useBattle = (
     };
 
     const addCondition = (cardId: string, condition: Condition) => {
+        const target = battleCards.find(card => card.id === cardId);
+
+        if (target) {
+            appendHistoryAction(`${getCurrentActorName()} применил состояние "${condition.label}" на ${target.name}`);
+        }
+
         setBattleCards(prev =>
             prev.map(card =>
                 card.id === cardId
@@ -419,7 +567,8 @@ export const useBattle = (
             isBattle,
             battleCards,
             turnState,
-            expiredConditions
+            expiredConditions,
+            history
         },
 
         notes: {

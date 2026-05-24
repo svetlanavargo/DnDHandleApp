@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react';
-import type { BattleCard } from '../../../hooks/useBattle.ts';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import type { BattleCard, BattleHistoryEntry } from '../../../hooks/useBattle.ts';
 import ConditionsList from '../../UI/ConditionsList/ConditionsList.tsx';
 import Btn from '../../UI/Btn/Btn.tsx';
 import styles from './Times.module.css';
@@ -12,13 +12,16 @@ interface TimesProps {
     stopBattle: () => void
     battleCards?: BattleCard[],
     expiredConditions?: string[],
+    history?: BattleHistoryEntry[],
     startFight: () => void,
     nextMove: () => void,
     onOpenSettings: () => void;
     listOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, onOpenSettings, listOpen }: TimesProps) {
+function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopBattle, battleCards, expiredConditions, history, onOpenSettings, listOpen }: TimesProps) {
+    const historyPanelRef = useRef<HTMLDivElement | null>(null);
+
     const formattedTime = useMemo(() => {
         const totalSeconds = Math.floor(timer);
 
@@ -30,6 +33,18 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
 
         return `${formattedMin}:${formattedSec}`;
     }, [timer]);
+
+    const visibleHistory = useMemo(
+        () => history?.filter(entry => entry.actions.length > 0) ?? [],
+        [history]
+    );
+
+    useEffect(() => {
+        const historyPanel = historyPanelRef.current;
+        if (!historyPanel) return;
+
+        historyPanel.scrollTop = historyPanel.scrollHeight;
+    }, [visibleHistory]);
 
     return (
         <div className={styles.times}>
@@ -80,6 +95,28 @@ function Times({isBattle, round, timer, turnCounter, startFight, nextMove, stopB
                                     {expiredConditions?.map((msg, i) => (
                                         <p key={i}>{msg}</p>
                                     ))}
+                                </div>
+                            </div>
+                            <div className={styles.historyWrapper}>
+                                <h3 className={styles.subtitle}>История:</h3>
+                                <div ref={historyPanelRef} className={styles.historyPanel}>
+                                    {visibleHistory.length > 0 ? (
+                                        visibleHistory
+                                            .map(entry => (
+                                                <div key={entry.id} className={styles.historyEntry}>
+                                                    <p className={styles.historyMeta}>
+                                                        Раунд {entry.round}, ход {entry.turn}: {entry.actorName}
+                                                    </p>
+                                                    <ul className={styles.historyActions}>
+                                                        {entry.actions.map((action, index) => (
+                                                            <li key={`${entry.id}-${index}`}>{action}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            ))
+                                    ) : (
+                                        <p className={styles.historyEmpty}>Событий пока нет</p>
+                                    )}
                                 </div>
                             </div>
                         </div>

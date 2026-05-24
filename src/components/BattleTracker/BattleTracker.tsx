@@ -254,6 +254,7 @@ function BattleTracker() {
                                 stopBattle={battle.actions.stopBattle}
                                 battleCards={battle.state.battleCards}
                                 expiredConditions={battle.state.expiredConditions}
+                                history={battle.state.history}
                                 startFight={battle.actions.startFight}
                                 nextMove={battle.actions.nextMove}
                                 onOpenSettings={openSettingsModal}
