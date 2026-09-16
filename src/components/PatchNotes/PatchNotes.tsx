@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import patchNotes from '../../data/PatchNotesData/PatchNotes.json';
-import FormToggle from '../MainPage/FormToggle/FormToggle.tsx';
 import styles from './PatchNotes.module.css';
 
 type PatchNoteType = 'bug' | 'feature';
@@ -29,9 +28,6 @@ const PATCH_NOTE_TEXT = {
     bugs: 'Найдено багов',
     latest: 'Последнее обновление',
     empty: 'Пока здесь пусто. Как только в JSON появятся записи, они сразу отрисуются на этой странице.',
-    feedbackSubtitle: 'Обратная связь',
-    feedbackTitle: 'Не находишь в списке баг или хочешь предложить улучшение?',
-    feedbackDescription: 'Отправь баг-репорт или поделись идеей.',
 } as const;
 
 function getTypeLabel(type: PatchNoteType) {
@@ -57,8 +53,6 @@ function getDateValue(date: string) {
 }
 
 export default function PatchNotes() {
-    const [activeForm, setActiveForm] = useState<'feedback' | 'report'>('feedback');
-
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'auto' });
 
@@ -146,19 +140,6 @@ export default function PatchNotes() {
                         </article>
                     ))
                 )}
-            </section>
-
-            <section className={styles.feedbackSection}>
-                <div className={styles.feedbackIntro}>
-                    <p className={styles.feedbackSubtitle}>{PATCH_NOTE_TEXT.feedbackSubtitle}</p>
-                    <h2 className={styles.feedbackTitle}>{PATCH_NOTE_TEXT.feedbackTitle}</h2>
-                    <p className={styles.feedbackDescription}>{PATCH_NOTE_TEXT.feedbackDescription}</p>
-                </div>
-
-                <FormToggle
-                    activeForm={activeForm}
-                    onChange={setActiveForm}
-                />
             </section>
         </div>
     )

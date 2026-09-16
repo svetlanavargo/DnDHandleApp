@@ -1,10 +1,11 @@
 .footerContainer {
     background:
         linear-gradient(180deg, #151515 0%, #101010 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .footerWrapper {
-    padding: 20px;
+    padding: 44px 20px 32px;
     margin: 0 auto;
     max-width: 1200px;
 }
@@ -20,13 +21,7 @@
 .footer {
     display: flex;
     flex-direction: column;
-    gap: 28px;
-    padding: 24px;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-        rgba(22, 22, 22, 0.96);
+    gap: 32px;
 }
 
 .brandColumn {
@@ -49,13 +44,13 @@
 }
 
 .footer a {
-    color: #CFCFCF;
-    transition: all 0.2s ease;
+    color: #a8a8a8;
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .footer a:hover {
     color: #2eb9a1;
-    transition: all 0.2s ease;
 }
 
 
@@ -67,9 +62,8 @@
 @media (min-width: 1023px) {
     .footer {
         flex-direction: row;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
-        padding: 28px 32px;
     }
 
     .linksColumn {

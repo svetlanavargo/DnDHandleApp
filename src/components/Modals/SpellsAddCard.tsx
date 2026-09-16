@@ -117,6 +117,15 @@ function SpellsAddCard({
         key: K,
         value: Filters[K]
     ) {
+        if (key === "class") {
+            setFilters(prev => ({
+                ...prev,
+                class: value as Filters["class"],
+                subclass: ""
+            }));
+            return;
+        }
+
         setFilters(prev => ({
             ...prev,
             [key]: value
@@ -160,8 +169,8 @@ function SpellsAddCard({
 
         const maxLevel = getMaxSpellLevel(
             character.level,
-            activeClass,
-            filters.subclass || character.subclass
+            character.class,
+            character.subclass
         );
 
         return (spellsJson as Spell[]).filter((spell) => {
@@ -200,14 +209,12 @@ function SpellsAddCard({
             return 0;
         }
 
-        const activeClass = (filters.class || character.class) as ClassKey;
-
         return getMaxSpellLevel(
             character.level,
-            activeClass,
-            filters.subclass || character.subclass
+            character.class,
+            character.subclass
         );
-    }, [character, filters.class, filters.subclass]);
+    }, [character]);
 
     // ================= RANDOM PLACEHOLDER =================
 

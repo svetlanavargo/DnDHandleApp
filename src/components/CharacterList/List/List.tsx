@@ -17,6 +17,7 @@ interface ListProps {
     longRest: () => void;
     addHits: () => void;
     subtractHits: () => void;
+    addExperience: () => void;
     subtractDice: () => void;
     isNoteOpen: boolean;
     toggleNoteOpen: () => void;
@@ -34,6 +35,7 @@ function List({
     longRest,
     addHits,
     subtractHits,
+    addExperience,
     subtractDice,
     isNoteOpen,
     toggleNoteOpen,
@@ -54,12 +56,14 @@ function List({
                     <ListHeader
                         name={activeCharacter.name}
                         level={activeCharacter.level}
+                        exp={activeCharacter.exp}
                         race={raceKey}
                         subrace={activeCharacter.subrace}
                         spec={classKey}
                         charSubclass={activeCharacter.subclass}
                         onEdit={openEditModal}
                         longRest={longRest}
+                        addExperience={addExperience}
                     />
                 </div>
 

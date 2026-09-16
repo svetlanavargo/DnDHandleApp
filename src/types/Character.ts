@@ -21,6 +21,7 @@ export interface Character {
     temporaryHits: number;
     initiative: number;
     level: number;
+    exp: number;
     class: ClassKey;
     subclass?: string;
     characteristics: Characteristics;

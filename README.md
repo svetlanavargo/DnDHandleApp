@@ -19,10 +19,6 @@ Create a `.env` file in the project root and fill in the required values:
 
 ```env
 VITE_API_URL=http://localhost:3000
-VITE_EMAILJS_PUBLIC_KEY=
-VITE_EMAILJS_SERVICE_ID=
-VITE_EMAILJS_FEEDBACK_TEMPLATE_ID=
-VITE_EMAILJS_REPORT_TEMPLATE_ID=
 ```
 
 ## Expanding the ESLint configuration

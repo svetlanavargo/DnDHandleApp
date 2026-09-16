@@ -83,6 +83,7 @@ export default function CharacterList() {
                             }
                             addHits={actions.addHits}
                             subtractHits={actions.subtractHits}
+                            addExperience={actions.addExperience}
                             subtractDice={actions.subtractDice}
                             longRest={actions.longRest}
                             isNoteOpen={notes.isNoteOpen}

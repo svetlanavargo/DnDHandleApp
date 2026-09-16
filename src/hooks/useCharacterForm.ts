@@ -11,6 +11,7 @@ import type {
 
 import { classesData } from "../constants/classesData";
 import { spellSlotProgression } from "../constants/spellSlotProgression";
+import { experienceByLevel } from "../constants/experienceByLevel";
 import { normalizeCharacterNotes } from "../utils/characterNotes";
 
 const THIEVES_TOOLS_KEY = 'thievesTools';
@@ -25,6 +26,7 @@ type FormValues = {
     ac: string;
     hits: string;
     level: string;
+    exp: string;
     initiative: string;
     characteristics: Characteristics;
     skills: string[];
@@ -46,6 +48,7 @@ const defaultForm: FormValues = {
     ac: "10",
     hits: "1",
     level: "1",
+    exp: "0",
     initiative: "0",
     characteristics: {
         STR: 0,
@@ -79,6 +82,7 @@ function getInitialFormValues(character: Character | null): FormValues {
         ac: String(character.ac),
         hits: String(character.hits),
         level: String(character.level),
+        exp: String(character.exp ?? experienceByLevel[character.level] ?? 0),
         initiative: String(character.initiative),
         characteristics: { ...character.characteristics },
         skills: [...character.skills],
@@ -107,6 +111,18 @@ export function useCharacterForm(character: Character | null) {
     // ================= HELPERS =================
     function getExpertiseLimit(level: number) {
         return level >= 6 ? 4 : 2;
+    }
+
+    function getLevelByExperience(exp: number) {
+        let resolvedLevel = 1;
+
+        Object.entries(experienceByLevel).forEach(([level, requiredExp]) => {
+            if (exp >= requiredExp) {
+                resolvedLevel = Number(level);
+            }
+        });
+
+        return Math.min(20, resolvedLevel);
     }
 
     function getCaster(className: ClassKey, subclassName?: string) {
@@ -224,7 +240,26 @@ export function useCharacterForm(character: Character | null) {
         setFormValues(prev => {
             const updated = { ...prev, [field]: value };
 
-            const level = Number(updated.level);
+            if (field === 'level') {
+                const level = Number(value);
+
+                if (Number.isFinite(level) && level >= 1) {
+                    const normalizedLevel = Math.min(20, level);
+                    updated.level = String(normalizedLevel);
+                    updated.exp = String(experienceByLevel[normalizedLevel] ?? 0);
+                }
+            }
+
+            if (field === 'exp') {
+                const exp = Number(value);
+
+                if (Number.isFinite(exp) && exp >= 0) {
+                    updated.exp = String(exp);
+                    updated.level = String(getLevelByExperience(exp));
+                }
+            }
+
+            const level = Number(updated.level) || 1;
             const availableExpertise = getAvailableExpertiseValues(updated);
 
             return {
@@ -266,6 +301,7 @@ export function useCharacterForm(character: Character | null) {
     // ================= BUILD =================
     function buildCharacter(existing: Character | null): Character {
         const level = Number(formValues.level) || 1;
+        const exp = Number(formValues.exp) || experienceByLevel[level] || 0;
         const hits = Number(formValues.hits) || 1;
 
         const caster = isCasterClass(formValues.class, formValues.subclass);
@@ -296,6 +332,7 @@ export function useCharacterForm(character: Character | null) {
             currentHits: existing?.currentHits ?? hits,
             temporaryHits: existing?.temporaryHits ?? 0,
             level,
+            exp,
             initiative: Number(formValues.initiative),
             characteristics: { ...formValues.characteristics },
             skills: [...formValues.skills],

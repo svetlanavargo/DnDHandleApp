@@ -1,12 +1,106 @@
-.feedbackContainer {
-    background-color: #1F1F1F;
+.feedback {
+    box-sizing: border-box;
+    position: relative;
+    width: calc(100% - 32px);
+    max-width: 1200px;
+    margin: 28px auto 48px;
+    padding: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(46, 185, 161, 0.24);
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 96% 4%, rgba(46, 185, 161, 0.2), transparent 36%),
+        linear-gradient(135deg, rgba(46, 185, 161, 0.1), rgba(255, 255, 255, 0.03) 54%),
+        #191919;
 }
 
-.feedbackWrapper {
-    padding: 50px 20px;
-    margin: 0 auto;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: column;
+.feedback::after {
+    position: absolute;
+    top: -80px;
+    right: -54px;
+    width: 210px;
+    height: 210px;
+    border: 1px solid rgba(46, 185, 161, 0.2);
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    color: #2eb9a1;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.title {
+    max-width: 580px;
+    margin: 0;
+    color: #fbfafa;
+    font-size: clamp(26px, 5vw, 38px);
+    line-height: 1.05;
+    text-wrap: balance;
+}
+
+.description {
+    max-width: 520px;
+    margin: 14px 0 0;
+    color: #b8b8b8;
+    line-height: 1.6;
+}
+
+.telegramLink {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
     align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+    padding: 13px 17px;
+    border: 1px solid rgba(46, 185, 161, 0.46);
+    border-radius: 14px;
+    background: #2eb9a1;
+    color: #151515;
+    font-weight: 400;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.telegramLink:hover {
+    background: #48d3ba;
+    box-shadow: 0 10px 28px rgba(46, 185, 161, 0.26);
+}
+
+.telegramLink:focus-visible {
+    outline: 3px solid #fbfafa;
+    outline-offset: 3px;
+}
+
+.telegramIcon {
+    margin-left: 2px;
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+@media (min-width: 768px) {
+    .feedback {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+        padding: 36px 42px;
+    }
+
+    .telegramLink {
+        flex: none;
+        margin-top: 0;
+    }
 }

@@ -18,7 +18,7 @@ button:focus-visible {
     outline: none;
 }
 
-.addCard, .copy, .openCardList, .settings, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
+.addCard, .copy, .openCardList, .settings, .nextMove, .nextMoveBig, .stopBattle, .addCharacter, .note, .saveNote, .close, .resurrection, .addCondition, .reset, .startBattle, .addHits, .addExperience, .edit, .delete, .addUserToBattle, .getOutOfBattle, .subtractHits {
     background-repeat: no-repeat;
     background-color: transparent;
     background-size: contain;
@@ -100,6 +100,12 @@ button:focus-visible {
     background-image: url("../../../assets/img/plus.svg");
 }
 
+.addExperience {
+    width: 18px;
+    height: 18px;
+    background-image: url("../../../assets/img/plus.svg");
+}
+
 .subtractHits {
     width: 25px;
     height: 25px;
@@ -114,8 +120,8 @@ button:focus-visible {
 }
 
 .reset {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background-image: url("../../../assets/img/longRest.svg");
 }
 

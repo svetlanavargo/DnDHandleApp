@@ -143,6 +143,15 @@ function CharacterModal({ character, onClose, onSave, onDelete, disabled }: Prop
                 Уровень
             </Input>
 
+            <Input
+                type="text"
+                inputMode="numeric"
+                value={formValues.exp}
+                onChange={e => handleChange("exp", clampNumber(e.target.value, 355000))}
+            >
+                Опыт
+            </Input>
+
             <div className={styles.inputsGroup}>
                 {fieldKeys.map(key => (
                     <Input

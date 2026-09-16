@@ -23,6 +23,7 @@ import type { Character } from '../types/Character';
 import type { Game, TurnTimeMode } from '../types/Game';
 import type { Card } from '../types/CardInBattleTracker';
 import { normalizeCharacterNotes } from '../utils/characterNotes';
+import { experienceByLevel } from '../constants/experienceByLevel';
 
 type AppProviderProps = {
     children: React.ReactNode;
@@ -58,6 +59,7 @@ function syncableGame(game: Game): ApiGame {
 function normalizeCharacter(character: Character): Character {
     return {
         ...character,
+        exp: character.exp ?? experienceByLevel[character.level] ?? 0,
         note: normalizeCharacterNotes(character.note),
     };
 }

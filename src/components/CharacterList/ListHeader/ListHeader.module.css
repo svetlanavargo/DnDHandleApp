@@ -4,8 +4,8 @@
 
 .listHeader {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    /*align-items: center;*/
+    /*justify-content: space-between;*/
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
         #1F1F1F;
@@ -48,10 +48,70 @@
 .flex {
     display: flex;
     align-items: center;
+    width: 100%;
+}
+
+.mainInfo {
+    flex: 1;
+    min-width: 0;
 }
 
 .margin {
+    width: 100%;
     margin-left: 12px;
+}
+
+.expBlock {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.expLevel {
+    width: 20px;
+    flex-shrink: 0;
+    color: #2eb9a1;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+}
+
+.expBar {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.expProgress {
+    height: 100%;
+    border-radius: inherit;
+    background-color: #2eb9a1;
+}
+
+.expLabel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fbfafa;
+    font-size: 11px;
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+}
+
+@media (min-width: 425px) {
+    .expBlock {
+        width: 100%;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -75,5 +135,9 @@
 
     .margin {
         margin-left: 16px;
+    }
+
+    .expBlock {
+        width: 100%;
     }
 }

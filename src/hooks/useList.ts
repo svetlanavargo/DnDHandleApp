@@ -4,6 +4,7 @@ import { useNumberModal } from './useNumberModal.ts';
 
 import { spellSlotProgression } from '../constants/spellSlotProgression';
 import { classesData } from '../constants/classesData';
+import { experienceByLevel } from '../constants/experienceByLevel';
 import { getModifier } from '../utils/getModifier';
 import {
     createCharacterNote,
@@ -15,6 +16,18 @@ import type { Character } from '../types/Character';
 import type { ClassKey, Classes, ProgressionType, SpellSlotsState } from '../types/dnd';
 
 const classes: Classes = classesData as unknown as Classes;
+
+function getLevelByExperience(exp: number) {
+    let resolvedLevel = 1;
+
+    Object.entries(experienceByLevel).forEach(([level, requiredExp]) => {
+        if (exp >= requiredExp) {
+            resolvedLevel = Number(level);
+        }
+    });
+
+    return Math.min(20, resolvedLevel);
+}
 
 export function useList() {
     const {
@@ -162,6 +175,37 @@ export function useList() {
         });
     }, [activeCharacter, numberModal, updateCharacter]);
 
+    const addExperience = useCallback(() => {
+        if (!activeCharacter) return;
+
+        numberModal.openModal({
+            title: `Добавить опыт ${activeCharacter.name}`,
+            min: 0,
+            max: 1000000,
+            onConfirm: (amount: number) => {
+                if (amount <= 0) return;
+
+                const nextExp = (activeCharacter.exp ?? experienceByLevel[activeCharacter.level] ?? 0) + amount;
+                const nextLevel = getLevelByExperience(nextExp);
+                const shouldRebuildSpellSlots = nextLevel !== activeCharacter.level;
+                const spellSlots = shouldRebuildSpellSlots
+                    ? initSpellSlots(
+                        activeCharacter.class as ClassKey,
+                        activeCharacter.subclass,
+                        nextLevel
+                    )
+                    : activeCharacter.spellSlots;
+
+                updateCharacter({
+                    ...activeCharacter,
+                    exp: nextExp,
+                    level: nextLevel,
+                    spellSlots
+                });
+            }
+        });
+    }, [activeCharacter, numberModal, updateCharacter, initSpellSlots]);
+
     const subtractDice = useCallback(() => {
         if (!activeCharacter) return;
 
@@ -284,6 +328,7 @@ export function useList() {
         saveCharacter,
         addHits,
         subtractHits,
+        addExperience,
         subtractDice,
         longRest,
         addNote,
@@ -295,6 +340,7 @@ export function useList() {
         saveCharacter,
         addHits,
         subtractHits,
+        addExperience,
         subtractDice,
         longRest,
         addNote,
